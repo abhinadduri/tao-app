@@ -1,0 +1,60 @@
+<div id="variable-editor"
+     [ngStyle]="{
+        'display': selected ? 'block' : 'none'
+     }">
+    <span class="title">Simulation Name</span>
+    <input type="text"
+           #simName
+           [ngModel]="simulationName"
+           (change)="updateSimulationName(simName)">
+    <br /> <br />
+
+    <span class="title">Description</span>
+        <textarea type="text"
+                  id="simulationDescription"
+                  #simDescription
+                  [ngModel]="simulationDescription"
+                  (change)="updateSimulationDescription(simDescription)"></textarea>
+    <br /> <br />
+
+    <span class="title">Time Units</span>
+    <input type="text"
+           #time
+           [ngModel]="timeUnits"
+           (change)="updateTimeUnits(time)">
+    <br /> <br />
+
+    <span class="title">Graphing</span>
+    <select #selectGraphVariable>
+        <option
+                *ngFor="let variable of variableList"
+                (change)="changeGraphingVariable()">{{variable ? variable.name : ''}}</option>
+    </select>
+    <br /> <br />
+
+    <span class="title">Global Variables</span>
+    <ul #globalVariables>
+        <li *ngFor="let variable of variableList" class="variables">
+            <span class="code variableName">{{variable.name}}</span>
+
+            <a class="right"
+               (click)="deleteGlobalVariable(variable)">✕</a>
+            <br />
+
+            <input placeholder="Initial Value" class="initialVal" #value
+                   (change)="updateVariableValue(value, variable)"
+                   [ngModel]="variable.value">
+
+            <input placeholder="Description" class="paramDescription" #description
+                   (change)="updateVariableDescription(description, variable)"
+                   [ngModel]="variable.description">
+
+        </li>
+
+        <span class="instructions">To add a global variable, enter a name for the variable below and hit enter to add it to the list.</span>
+        <input class="code globalVariableNameInput" #variableName
+               type="text"
+               (keyup.enter)="addVariable(variableName)">
+    </ul>
+
+</div>

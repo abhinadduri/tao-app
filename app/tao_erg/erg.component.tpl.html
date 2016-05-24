@@ -1,0 +1,39 @@
+<div #graph class="graph"
+     (dblclick)="createEvent($event, graph)"
+     (click)="unSelect(graph, $event)">
+
+    <event
+            *ngFor="let event of eventList"
+            [tao_event]="event"
+            (drag)="handleDrag($event)"
+            (mousedown)="selectEvent(event, $event)"
+            [selected]="event == selectedParticle"
+            [shiftSelected]="event == shiftSelectedSource">
+    </event>
+
+    <edge
+            *ngFor="let edge of edgeList"
+            [tao_edge]="edge"
+            (click)="selectEdge(edge, $event)"
+            [selected]="edge == selectedParticle"
+            [edgeList]="edgeList">
+    </edge>
+
+    <sidebar
+            [selectedParticle]="selectedParticle"
+            [eventList]="eventList"
+            [edgeList]="edgeList"
+            [variableList]="variableList"
+            (resetParticle)="unSelectFromPanel()"
+            [variablePanel]="selectedVariablePanel"
+            [simulationName]="simulationName"
+            [simulationDescription]="simulationDescription"
+            [timeUnits]="timeUnits"
+            (downloadERG)="handleDownload()"
+            (runERG)="handleRun()"
+            (openERG)="handleOpen($event)"
+            (changeNameERG)="simulationName = $event"
+            (changeDescriptionERG)="simulationDescription = $event"
+            (changeTimeERG)="timeUnits = $event">
+    </sidebar>
+</div>

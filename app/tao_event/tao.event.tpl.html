@@ -1,0 +1,14 @@
+<div class="node"
+     #circle
+     [ngStyle]="{'top': tao_event.y + 'px',
+     'left': tao_event.x + 'px'}"
+     [ngClass]="{
+     'runNode': tao_event.name == 'Run',
+     'selectedNode': !shiftSelected && selected,
+     'shiftSelectedNode': shiftSelected}"
+     (click)="handleOnClick($event, circle)"
+     (mousemove)="handleMouseMove($event, circle)"
+     (mousedown)="handleMouseDown($event, circle)"
+     (mouseup)="handleMouseUp($event, circle)">
+    <span #name (click)="handleSpanClick(name)">{{tao_event.name}}</span>
+</div>

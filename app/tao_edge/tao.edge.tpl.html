@@ -1,0 +1,15 @@
+<div class="segment"
+     [ngClass]="{
+    'circle': tao_edge.source == tao_edge.target,
+    'line': tao_edge.source != tao_edge.target,
+    'selected': selected}"
+     [ngStyle]="{
+    'top': (tao_edge.source == tao_edge.target) ? (tao_edge.startY - 70) + 'px' : (twoWayEdge() ? (parse(tao_edge.startY) + calculateDisplacement()) + 'px' : tao_edge.startY + 'px'),
+    'left': (tao_edge.source == tao_edge.target) ? (tao_edge.startX - 35) + 'px' : (tao_edge.startX) + 'px',
+    'width': getLength(),
+    'transform': (tao_edge.source == tao_edge.target) ? 'rotate(108deg)' : 'rotate(' + getAngle() + ')'}">
+    <div class="arrow-tip"
+         [ngStyle]="{
+        'margin': (tao_edge.source == tao_edge.target) ? '-5px 30px 0 0' : '-5px -2px 0 0'
+    }"></div>
+</div>

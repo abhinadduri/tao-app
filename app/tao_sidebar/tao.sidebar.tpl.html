@@ -1,0 +1,186 @@
+<div id="sidebar">
+    <div id="contents"
+         [ngStyle]="{
+            'display': selectedParticle == null && !variablePanel ? 'none' : 'block'
+        }">
+        <div class="editor">
+            <div id="node-editor"
+                 [ngStyle]="{
+                    'display': typeOfNode() ? 'block' : 'none'
+                }">
+                <span class="title">NAME</span>
+                <input type="text" #eventName [ngModel]="typeOfNode() ? selectedParticle.name : ''">
+                <br /> <br />
+                <span class="title">TRACE</span>
+                <span [ngStyle]="{'display': 'inline-block'}" class="instructions">To trace an event, check the box:</span>
+                <input #eventTrace
+                       [ngStyle]="{'display': 'inline-block'}"
+                       type="checkbox"
+                       id="traceEvent"
+                       [ngModel]="typeOfNode() ? selectedParticle.trace : false">
+
+                <br /> <br />
+                <span class="title">STATE CHANGE</span>
+                <textarea #eventStateChange [ngModel]="typeOfNode() ? selectedParticle.stateChange : ''"></textarea>
+                <br /> <br />
+                <span class="title">PARAMETERS</span>
+                <ul #eventParameters>
+                    <li *ngFor="let parameter of keys((typeOfNode() ? selectedParticle.parameters : emptyDict))">
+                        <span class="code variableName">{{parameter}}</span>
+                        <a class="right"
+                           (click)="deleteParameterEvent(parameter)">✕</a>
+                    </li>
+                    <span class="instructions">To add a parameter, enter a name for the parameter below and hit enter to add it to the list.</span>
+                    <input #addParam
+                           class="code variableNameInput"
+                           type="text"
+                           (keyup.enter)="addParameterToEvent(addParam)">
+
+                </ul>
+            </div>
+            <div id="edge-editor"
+                 [ngStyle]="{
+                    'display': typeOfEdge() ? 'block' : 'none'
+                 }">
+                <span class="title">SOURCE</span>
+                <input type="text" disabled="" [ngModel]="typeOfEdge() ? selectedParticle.source : ''">
+                <br /> <br />
+                <span class="title">TARGET</span>
+                <input type="text" disabled="" [ngModel]="typeOfEdge() ? selectedParticle.target : ''">
+                <br /> <br />
+
+                    <span class="title"
+                          *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1" id="edgeListDisplay">EDGES</span>
+                    <span class="instructions"
+                          *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1"
+                          id="edgeListDisplayInstructions">There are multiple edges from the given source to the given target. Click on an edge to load it.</span>
+
+
+                <ul #multipleEdgeSelector
+                    *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1">
+                    <li class="edgeDropDown"
+                        *ngFor="let edge of (typeOfEdge() ? selectedParticle.getCopies(edgeList) : emptyList); let id = index"
+                        (click)="setEdge(edge)">
+                        Edge {{id + 1}}
+                            <span class="right"
+                                  *ngIf="edge == selectedParticle">←</span>
+                    </li>
+                </ul>
+                <br />
+
+                <span class="title">EDGE TYPE</span>
+                <select #edgeType
+                        (change)="0"
+                        [ngModel]="typeOfEdge() ? selectedParticle.type : ''">
+                    <option value="Scheduling">Scheduling Edge</option>
+                    <option value="Pending">Pending Edge</option>
+                    <option value="Cancelling">Cancelling Edge</option>
+                </select>
+                <br /> <br />
+
+                <span class="title">CONDITION</span>
+                <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"></textarea>
+                <br /> <br />
+                <span class="title" >DELAY</span>
+                <input type="text" #edgeDelay
+                       [ngStyle]="{
+                        'display': edgeType.value == 'Pending' ? 'none' : 'block'
+                    }"
+                       [ngModel]="typeOfEdge() ? selectedParticle.delay : 0">
+                    <span class="instructions"
+                          [ngStyle]="{
+                        'display': edgeType.value == 'Pending' ? 'block' : 'none'
+                    }">You cannot set a delay for a pending edge.</span>
+                <br /> <br />
+                <span class="title">PRIORITY</span>
+                <input type="text" #edgePriority
+                       [ngModel]="typeOfEdge() ? selectedParticle.priority : 0">
+                <br /> <br />
+
+                <span class="title">PARAMETERS</span>
+                <ul #edgeParameters>
+                    <li class="edgeParams" *ngFor="let edgeParam of keys(typeOfEdge() ? selectedParticle.getTargetEvent(eventList).parameters : emptyDict)">
+                        <span class="code variableName">{{edgeParam}}</span>
+                        <br />
+                        <input placeholder="Parameter Value"
+                               class="parameterVal"
+                               [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''">
+                    </li>
+                </ul>
+            </div>
+
+            <VariablePanel
+                    [selected]="variablePanel"
+                    [simulationName]="simulationName"
+                    [simulationDescription]="simulationDescription"
+                    [timeUnits]="timeUnits"
+                    [variableList]="variableList"
+                    (changeName)="changeNameERG.emit($event)"
+                    (changeDescription)="changeDescriptionERG.emit($event)"
+                    (changeTime)="changeTimeERG.emit($event)">
+            </VariablePanel>
+
+        </div>
+        <div class="footer"
+             *ngIf="typeOfNode() || typeOfEdge()">
+            <div class="right">
+                <a class="action-button green"
+                   (click)="typeOfNode() ?
+                    deleteEvent() :
+                    deleteEdge()">Delete</a>
+
+                <a class="action-button green"
+                   (click)="typeOfNode() ?
+                    updateEvent(eventName, eventTrace, eventStateChange) :
+                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">Update</a>
+            </div>
+        </div>
+    </div>
+
+
+    <ul id="menu">
+        <li id="run"
+            (click)="handleRun()">
+            <a>
+                <span class="icon">►</span>
+                <br>
+                <span>RUN</span>
+            </a>
+        </li>
+        <li id="globals"
+            (click)="loadVariablePanel()">
+            <a>
+                <span class="icon"><strong>{&nbsp;}</strong></span>
+                <br>
+                <span>GLOBALS</span>
+            </a>
+        </li>
+        <li id="open"
+            (click)="file.click()">
+            <input #file type="file"
+                   (change)="handleOpen($event)"
+                   [ngStyle]="{'display': 'none'}">
+            <a>
+                <span class="icon"><strong>↑</strong></span>
+                <br>
+                <span>OPEN</span>
+            </a>
+        </li>
+        <li id="download"
+            (click)="handleDownload()">
+            <a>
+                <span class="icon"><strong>v</strong></span>
+                <br>
+                <span>DOWNLOAD</span>
+            </a>
+        </li>
+        <li id="help"
+            (click)="launchHelp()">
+            <a>
+                <span class="icon"><strong>?</strong></span>
+                <br>
+                <span>HELP</span>
+            </a>
+        </li>
+    </ul>
+</div>
