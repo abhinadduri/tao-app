@@ -4,7 +4,8 @@ System.config({
     map: {
         'app' : 'app',
         'rxjs': 'node_modules/rxjs',
-        '@angular'                         : 'node_modules/@angular'
+        '@angular'                         : 'node_modules/@angular',
+        'ng2-bs3-modal': 'node_modules/ng2-bs3-modal'
     },
     packages: {
         'app'                              : {main: 'main.ts', defaultExtension: 'ts'},

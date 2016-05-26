@@ -121,20 +121,21 @@
             </VariablePanel>
 
         </div>
-        <div class="footer"
+        <div class="tao-panel-footer"
              *ngIf="typeOfNode() || typeOfEdge()">
             <div class="right">
-                <a class="action-button green"
+                <a class="tao-footer-action-button green"
                    (click)="typeOfNode() ?
                     deleteEvent() :
                     deleteEdge()">Delete</a>
 
-                <a class="action-button green"
+                <a class="tao-footer-action-button green"
                    (click)="typeOfNode() ?
                     updateEvent(eventName, eventTrace, eventStateChange) :
                     updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">Update</a>
             </div>
         </div>
+
     </div>
 
 
@@ -175,7 +176,7 @@
             </a>
         </li>
         <li id="help"
-            (click)="launchHelp()">
+            (click)="helpDialogue.open()">
             <a>
                 <span class="icon"><strong>?</strong></span>
                 <br>
@@ -184,3 +185,5 @@
         </li>
     </ul>
 </div>
+
+<help #helpDialogue></help>

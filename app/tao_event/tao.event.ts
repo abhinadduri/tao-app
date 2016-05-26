@@ -41,7 +41,6 @@ export class TaoEvent {
             this.tao_event.y = this.y.toString();
             this.tao_event.x = this.x.toString();
             this.drag.emit(this.tao_event);
-            console.log(this.tao_event);
         }
 
     }

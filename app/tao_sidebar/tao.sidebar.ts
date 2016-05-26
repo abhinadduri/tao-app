@@ -4,6 +4,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {NgStyle} from '@angular/common';
 import {CORE_DIRECTIVES} from '@angular/common';
+import {HelpDialogue} from './tao.help';
 import {Event} from '../tao_event/tao.event.model'
 import {Edge} from '../tao_edge/tao.edge.model'
 
@@ -12,7 +13,7 @@ import {TaoVariablePanel} from '../tao_sidebar/tao.variable.panel'
 @Component({
     selector: 'sidebar',
     templateUrl: './app/tao_sidebar/tao.sidebar.tpl.html',
-    directives: [NgStyle, CORE_DIRECTIVES, TaoVariablePanel]
+    directives: [NgStyle, CORE_DIRECTIVES, TaoVariablePanel, HelpDialogue]
 })
 
 export class TaoSidebar {
@@ -55,6 +56,7 @@ export class TaoSidebar {
 
     launchHelp() {
         this.selectedParticle = null;
+        this.help = true;
     }
 
     loadVariablePanel() {

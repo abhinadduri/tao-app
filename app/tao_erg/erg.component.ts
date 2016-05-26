@@ -258,7 +258,7 @@ export class ErgComponent implements OnInit {
     }
 
     loadFromText(simulation: string) {
-        let simJson = eval('(' + simulation + ')');
+        let simJson = JSON.parse(simulation);
         this.clearERG();
 
 

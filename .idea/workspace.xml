@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="33f8cbd5-6166-4034-9c63-275a679f7c12" name="Default" comment="" />
+    <list default="true" id="33f8cbd5-6166-4034-9c63-275a679f7c12" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/resources/css/tao.css" afterPath="$PROJECT_DIR$/app/resources/css/tao.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_event/tao.event.ts" afterPath="$PROJECT_DIR$/app/tao_event/tao.event.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/bootstrap/package.json" afterPath="$PROJECT_DIR$/node_modules/bootstrap/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/systemjs.config.js" afterPath="$PROJECT_DIR$/systemjs.config.js" />
+    </list>
     <ignored path="angular_tao.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,27 +33,125 @@
     <favorites_list name="angular_tao" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="tao.help.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.help.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="649">
+              <caret line="76" column="98" selection-start-line="76" selection-start-column="91" selection-end-line="76" selection-end-column="98" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#46#105#0" expanded="true" />
+                <marker date="1464295070000" expanded="true" signature="557:2682" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="640:738" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="685:704" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="759:2669" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="777:2647" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="799:1706" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="982:1066" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="1130:1683" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="1203:1657" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="1279:1627" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="1379:1593" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="1745:2628" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="2024:2140" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="2172:2286" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="2321:2441" placeholder="..." />
+                <marker date="1464295070000" expanded="true" signature="2479:2605" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tao.edge.help.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.edge.help.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="139">
+              <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#46#93#0" expanded="true" />
+                <marker date="1464300427000" expanded="true" signature="233:4033" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="395:800" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="453:785" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="871:2482" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="929:1262" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="1310:1477" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="1524:1873" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="1916:2125" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="2171:2467" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="2551:2967" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="2609:2952" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="3039:3193" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="3259:4022" placeholder="..." />
+                <marker date="1464300427000" expanded="true" signature="3317:4007" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tao.sidebar.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+                <element signature="e#46#115#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tao.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/resources/css/tao.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="445">
+              <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/tao_edge/tao.edge.service.ts" />
         <option value="$PROJECT_DIR$/app/tao_edge/tao.edge.ts" />
-        <option value="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
-        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" />
-        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.ts" />
         <option value="$PROJECT_DIR$/app/app.component.ts" />
-        <option value="$PROJECT_DIR$/systemjs.config.js" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.template.ts" />
         <option value="$PROJECT_DIR$/app/main.ts" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.component.tpl.html" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.tpl.html" />
-        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
-        <option value="$PROJECT_DIR$/app/tao_event/tao.event.ts" />
         <option value="$PROJECT_DIR$/app/tao_event/tao.event.tpl.html" />
         <option value="$PROJECT_DIR$/app/tao_edge/tao.edge.tpl.html" />
+        <option value="$PROJECT_DIR$/systemjs.config.js" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.edges.help.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.globals.help.ts" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" />
+        <option value="$PROJECT_DIR$/app/tao_event/tao.event.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.javascript.help.ts" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.event.help.ts" />
+        <option value="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.edge.help.ts" />
+        <option value="$PROJECT_DIR$/app/resources/css/tao.css" />
       </list>
     </option>
   </component>
@@ -50,6 +161,9 @@
   </component>
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
+  </component>
+  <component name="NamedScopeManager">
+    <scope name="js_ignore" pattern="!file:app/*.js*" />
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
@@ -63,11 +177,11 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="1" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="js_ignore" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -81,95 +195,197 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
+      <pane id="Scope">
+        <subPane subId="js_ignore">
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tao_event" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tao_erg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="tao_sidebar">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="angular_tao" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tao_edge" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            <PATH_ELEMENT USER_OBJECT="tao_sidebar">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="tao_help_components">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="tao_erg">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="resources">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="resources">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="css">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="tao_edge">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="angular_tao">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="app">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="resources">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane />
       </pane>
     </panes>
   </component>
@@ -208,6 +424,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -244,54 +466,38 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1464125317506</updated>
-      <workItem from="1464125319493" duration="2634000" />
+      <workItem from="1464125319493" duration="14404000" />
+      <workItem from="1464215336804" duration="11314000" />
+      <workItem from="1464298060073" duration="37000" />
+      <workItem from="1464298099353" duration="2427000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2634000" />
+    <option name="totallyTimeSpent" value="28182000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.7721519" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.2278481" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-    </layout>
-    <layout-to-restore>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20225511" sideWeight="0.7721519" order="3" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.2278481" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.2278481" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.7721519" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
+    </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -301,35 +507,215 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Procfile">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.help.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1140">
+          <caret line="76" column="98" selection-start-line="76" selection-start-column="91" selection-end-line="76" selection-end-column="98" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#105#0" expanded="true" />
+            <marker date="1464295070000" expanded="true" signature="557:2682" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="640:738" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="685:704" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="759:2669" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="777:2647" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="799:1706" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="982:1066" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1130:1683" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1203:1657" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1279:1627" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1379:1593" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1745:2628" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2024:2140" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2172:2286" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2321:2441" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2479:2605" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.javascript.help.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300215000" expanded="true" signature="240:3573" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="393:639" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="451:624" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="704:1183" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="762:1149" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="1248:1968" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="1306:1953" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2030:2732" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2088:2717" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2795:3562" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2853:3547" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.globals.help.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="19" column="18" selection-start-line="9" selection-start-column="8" selection-end-line="19" selection-end-column="18" />
+          <folding>
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464294556000" expanded="true" signature="241:2155" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="428:967" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="494:948" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1057:1507" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1123:1488" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1581:2140" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1647:2121" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2880">
+          <caret line="192" column="14" selection-start-line="192" selection-start-column="14" selection-end-line="192" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.event.help.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="43" selection-start-line="44" selection-start-column="43" selection-end-line="44" selection-end-column="43" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300390000" expanded="true" signature="248:2825" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="427:652" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="473:652" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="493:633" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="732:2358" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="778:2358" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="798:1097" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="798:1235" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1285:1517" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1575:1896" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1952:2339" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="2439:2810" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="2505:2791" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.edge.help.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="58" column="145" selection-start-line="58" selection-start-column="145" selection-end-line="58" selection-end-column="145" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300427000" expanded="true" signature="233:4033" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="395:800" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="453:785" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="871:2482" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="929:1262" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1310:1477" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1524:1873" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1916:2125" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2171:2467" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2551:2967" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2609:2952" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3039:3193" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3259:4022" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3317:4007" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#115#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/resources/css/tao.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3720">
+          <caret line="248" column="4" selection-start-line="248" selection-start-column="4" selection-end-line="248" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bs-config.js">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#115#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.help.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="649">
+          <caret line="76" column="98" selection-start-line="76" selection-start-column="91" selection-end-line="76" selection-end-column="98" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#105#0" expanded="true" />
+            <marker date="1464295070000" expanded="true" signature="557:2682" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="640:738" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="685:704" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="759:2669" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="777:2647" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="799:1706" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="982:1066" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1130:1683" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1203:1657" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1279:1627" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1379:1593" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="1745:2628" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2024:2140" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2172:2286" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2321:2441" placeholder="..." />
+            <marker date="1464295070000" expanded="true" signature="2479:2605" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/resources/heap.ts">
+    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5309">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="334">
+          <caret line="260" column="45" selection-start-line="260" selection-start-column="45" selection-end-line="260" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.javascript.help.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="574">
+          <caret line="54" column="27" selection-start-line="54" selection-start-column="27" selection-end-line="54" selection-end-column="27" />
+          <folding>
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300215000" expanded="true" signature="240:3573" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="393:639" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="451:624" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="704:1183" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="762:1149" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="1248:1968" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="1306:1953" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2030:2732" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2088:2717" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2795:3562" placeholder="..." />
+            <marker date="1464300215000" expanded="true" signature="2853:3547" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -338,183 +724,103 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#41#0" expanded="false" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.globals.help.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="39" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
+        <state relative-caret-position="240">
+          <caret line="19" column="18" selection-start-line="9" selection-start-column="8" selection-end-line="19" selection-end-column="18" />
           <folding>
-            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464294556000" expanded="true" signature="241:2155" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="428:967" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="494:948" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1057:1507" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1123:1488" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1581:2140" placeholder="..." />
+            <marker date="1464294556000" expanded="true" signature="1647:2121" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.ts">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.event.help.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_variable/tao.variable.model.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/systemjs.config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.template.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="170" column="33" selection-start-line="170" selection-start-column="33" selection-end-line="170" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/app.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+        <state relative-caret-position="322">
+          <caret line="37" column="50" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="50" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1464126171000" expanded="true" signature="361:400" placeholder="..." />
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300390000" expanded="true" signature="248:2825" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="427:652" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="473:652" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="493:633" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="732:2358" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="778:2358" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="798:1097" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="798:1235" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1285:1517" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1575:1896" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="1952:2339" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="2439:2810" placeholder="..." />
+            <marker date="1464300390000" expanded="true" signature="2505:2791" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/main.ts">
+    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.edge.help.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#60#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="27" column="29" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="61" column="115" selection-start-line="61" selection-start-column="115" selection-end-line="61" selection-end-column="115" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.help.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+        <state relative-caret-position="139">
+          <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#93#0" expanded="true" />
+            <marker date="1464300427000" expanded="true" signature="233:4033" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="395:800" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="453:785" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="871:2482" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="929:1262" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1310:1477" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1524:1873" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="1916:2125" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2171:2467" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2551:2967" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="2609:2952" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3039:3193" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3259:4022" placeholder="..." />
+            <marker date="1464300427000" expanded="true" signature="3317:4007" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_edge/tao.edge.service.ts">
+    <entry file="file://$PROJECT_DIR$/app/resources/css/tao.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-626">
-          <caret line="5" column="38" selection-start-line="5" selection-start-column="38" selection-end-line="5" selection-end-column="38" />
+        <state relative-caret-position="445">
+          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_edge/tao.edge.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_edge/tao.edge.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="6" column="37" selection-start-line="6" selection-start-column="37" selection-end-line="6" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_edge/tao.edge.model.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_event/tao.event.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_event/tao.event.model.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_event/tao.event.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="43" column="40" selection-start-line="43" selection-start-column="40" selection-end-line="43" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.tpl.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="43" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="41" selection-start-line="0" selection-start-column="41" selection-end-line="0" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <last-edited>js_ignore</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+          <order>
+            <scope name="js_ignore" />
+          </order>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

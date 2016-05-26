@@ -93,6 +93,10 @@ class Scheduler {
         return this.clock;
     }
 
+    setClock(time: number) {
+        this.clock = time;
+    }
+
     getCount() : number {
         return this.count;
     }
@@ -172,6 +176,9 @@ export class Engine {
     execute(scenario: any, duration: number) {
         let scheduler = new Scheduler(this.eventRanker, duration);
         let graph_data = {};
+        // how to deal with pending events only? one time unit per execution?
+        // let pendingEventCounter = 0;
+        // let pendingEventOccured = false;
         scenario.Run(scheduler);
 
         while (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
@@ -179,7 +186,12 @@ export class Engine {
             let currentEvent = scheduler.next();
             let skip = false;
 
-            if (currentEvent) {
+            if (!currentEvent) {
+                scheduler.setClock(scheduler.getClock() + 1);
+                if (scheduler.getClock() > duration)
+                    break;
+            } else {
+                // cancel pending events?
                 for (var e in scheduler.cancellingEvents) {
                     let event = scheduler.cancellingEvents[e];
 
