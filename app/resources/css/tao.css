@@ -168,7 +168,7 @@ a {
     background-color: rgb(228, 231, 232);
     padding: 5px 10px;
 
-    height: 120px;
+    height: 130px;
 
 
     line-height: 30px;
@@ -177,14 +177,14 @@ a {
 
 
 .editor .paramDescription {
-    margin-top: 10px;
+    margin-top: 7px;
 }
 
 
 .editor ul li {
     background-color: rgb(228, 231, 232);
     padding: 5px 15px;
-    height: 30px;
+    height: 42px;
     line-height: 30px;
     margin-bottom: 2px;
 }
