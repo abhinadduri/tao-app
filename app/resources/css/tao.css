@@ -232,7 +232,7 @@ a {
 
 @media (min-width: 992px) {
     .modal-lg {
-        width: 100vh;
+        width: 1200px;
         height: 40vh;
     }
 }
