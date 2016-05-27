@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {TaoEvent} from './../tao_event/tao.event'
-import {TaoEdge} from './../tao_edge/tao.edge'
-import {TaoSidebar} from './../tao_sidebar/tao.sidebar'
-import {Edge} from './../tao_edge/tao.edge.model'
-import {Event} from './../tao_event/tao.event.model'
-import {Variable} from './../tao_variable/tao.variable.model'
-import {ErgTemplate} from './erg.template'
-import {Engine} from './erg.engine'
+import {TaoEvent} from './../tao_event/tao.event';
+import {TaoEdge} from './../tao_edge/tao.edge';
+import {TaoSidebar} from './../tao_sidebar/tao.sidebar';
+import {Edge} from './../tao_edge/tao.edge.model';
+import {Event} from './../tao_event/tao.event.model';
+import {Variable} from './../tao_variable/tao.variable.model';
+import {ErgTemplate} from './erg.template';
+import {Engine} from './erg.engine';
+
 
 @Component({
     selector: 'erg',
@@ -75,7 +76,10 @@ export class ErgComponent implements OnInit {
     }
 
     handleDownload() {
-        console.log(JSON.stringify(this.produceErgJSON()));
+        let data = JSON.stringify(this.produceErgJSON());
+
+        var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, this.simulationName + ".txt");
     }
 
     handleRun() {

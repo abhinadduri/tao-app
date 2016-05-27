@@ -138,7 +138,9 @@
                 <a class="tao-footer-action-button green"
                    (click)="typeOfNode() ?
                     deleteEvent() :
-                    deleteEdge()">Delete</a>
+                    (typeOfEdge() ?
+                    deleteEdge() :
+                    logError('Element not found'))">Delete</a>
 
                 <a class="tao-footer-action-button green"
                    (click)="typeOfNode() ?
@@ -147,6 +149,14 @@
                     updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters) :
                     logError('Element not found'))">Update</a>
             </div>
+        </div>
+
+        <div class="tao-panel-footer"
+             *ngIf="variablePanel">
+             <div class="right">
+                 <a class="tao-footer-action-button green"
+                    (click)="handleDownload()">Download Tao File</a>
+             </div>
         </div>
 
     </div>
@@ -178,14 +188,6 @@
                 <span class="icon"><strong>↑</strong></span>
                 <br>
                 <span>OPEN</span>
-            </a>
-        </li>
-        <li id="download"
-            (click)="handleDownload()">
-            <a>
-                <span class="icon"><strong>v</strong></span>
-                <br>
-                <span>DOWNLOAD</span>
             </a>
         </li>
         <li id="undo"
