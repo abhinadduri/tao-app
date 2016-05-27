@@ -137,7 +137,7 @@ class Scheduler {
             this.uniqueId[name] = 0;
         else
             this.uniqueId[name] += 1;
-        // console.log(name);
+
         let futureEvent = new EnginePendingEvent(name, parentEvent, this.uniqueId[name], this.count, this.clock + offset, priority, func, params, trace, condition, conditionFunc);
         this.pendingEvents.push(futureEvent);
         this.count += 1;

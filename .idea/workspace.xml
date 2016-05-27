@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="33f8cbd5-6166-4034-9c63-275a679f7c12" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.template.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.template.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
     </list>
     <ignored path="angular_tao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +24,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="erg.template.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="erg.template.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.template.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -44,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="erg.component.ts" pinned="false" current-in-tab="false">
+      <file leaf-file-name="erg.component.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="87" column="35" selection-start-line="87" selection-start-column="35" selection-end-line="87" selection-end-column="35" />
+            <state relative-caret-position="3975">
+              <caret line="265" column="39" selection-start-line="265" selection-start-column="39" selection-end-line="265" selection-end-column="39" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
               </folding>
@@ -79,8 +79,8 @@
       <file leaf-file-name="erg.engine.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2001">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state relative-caret-position="213">
+              <caret line="212" column="31" selection-start-line="212" selection-start-column="20" selection-end-line="212" selection-end-column="31" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -133,12 +133,12 @@
         <option value="$PROJECT_DIR$/app/tao_event/tao.event.ts" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.component.tpl.html" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
-        <option value="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/systemjs.config.js" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
-        <option value="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.template.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
       </list>
     </option>
   </component>
@@ -358,12 +358,12 @@
       <workItem from="1464125319493" duration="14404000" />
       <workItem from="1464215336804" duration="11314000" />
       <workItem from="1464298060073" duration="37000" />
-      <workItem from="1464298099353" duration="13846000" />
+      <workItem from="1464298099353" duration="14010000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39601000" />
+    <option name="totallyTimeSpent" value="39765000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
@@ -731,6 +731,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.template.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="31" column="77" selection-start-line="31" selection-start-column="77" selection-end-line="31" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
@@ -741,8 +749,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2001">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        <state relative-caret-position="213">
+          <caret line="212" column="31" selection-start-line="212" selection-start-column="20" selection-end-line="212" selection-end-column="31" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -751,19 +759,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="87" column="35" selection-start-line="87" selection-start-column="35" selection-end-line="87" selection-end-column="35" />
+        <state relative-caret-position="3975">
+          <caret line="265" column="39" selection-start-line="265" selection-start-column="39" selection-end-line="265" selection-end-column="39" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.template.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="31" column="77" selection-start-line="31" selection-start-column="77" selection-end-line="31" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
