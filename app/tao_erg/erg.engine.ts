@@ -137,7 +137,7 @@ class Scheduler {
             this.uniqueId[name] = 0;
         else
             this.uniqueId[name] += 1;
-        console.log(name);
+        // console.log(name);
         let futureEvent = new EnginePendingEvent(name, parentEvent, this.uniqueId[name], this.count, this.clock + offset, priority, func, params, trace, condition, conditionFunc);
         this.pendingEvents.push(futureEvent);
         this.count += 1;
@@ -182,7 +182,6 @@ export class Engine {
         scenario.Run(scheduler);
 
         while (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
-            // console.log(scheduler.scheduledEvents.nodes);
             let currentEvent = scheduler.next();
             let skip = false;
 
@@ -204,17 +203,12 @@ export class Engine {
                 if (skip)
                     continue;
 
-                // console.log(scenario[$('#global_vars option:selected').text()]);
                 var data = 0
 
                 if (currentEvent.timestamp > duration) break;
 
                 data = currentEvent.func(scheduler, currentEvent.params, false);
 
-                // var color = $('#' + currentEvent.name).css('background')
-                // $('#' + currentEvent.name).css({'background': 'black'})
-
-                // setTimeout(function() {
                 if (currentEvent.parentEvent.name == "Run") {
                     console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run 0');
                 } else if (currentEvent.parentEvent && currentEvent.trace) {
@@ -224,8 +218,7 @@ export class Engine {
                         + currentEvent.parentEvent.getId() + ' at time '
                         + scheduler.getClock());
                 }
-                // $('#' + currentEvent.name).css({'background': color})
-                // }, 50)
+
             }
 
 

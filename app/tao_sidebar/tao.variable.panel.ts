@@ -21,29 +21,28 @@ export class TaoVariablePanel {
     @Output() changeName = new EventEmitter();
     @Output() changeDescription = new EventEmitter();
     @Output() changeTime = new EventEmitter();
+    @Output() variableHistoryUpdate = new EventEmitter();
 
     updateSimulationName(newName) {
         this.changeName.emit(newName.value);
-        // this.simulationName = newName.value;
     }
 
     updateSimulationDescription(newDescription) {
         this.changeDescription.emit(newDescription.value);
-        // this.simulationDescription = newDescription.value;
     }
 
     updateTimeUnits(newTime) {
         this.changeTime.emit(parseInt(newTime.value));
-        // this.timeUnits = parseInt(newTime.value);
-        // emit to update properly
     }
 
     updateVariableValue(newValue, variable) {
         variable.value = newValue.value;
+        this.variableHistoryUpdate.emit(0);
     }
 
     updateVariableDescription(newDescription, variable) {
         variable.description = newDescription.value;
+        this.variableHistoryUpdate.emit(0);
     }
 
     changeGraphingVariable() {
@@ -56,6 +55,7 @@ export class TaoVariablePanel {
                 this.variableList.splice(i, 1);
         }
 
+        this.variableHistoryUpdate.emit(0);
     }
 
     isEmpty() {
@@ -70,6 +70,7 @@ export class TaoVariablePanel {
             "A new global variable."
         ));
         variableText.value = "";
+        this.variableHistoryUpdate.emit(0);
     }
 
 

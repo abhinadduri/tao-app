@@ -23,6 +23,8 @@ export class ErgComponent implements OnInit {
     eventList: Event[];
     edgeList: Edge[];
     variableList: Variable[];
+    history: string[];
+    currentVersion = 0;
     simulationName: string;
     simulationDescription: string;
     timeUnits: number;
@@ -43,16 +45,41 @@ export class ErgComponent implements OnInit {
         this.edgeList = [];
 
         this.variableList = [];
+
+        this.history = [JSON.stringify(this.produceErgJSON())];
+        this.currentVersion = 0;
+
     }
 
-    
+    handleHistoryUpdate() {
+        if (this.history.length > 20)
+            this.history.splice(0, 1);
+
+        if (this.currentVersion >= 19)
+            this.currentVersion = 19;
+
+        else
+            this.currentVersion ++;
+
+        this.history.splice(this.currentVersion,
+                            0,
+                            JSON.stringify(this.produceErgJSON()));
+    }
+
+    handleUndo() {
+        if (this.currentVersion == 0)
+            return;
+        this.selectedParticle = null;
+        this.currentVersion --;
+        this.loadFromText(this.history[this.currentVersion]);
+    }
+
     handleDownload() {
         console.log(JSON.stringify(this.produceErgJSON()));
     }
 
     handleRun() {
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
-
         let engine = new Engine();
 
         let compiledFunction = eval('(' + generatedCode + ')');
@@ -92,6 +119,7 @@ export class ErgComponent implements OnInit {
             var event = new Event(name, stateChange, x, y, true, {});
             this.counter++;
             this.eventList.push(event);
+            this.handleHistoryUpdate();
         }
     }
     
@@ -117,7 +145,6 @@ export class ErgComponent implements OnInit {
         else {
             this.selectedVariablePanel = false;
             this.selectedParticle = event;
-            // this.loadPanelEvent(event, e);
         }
     }
 
@@ -160,6 +187,7 @@ export class ErgComponent implements OnInit {
         );
 
         this.edgeList.push(newEdge);
+        this.handleHistoryUpdate();
     }
     
     selectEdge(edge: Edge, e) {
@@ -181,17 +209,19 @@ export class ErgComponent implements OnInit {
     }
 
     handleDrag(node: Event) {
-        var sourceAndTarget = this.getSourceAndTargetEdges(this.selectedParticle);
-        var sourceEdges = sourceAndTarget['source'];
-        var targetEdges = sourceAndTarget['target'];
+        if (node && this.selectedParticle) {
+            var sourceAndTarget = this.getSourceAndTargetEdges(this.selectedParticle);
+            var sourceEdges = sourceAndTarget['source'];
+            var targetEdges = sourceAndTarget['target'];
 
-        for (var i = 0; i < sourceEdges.length; i++) {
-            sourceEdges[i].startX = (parseInt(node.x) + 35).toString();
-            sourceEdges[i].startY = (parseInt(node.y) + 35).toString();
-        }
-        for (var i = 0; i < targetEdges.length; i++) {
-            targetEdges[i].endX = (parseInt(node.x) + 35).toString();
-            targetEdges[i].endY = (parseInt(node.y) + 35).toString();
+            for (var i = 0; i < sourceEdges.length; i++) {
+                sourceEdges[i].startX = (parseInt(node.x) + 35).toString();
+                sourceEdges[i].startY = (parseInt(node.y) + 35).toString();
+            }
+            for (var i = 0; i < targetEdges.length; i++) {
+                targetEdges[i].endX = (parseInt(node.x) + 35).toString();
+                targetEdges[i].endY = (parseInt(node.y) + 35).toString();
+            }
         }
     }
 
@@ -253,7 +283,6 @@ export class ErgComponent implements OnInit {
                 }
             )
         }
-        // console.log(simulation);
         return simulation;
     }
 
@@ -263,6 +292,7 @@ export class ErgComponent implements OnInit {
 
 
         this.simulationName = simJson.hasOwnProperty('name') ? simJson.name : 'Simulation';
+        this.simulationDescription = simJson.hasOwnProperty('description') ? simJson.description : 'A sample description.';
         this.timeUnits = simJson.hasOwnProperty('time') ? simJson.time : 10;
 
         if (simJson.hasOwnProperty('variables')) {

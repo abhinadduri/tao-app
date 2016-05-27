@@ -36,11 +36,12 @@ export class TaoSidebar {
     @Output() changeNameERG = new EventEmitter();
     @Output() changeDescriptionERG = new EventEmitter();
     @Output() changeTimeERG = new EventEmitter();
+    @Output() historyUpdate = new EventEmitter();
+    @Output() undo = new EventEmitter();
     
     
     emptyDict: any = {};
     emptyList: any = [];
-    help: boolean = false;
 
     handleDownload() {
         this.downloadERG.emit(0);
@@ -54,9 +55,12 @@ export class TaoSidebar {
         this.openERG.emit(file);
     }
 
+    handleUndo() {
+        this.undo.emit(0);
+    }
+
     launchHelp() {
         this.selectedParticle = null;
-        this.help = true;
     }
 
     loadVariablePanel() {
@@ -67,9 +71,25 @@ export class TaoSidebar {
         this.selectedParticle = edge;
     }
 
-    tester(a) {
-        console.log(a);
+    emitNameERG(event) {
+        this.changeNameERG.emit(event);
+        this.emitHistoryUpdate();
     }
+
+    emitDescriptionERG(event) {
+        this.changeDescriptionERG.emit(event);
+        this.emitHistoryUpdate();
+    }
+
+    emitTimeERG(event) {
+        this.changeTimeERG.emit(event);
+        this.emitHistoryUpdate();
+    }
+
+    logError(err) {
+        console.error(err);
+    }
+
     typeOfNode() {
         return (!(this.selectedParticle)) ? false : (this.selectedParticle.constructor == Event);
     }
@@ -78,8 +98,8 @@ export class TaoSidebar {
         return (!(this.selectedParticle)) ? false : (this.selectedParticle.constructor == Edge);
     }
 
-    updateGlobalsPanel() {
-        
+    emitHistoryUpdate() {
+        this.historyUpdate.emit(0);
     }
 
     updateEvent(eventName, trace, stateChange) {
@@ -87,7 +107,7 @@ export class TaoSidebar {
         this.selectedParticle.trace = trace.checked;
         this.selectedParticle.stateChange = stateChange.value;
 
-        // console.log(this.selectedParticle.parameters);
+        this.emitHistoryUpdate();
     }
 
     // only called if selected particle is an edge
@@ -108,6 +128,7 @@ export class TaoSidebar {
             this.selectedParticle.parameters[span] = value;
         }
 
+        this.emitHistoryUpdate();
     }
 
     keys(params) {
@@ -118,6 +139,8 @@ export class TaoSidebar {
         // if this function is being called, selectedParticle cannot possibly be null
         // can change this to only make permanent changes on an update
         delete this.selectedParticle.parameters[parameter];
+
+        this.emitHistoryUpdate();
     }
 
     addParameterToEvent(param) {
@@ -125,6 +148,7 @@ export class TaoSidebar {
         this.selectedParticle.parameters[param.value] = null;
         param.value = "";
 
+        this.emitHistoryUpdate();
     }
 
     deleteEvent() {
@@ -132,25 +156,32 @@ export class TaoSidebar {
             alert('You cannot delete the run node.');
             return;
         }
+        let spliceIndices = [];
 
         for (var i = 0; i < this.edgeList.length; i++) {
             let currentEdge = this.edgeList[i];
 
             if (currentEdge.target == this.selectedParticle.name
                 || currentEdge.source == this.selectedParticle.name) {
-                this.edgeList.splice(i, 1);
+                spliceIndices.push(i)
             }
+        }
+
+        for (var j = 0; j < spliceIndices.length; j++) {
+            this.edgeList.splice(spliceIndices[i]);
         }
 
         let index = this.eventList.indexOf(this.selectedParticle);
 
         this.eventList.splice(index, 1);
+        this.emitHistoryUpdate();
     }
 
     deleteEdge() {
         let index = this.edgeList.indexOf(this.selectedParticle);
 
         this.edgeList.splice(index, 1);
+        this.emitHistoryUpdate();
     }
 
 }

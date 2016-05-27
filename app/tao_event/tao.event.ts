@@ -13,8 +13,10 @@ export class TaoEvent {
     @Input() shiftSelected;
     
     @Output() drag = new EventEmitter();
+    @Output() historyUpdate = new EventEmitter();
     mousedown = false;
     shiftClick = false;
+    dragFinish = false;
     // move this to erg
 
     startX = 0; startY = 0; x = 0; y = 0;
@@ -35,6 +37,8 @@ export class TaoEvent {
         event.preventDefault();
 
         if (this.mousedown) {
+            this.dragFinish = true;
+
             this.y = event.pageY - this.startY;
             this.x = event.pageX - this.startX;
 
@@ -57,6 +61,9 @@ export class TaoEvent {
         event.preventDefault();
 
         this.mousedown = false;
+        if (this.dragFinish)
+            this.historyUpdate.emit(0);
+        this.dragFinish = false;
     }
 }
 

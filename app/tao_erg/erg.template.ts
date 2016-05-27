@@ -9,6 +9,7 @@ export class ErgTemplate {
         function {{name}} () {
           var self = this;
           var globals = this;
+          var function_lookup = {};
           console.log('Running: {{name}}');
           
           {{! variables}}
@@ -20,10 +21,15 @@ export class ErgTemplate {
           {{! functions}}
         
           {{#each events}}
+          
+          function_lookup['{{name}}'] = function() { 
+          {{{stateChange}}} 
+          
+          };
+          
           self.{{name}} = function(scheduler, params, scheduledByPending) {
             this.name = "{{name}}";
-        
-            {{{stateChange}}}
+            function_lookup['{{name}}']();
             {{#getSchedulingEdges ../edges name}}
             if ({{{condition}}}) {
               scheduler.schedule("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", 

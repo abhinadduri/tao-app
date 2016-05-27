@@ -9,20 +9,25 @@
                     'display': typeOfNode() ? 'block' : 'none'
                 }">
                 <span class="title">NAME</span>
-                <input type="text" #eventName [ngModel]="typeOfNode() ? selectedParticle.name : ''">
+                <input type="text" #eventName [ngModel]="typeOfNode() ? selectedParticle.name : ''"
+                       (change)="updateEvent(eventName, eventTrace, eventStateChange)">
                 <br /> <br />
+
                 <span class="title">TRACE</span>
                 <span [ngStyle]="{'display': 'inline-block'}" class="instructions">To trace an event, check the box:</span>
                 <input #eventTrace
                        [ngStyle]="{'display': 'inline-block'}"
                        type="checkbox"
                        id="traceEvent"
-                       [ngModel]="typeOfNode() ? selectedParticle.trace : false">
+                       [ngModel]="typeOfNode() ? selectedParticle.trace : false"
+                       (change)="updateEvent(eventName, eventTrace, eventStateChange)">
 
                 <br /> <br />
                 <span class="title">STATE CHANGE</span>
-                <textarea #eventStateChange [ngModel]="typeOfNode() ? selectedParticle.stateChange : ''"></textarea>
+                <textarea #eventStateChange [ngModel]="typeOfNode() ? selectedParticle.stateChange : ''"
+                          (change)="updateEvent(eventName, eventTrace, eventStateChange)"></textarea>
                 <br /> <br />
+
                 <span class="title">PARAMETERS</span>
                 <ul #eventParameters>
                     <li *ngFor="let parameter of keys((typeOfNode() ? selectedParticle.parameters : emptyDict))">
@@ -49,11 +54,11 @@
                 <input type="text" disabled="" [ngModel]="typeOfEdge() ? selectedParticle.target : ''">
                 <br /> <br />
 
-                    <span class="title"
-                          *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1" id="edgeListDisplay">EDGES</span>
-                    <span class="instructions"
-                          *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1"
-                          id="edgeListDisplayInstructions">There are multiple edges from the given source to the given target. Click on an edge to load it.</span>
+                <span class="title"
+                      *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1" id="edgeListDisplay">EDGES</span>
+                <span class="instructions"
+                      *ngIf="typeOfEdge() && selectedParticle.getCopies(edgeList).length > 1"
+                      id="edgeListDisplayInstructions">There are multiple edges from the given source to the given target. Click on an edge to load it.</span>
 
 
                 <ul #multipleEdgeSelector
@@ -70,7 +75,7 @@
 
                 <span class="title">EDGE TYPE</span>
                 <select #edgeType
-                        (change)="0"
+                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)"
                         [ngModel]="typeOfEdge() ? selectedParticle.type : ''">
                     <option value="Scheduling">Scheduling Edge</option>
                     <option value="Pending">Pending Edge</option>
@@ -79,22 +84,27 @@
                 <br /> <br />
 
                 <span class="title">CONDITION</span>
-                <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"></textarea>
+                <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"
+                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)"></textarea>
                 <br /> <br />
+
                 <span class="title" >DELAY</span>
                 <input type="text" #edgeDelay
                        [ngStyle]="{
                         'display': edgeType.value == 'Pending' ? 'none' : 'block'
                     }"
-                       [ngModel]="typeOfEdge() ? selectedParticle.delay : 0">
+                       [ngModel]="typeOfEdge() ? selectedParticle.delay : 0"
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
                     <span class="instructions"
                           [ngStyle]="{
                         'display': edgeType.value == 'Pending' ? 'block' : 'none'
                     }">You cannot set a delay for a pending edge.</span>
                 <br /> <br />
+
                 <span class="title">PRIORITY</span>
                 <input type="text" #edgePriority
-                       [ngModel]="typeOfEdge() ? selectedParticle.priority : 0">
+                       [ngModel]="typeOfEdge() ? selectedParticle.priority : 0"
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
                 <br /> <br />
 
                 <span class="title">PARAMETERS</span>
@@ -115,9 +125,10 @@
                     [simulationDescription]="simulationDescription"
                     [timeUnits]="timeUnits"
                     [variableList]="variableList"
-                    (changeName)="changeNameERG.emit($event)"
-                    (changeDescription)="changeDescriptionERG.emit($event)"
-                    (changeTime)="changeTimeERG.emit($event)">
+                    (changeName)="emitNameERG($event)"
+                    (changeDescription)="emitDescriptionERG($event)"
+                    (changeTime)="emitTimeERG($event)"
+                    (variableHistoryUpdate)="emitHistoryUpdate()">
             </VariablePanel>
 
         </div>
@@ -132,7 +143,9 @@
                 <a class="tao-footer-action-button green"
                    (click)="typeOfNode() ?
                     updateEvent(eventName, eventTrace, eventStateChange) :
-                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">Update</a>
+                    (typeOfEdge() ?
+                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters) :
+                    logError('Element not found'))">Update</a>
             </div>
         </div>
 
@@ -173,6 +186,14 @@
                 <span class="icon"><strong>v</strong></span>
                 <br>
                 <span>DOWNLOAD</span>
+            </a>
+        </li>
+        <li id="undo"
+            (click)="handleUndo()">
+            <a>
+                <span class="icon"><strong>↺</strong></span>
+                <br>
+                <span>UNDO</span>
             </a>
         </li>
         <li id="help"

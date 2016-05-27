@@ -6,6 +6,7 @@
             *ngFor="let event of eventList"
             [tao_event]="event"
             (drag)="handleDrag($event)"
+            (historyUpdate) = "handleHistoryUpdate()"
             (mousedown)="selectEvent(event, $event)"
             [selected]="event == selectedParticle"
             [shiftSelected]="event == shiftSelectedSource">
@@ -34,6 +35,8 @@
             (openERG)="handleOpen($event)"
             (changeNameERG)="simulationName = $event"
             (changeDescriptionERG)="simulationDescription = $event"
-            (changeTimeERG)="timeUnits = $event">
+            (changeTimeERG)="timeUnits = $event"
+            (historyUpdate)="handleHistoryUpdate()"
+            (undo)="handleUndo()">
     </sidebar>
 </div>
