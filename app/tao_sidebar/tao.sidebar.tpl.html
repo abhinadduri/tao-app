@@ -114,7 +114,8 @@
                         <br />
                         <input placeholder="Parameter Value"
                                class="parameterVal"
-                               [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''">
+                               [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''"
+                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
                     </li>
                 </ul>
             </div>
