@@ -22,14 +22,14 @@ export class ErgTemplate {
         
           {{#each events}}
           
-          function_lookup['{{name}}'] = function() { 
+          function_lookup['{{name}}'] = function(scheduler, params, scheduledByPending) { 
           {{{stateChange}}} 
           
           };
           
           self.{{name}} = function(scheduler, params, scheduledByPending) {
             this.name = "{{name}}";
-            function_lookup['{{name}}']();
+            function_lookup['{{name}}'](scheduler, params, scheduledByPending);
             {{#getSchedulingEdges ../edges name}}
             if ({{{condition}}}) {
               scheduler.schedule("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", 

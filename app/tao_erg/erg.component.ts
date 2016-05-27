@@ -85,7 +85,7 @@ export class ErgComponent implements OnInit {
     handleRun() {
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
-
+        console.log(generatedCode);
         let compiledFunction = eval('(' + generatedCode + ')');
         let codeToRun = new compiledFunction();
 
