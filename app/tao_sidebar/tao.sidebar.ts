@@ -27,6 +27,7 @@ export class TaoSidebar {
     @Input() simulationName: string;
     @Input() simulationDescription: string;
     @Input() timeUnits: number;
+    @Input() threads: number;
     
     @Output() resetParticle = new EventEmitter();
     @Output() downloadERG = new EventEmitter();
@@ -36,6 +37,7 @@ export class TaoSidebar {
     @Output() changeNameERG = new EventEmitter();
     @Output() changeDescriptionERG = new EventEmitter();
     @Output() changeTimeERG = new EventEmitter();
+    @Output() changeThreadNumber = new EventEmitter();
     @Output() historyUpdate = new EventEmitter();
     @Output() undo = new EventEmitter();
     
@@ -83,6 +85,11 @@ export class TaoSidebar {
 
     emitTimeERG(event) {
         this.changeTimeERG.emit(event);
+        this.emitHistoryUpdate();
+    }
+
+    emitThreadNumber(event) {
+        this.changeThreadNumber.emit(event);
         this.emitHistoryUpdate();
     }
 

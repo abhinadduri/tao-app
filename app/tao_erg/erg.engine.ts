@@ -173,82 +173,104 @@ export class Engine {
         this.eventRanker = lifoRank;
     }
 
-    execute(scenario: any, duration: number) {
-        let scheduler = new Scheduler(this.eventRanker, duration);
-        let graph_data = {};
-        // how to deal with pending events only? one time unit per execution?
-        // let pendingEventCounter = 0;
-        // let pendingEventOccured = false;
-        scenario.Run(scheduler);
+    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, steps: number): number {
+        let scheduler = schedulers[thread];
 
-        while (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
-            let currentEvent = scheduler.next();
-            let skip = false;
+        for (var i = 0; i < steps; i++) {
+            if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
+                let currentEvent = scheduler.next();
+                let skip = false;
+                if (!currentEvent) {
+                    scheduler.setClock(scheduler.getClock() + 1);
+                    if (scheduler.getClock() > duration)
+                        return -1;
+                }
 
-            if (!currentEvent) {
-                scheduler.setClock(scheduler.getClock() + 1);
-                if (scheduler.getClock() > duration)
-                    break;
-            } else {
-                // cancel pending events?
+                // check cancelling edges
                 for (var e in scheduler.cancellingEvents) {
-                    let event = scheduler.cancellingEvents[e];
-
-                    if (event.name == currentEvent.name) {
-                        skip = true;
+                    let cancel = scheduler.cancellingEvents[e];
+                    if (cancel.name == currentEvent.name) {
                         delete scheduler.cancellingEvents[e];
+                        return 0;
                     }
                 }
 
-                if (skip)
-                    continue;
+                if (currentEvent.timestamp > duration) return -1;
 
-                var data = 0
+                currentEvent.func(scheduler, currentEvent.params, false);
 
-                if (currentEvent.timestamp > duration) break;
-
-                data = currentEvent.func(scheduler, currentEvent.params, false);
-
-                if (currentEvent.parentEvent.name == "Run") {
-                    console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run 0');
-                } else if (currentEvent.parentEvent && currentEvent.trace) {
+                if (currentEvent.parentEvent.name == "Run" && currentEvent.trace)
+                    console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run at time '
+                        + scheduler.getClock()
+                        + ' by thread ' + (thread + 1));
+                else if (currentEvent.parentEvent && currentEvent.trace) {
                     console.log(currentEvent.name + ' '
                         + currentEvent.getId() + ' by '
                         + currentEvent.parentEvent.name + ' '
                         + currentEvent.parentEvent.getId() + ' at time '
-                        + scheduler.getClock());
+                        + scheduler.getClock()
+                        + ' by thread ' + (thread + 1));
                 }
 
-            }
+                for (var e in scheduler.pendingEvents) {
+                    let pendingEvent = scheduler.pendingEvents[e];
 
+                    // only global variables
 
-            //pending events
-            for (var e in scheduler.pendingEvents) {
-                let pendingEvent = scheduler.pendingEvents[e];
+                    if (pendingEvent.conditionFunc(scenario)) {
+                        delete scheduler.pendingEvents[e];
 
-                // only global variables
+                        pendingEvent.func(scheduler, pendingEvent.params, true);
+                        if (pendingEvent.parentEvent.name == "Run" && pendingEvent.trace)
+                            console.log(pendingEvent.name + ' ' + pendingEvent.getId() + ' by Run at time '
+                                + scheduler.getClock()
+                                + ' by thread ' + (thread + 1));
+                        else if (pendingEvent.parentEvent && pendingEvent.trace) {
+                            console.log(pendingEvent.name + ' '
+                                + pendingEvent.getId() + ' by '
+                                + pendingEvent.parentEvent.name + ' '
+                                + pendingEvent.parentEvent.getId() + ' at time '
+                                + scheduler.getClock()
+                                + ' by thread ' + (thread + 1));
+                        }
 
-                if (pendingEvent.conditionFunc(scenario)) {
-                    delete scheduler.pendingEvents[e];
-
-                    data = pendingEvent.func(scheduler, pendingEvent.params, true);
-                    if (pendingEvent.parentEvent.name == "Run") {
-                        console.log(pendingEvent.name + ' ' + pendingEvent.getId() + ' by Run 0 at time ' + scheduler.getClock());
-                    } else if (pendingEvent.parentEvent && pendingEvent.trace) {
-                        console.log(pendingEvent.name + ' '
-                            + pendingEvent.getId() + ' by '
-                            + pendingEvent.parentEvent.name + ' '
-                            + pendingEvent.parentEvent.getId() + ' at time '
-                            + scheduler.getClock());
                     }
-
                 }
             }
+        }
+        return 1;
+    }
 
-            // graph_data[scheduler.getClock()] = data
+    execute(scenarioList: any[], duration: number, threads: number=1) {
+
+        if (scenarioList.length != threads) {
+            alert('Error. Please report this error.');
         }
 
-        // return graph_data
+        let schedulerMaster: Scheduler[] = [];
+        let loopMaster: number[] = [];
+
+        for (var i = 0; i < threads; i++) {
+            schedulerMaster.push(new Scheduler(this.eventRanker, duration));
+            loopMaster.push(1);
+        }
+        
+        for (var j = 0; j < threads; j++) {
+            scenarioList[j].Run(schedulerMaster[j]);
+            console.log('Running ' + scenarioList[j].name + ' on thread ' + (j + 1));
+        }
+
+        while (!_.isEmpty(loopMaster)) {
+            for (var k in loopMaster) {
+                if (loopMaster[k] == 1) {
+                    let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k), 1);
+                    if (status == -1 || status == -2)
+                        loopMaster.splice(parseInt(k), 1);
+                    loopMaster[k] == status;
+                }
+            }
+        }
 
     }
+
 }

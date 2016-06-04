@@ -6,30 +6,22 @@ export class ErgTemplate {
 
     public static makeTemplate(simulation) {
         let template = `
+        
         function {{name}} () {
           var self = this;
           var globals = this;
-          var function_lookup = {};
-          console.log('Running: {{name}}');
           
           {{! variables}}
           
-          {{~#each variables}}
-          globals.{{name}} = {{{value}}};
-          {{~/each}}
+          
           
           {{! functions}}
         
           {{#each events}}
           
-          function_lookup['{{name}}'] = function(scheduler, params, scheduledByPending) { 
-          {{{stateChange}}} 
-          
-          };
-          
           self.{{name}} = function(scheduler, params, scheduledByPending) {
             this.name = "{{name}}";
-            function_lookup['{{name}}'](scheduler, params, scheduledByPending);
+            self.{{name}}.func(scheduler, params, scheduledByPending);
             {{#getSchedulingEdges ../edges name}}
             if ({{{condition}}}) {
               scheduler.schedule("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", 
@@ -63,6 +55,14 @@ export class ErgTemplate {
           }
         
           {{/each}}
+          
+          {{#each events}}
+          
+          self.{{name}}.func = function(scheduler, params, scheduledByPending) {
+            {{{stateChange}}}
+           
+          }
+          {{~/each}}
         }
         `;
 

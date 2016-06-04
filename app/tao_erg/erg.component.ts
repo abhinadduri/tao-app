@@ -7,6 +7,7 @@ import {Event} from './../tao_event/tao.event.model';
 import {Variable} from './../tao_variable/tao.variable.model';
 import {ErgTemplate} from './erg.template';
 import {Engine} from './erg.engine';
+import {Stats} from '../resources/stats';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class ErgComponent implements OnInit {
     simulationName: string;
     simulationDescription: string;
     timeUnits: number;
+    threads: number;
 
     ngOnInit() {
         this.counter = 1;
@@ -38,6 +40,7 @@ export class ErgComponent implements OnInit {
         this.simulationName = "Simulation";
         this.simulationDescription = "A sample description.";
         this.timeUnits = 5;
+        this.threads = 1;
 
         this.eventList = [
             new Event("Run", "// your code here", "50", "50", false, {})
@@ -85,11 +88,31 @@ export class ErgComponent implements OnInit {
     handleRun() {
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
-        
-        let compiledFunction = eval('(' + generatedCode + ')');
-        let codeToRun = new compiledFunction();
 
-        engine.execute(codeToRun, this.timeUnits);
+        let compiledFunction = eval('(' + generatedCode + ')');
+
+        let scenarioList: any[] = [];
+        for (var i = 0; i < this.threads; i++) {
+            let code = new compiledFunction();
+            code.stats = Stats;
+            for (var j = 0; j < this.variableList.length; j++) {
+                let value = eval('(' + this.variableList[j].value + ')');
+                if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
+                    alert('The number of threads is greater than one. Each global variable must be a comma separated array,' +
+                        'specifying the initial values of the simulation for each thread. For example, with two threads, a global' +
+                        'variable named queue with initial values of 2 and 3 would have a value of [2, 3].')
+                    return;
+                }
+
+                if (this.threads == 1)
+                    code[this.variableList[j].name] = value;
+                else
+                    code[this.variableList[j].name] = value[i];
+            }
+            scenarioList.push(code);
+        }
+
+        engine.execute(scenarioList, this.timeUnits, this.threads);
     }
 
     handleOpen(e) {
@@ -112,7 +135,15 @@ export class ErgComponent implements OnInit {
         reader.readAsText(file);
     }
 
+    updateThreads(num: number) {
+        if (num <= 0) {
+            alert('Need at least one thread!');
+            this.threads = 1;
+            return;
+        }
 
+        this.threads = num;
+    }
 
     createEvent(e, graph) {
         if (e.target == graph) {
@@ -234,6 +265,7 @@ export class ErgComponent implements OnInit {
 
         simulation['name'] = this.simulationName;
         simulation['time'] = this.timeUnits;
+        simulation['threads'] = this.threads;
 
         simulation['variables'] = [];
 
@@ -298,6 +330,7 @@ export class ErgComponent implements OnInit {
         this.simulationName = simJson.hasOwnProperty('name') ? simJson.name : 'Simulation';
         this.simulationDescription = simJson.hasOwnProperty('description') ? simJson.description : 'A sample description.';
         this.timeUnits = simJson.hasOwnProperty('time') ? simJson.time : 10;
+        this.threads = simJson.hasOwnProperty('threads') ? simJson.threads : 1;
 
         if (simJson.hasOwnProperty('variables')) {
             for (var i = 0; i < simJson.variables.length; i++) {

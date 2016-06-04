@@ -125,10 +125,12 @@
                     [simulationName]="simulationName"
                     [simulationDescription]="simulationDescription"
                     [timeUnits]="timeUnits"
+                    [threads]="threads"
                     [variableList]="variableList"
                     (changeName)="emitNameERG($event)"
                     (changeDescription)="emitDescriptionERG($event)"
                     (changeTime)="emitTimeERG($event)"
+                    (changeThreadNumber)="emitThreadNumber($event)"
                     (variableHistoryUpdate)="emitHistoryUpdate()">
             </VariablePanel>
 

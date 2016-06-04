@@ -17,10 +17,12 @@ export class TaoVariablePanel {
     @Input() simulationDescription;
     @Input() timeUnits;
     @Input() variableList;
+    @Input() threads;
 
     @Output() changeName = new EventEmitter();
     @Output() changeDescription = new EventEmitter();
     @Output() changeTime = new EventEmitter();
+    @Output() changeThreadNumber = new EventEmitter();
     @Output() variableHistoryUpdate = new EventEmitter();
 
     updateSimulationName(newName) {
@@ -36,8 +38,13 @@ export class TaoVariablePanel {
     }
 
     updateVariableValue(newValue, variable) {
+        let value = eval('(' + newValue.value + ')');
         variable.value = newValue.value;
         this.variableHistoryUpdate.emit(0);
+    }
+
+    updateThreadNumber(newValue) {
+        this.changeThreadNumber.emit(newValue.value);
     }
 
     updateVariableDescription(newDescription, variable) {

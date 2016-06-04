@@ -24,6 +24,15 @@
            (change)="updateTimeUnits(time)">
     <br /> <br />
 
+    <span class="title">Threads</span>
+    <input type="text"
+           #thread
+           [ngModel]="threads"
+           (change)="updateThreadNumber(thread)">
+    <span class="instructions">To spawn multiple threads, set this value above 1. Each global variable
+    must be an array specifying the initial conditions for each thread. The size of the array must be equal to the number of threads.</span>
+    <br />
+
     <span class="title">Graphing</span>
     <select #selectGraphVariable>
         <option

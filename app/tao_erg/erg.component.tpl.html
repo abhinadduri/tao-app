@@ -30,12 +30,14 @@
             [simulationName]="simulationName"
             [simulationDescription]="simulationDescription"
             [timeUnits]="timeUnits"
+            [threads]="threads"
             (downloadERG)="handleDownload()"
             (runERG)="handleRun()"
             (openERG)="handleOpen($event)"
             (changeNameERG)="simulationName = $event"
             (changeDescriptionERG)="simulationDescription = $event"
             (changeTimeERG)="timeUnits = $event"
+            (changeThreadNumber)="updateThreads($event)"
             (historyUpdate)="handleHistoryUpdate()"
             (undo)="handleUndo()">
     </sidebar>
