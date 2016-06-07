@@ -125,6 +125,17 @@ a {
     border: 0;
 }
 
+.editor textarea {
+    font-size: 14px;
+    background-color: rgb(241, 242, 243);
+    color: inherit;
+    width: calc(100% - 30px);
+    padding: 5px 15px;
+    height: 300px;
+    border: 0;
+}
+
+
 #traceEvent {
     width: 10px;
     vertical-align: -7px;
@@ -217,7 +228,8 @@ a {
 
 .tao-panel-footer .tao-footer-action-button.green {
     color: rgb(22, 150, 136);
-    border-color: rgb(22, 150, 136);;
+    border-color: rgb(22, 150, 136);
+
 }
 
 .code {
@@ -240,4 +252,12 @@ a {
 
 .help-list:hover {
     color: rgb(98, 125, 137)
+}
+
+.taobtn {
+
+}
+
+.taobtn:hover {
+    cursor: pointer;
 }

@@ -25,7 +25,7 @@
             [eventList]="eventList"
             [edgeList]="edgeList"
             [variableList]="variableList"
-            (resetParticle)="unSelectFromPanel()"
+            (resetParticle)="unSelectFromPanel($event)"
             [variablePanel]="selectedVariablePanel"
             [simulationName]="simulationName"
             [simulationDescription]="simulationDescription"

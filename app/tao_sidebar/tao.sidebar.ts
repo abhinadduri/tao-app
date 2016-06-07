@@ -182,6 +182,7 @@ export class TaoSidebar {
 
         this.eventList.splice(index, 1);
         this.emitHistoryUpdate();
+        this.resetParticle.emit('reset all');
     }
 
     deleteEdge() {

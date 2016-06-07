@@ -16,9 +16,9 @@ export class Stats {
     }
 
     public static poissonRandomVariable = function(lambda) {
-        var n = 0;
-        var limit = Math.exp(-lambda);
-        var u = Math.random();
+        let n = 0;
+        let limit = Math.exp(-lambda);
+        let u = Math.random();
 
         while (u > limit) {
             n++;
@@ -32,6 +32,39 @@ export class Stats {
              * Math.exp(-lambda)) / Stats.gamma(x+1);
     }
 
+    public static poissoncdf = function(lambda, x) {
+        let sum = 0;
+
+        for (let i = 0; i < x; i++) {
+            sum += Stats.poissonpmf(lambda, i);
+        }
+    }
+
+    public static binomRandomVariable = function(n, p) {
+        let variate = 0;
+
+        for (let i = 0; i < n; i++) {
+            if (Math.random() < p)
+                variate++;
+        }
+
+        return variate;
+    }
+
+    public static binompmf = function(n, k, p) {
+        return Stats.choose(n, k) * Math.pow(p, k) * Math.pow((1-p), (n-k));
+    }
+
+    public static binomcdf = function(n, k, p) {
+        let sum = 0;
+
+        for (let i = 0; i < k; i++) {
+            sum += Stats.binompmf(n, i, p);
+        }
+
+        return sum;
+    }
+
     public static gamma = function(t) {
         if (t == 0)
             return 1;
@@ -43,9 +76,9 @@ export class Stats {
     }
 
     public static gammacdf = function(t, a, b, precision=.00001) {
-        var normalize = Math.pow(b, a) / Stats.gamma(a);
+        let normalize = Math.pow(b, a) / Stats.gamma(a);
 
-        var pdf = function(y) {
+        let pdf = function(y) {
             return (Math.pow(y, a-1)
             * Math.exp(-b*y));
         }
@@ -60,9 +93,9 @@ export class Stats {
     }
 
     public static betacdf = function(x, a, b, precision=.00001) {
-        var betaConstant = Stats.beta(a, b);
+        let betaConstant = Stats.beta(a, b);
 
-        var pdf = function(y) {
+        let pdf = function(y) {
             return (Math.pow(y, a-1)
             * Math.pow((1-y), b-1))
         }
@@ -71,7 +104,7 @@ export class Stats {
     }
 
     public static integrate = function(a, b, dx=.0001, func) {
-        var neg = false;
+        let neg = false;
         if (a > b) {
             neg = true;
             var temp = a;
@@ -79,7 +112,7 @@ export class Stats {
             b = temp;
         }
 
-        var sum = 0;
+        let sum = 0;
         while (a < b) {
             sum += func(a)*dx;
             a += dx;
@@ -96,7 +129,7 @@ export class Stats {
     }
 
     public static expdisc = function(a, b, arg, pdf) {
-        var sum = 0;
+        let sum = 0;
 
         while (a < b) {
             var curr_dens = pdf(a);
@@ -111,19 +144,24 @@ export class Stats {
     }
 
     public static derv = function(f, x, error=.00001) {
-        var h = .001;
-        var d1 = (f(x + h) - f(x))/h;
+        let h = .001;
+        let d1 = (f(x + h) - f(x))/h;
+        let d2 = 0;
 
         while (true) {
             h /= 10;
-            var d2 = (f(x + h) - f(x))/h;
-            var diff = Math.abs(d2 - d1);
+            let d2 = (f(x + h) - f(x))/h;
+            let diff = Math.abs(d2 - d1);
             if (diff < error)
                 break;
             d1 = d2;
         }
 
         return d2;
+    }
+
+    public static choose = function(n, k) {
+        return Math.round(Stats.gamma(n + 1) / (Stats.gamma(k + 1) * Stats.gamma(n - k + 1)));
     }
 
     private static isInt(x) {

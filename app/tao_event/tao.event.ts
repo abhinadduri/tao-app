@@ -17,7 +17,6 @@ export class TaoEvent {
     mousedown = false;
     shiftClick = false;
     dragFinish = false;
-    // move this to erg
 
     startX = 0; startY = 0; x = 0; y = 0;
 

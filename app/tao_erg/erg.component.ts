@@ -89,14 +89,25 @@ export class ErgComponent implements OnInit {
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
 
-        let compiledFunction = eval('(' + generatedCode + ')');
+        let compiledFunction;
+        try {
+            compiledFunction = eval('(' + generatedCode + ')');
+        } catch (e) {
+            console.error(e);
+        }
 
         let scenarioList: any[] = [];
         for (var i = 0; i < this.threads; i++) {
             let code = new compiledFunction();
             code.stats = Stats;
             for (var j = 0; j < this.variableList.length; j++) {
-                let value = eval('(' + this.variableList[j].value + ')');
+                let value;
+                try {
+                    value = eval('(' + this.variableList[j].value + ')');
+                } catch (e) {
+                    console.error(e);
+                }
+
                 if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
                     alert('The number of threads is greater than one. Each global variable must be a comma separated array,' +
                         'specifying the initial values of the simulation for each thread. For example, with two threads, a global' +
@@ -119,6 +130,7 @@ export class ErgComponent implements OnInit {
         // let file = new FileReader();
         let file = e.target.files[0];
         if (!file) {
+            alert('Invalid file.');
             return;
         }
 
@@ -167,11 +179,12 @@ export class ErgComponent implements OnInit {
         }
     }
 
-    unSelectFromPanel() {
+    unSelectFromPanel(type) {
         this.selectedParticle = null;
         this.shiftSelectedSource = null;
 
-        this.selectedVariablePanel = true
+        if (!(type == 'reset all'))
+            this.selectedVariablePanel = true
     }
 
     selectEvent(event: Event, e) {

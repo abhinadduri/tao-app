@@ -138,14 +138,14 @@
         <div class="tao-panel-footer"
              *ngIf="typeOfNode() || typeOfEdge()">
             <div class="right">
-                <a class="tao-footer-action-button green"
+                <a class="tao-footer-action-button green taobtn"
                    (click)="typeOfNode() ?
                     deleteEvent() :
                     (typeOfEdge() ?
                     deleteEdge() :
                     logError('Element not found'))">Delete</a>
 
-                <a class="tao-footer-action-button green"
+                <a class="tao-footer-action-button green taobtn"
                    (click)="typeOfNode() ?
                     updateEvent(eventName, eventTrace, eventStateChange) :
                     (typeOfEdge() ?
@@ -167,6 +167,7 @@
 
     <ul id="menu">
         <li id="run"
+            class="taobtn"
             (click)="handleRun()">
             <a>
                 <span class="icon">►</span>
@@ -175,6 +176,7 @@
             </a>
         </li>
         <li id="globals"
+            class="taobtn"
             (click)="loadVariablePanel()">
             <a>
                 <span class="icon"><strong>{&nbsp;}</strong></span>
@@ -183,6 +185,7 @@
             </a>
         </li>
         <li id="open"
+            class="taobtn"
             (click)="file.click()">
             <input #file type="file"
                    (change)="handleOpen($event)"
@@ -194,6 +197,7 @@
             </a>
         </li>
         <li id="undo"
+            class="taobtn"
             (click)="handleUndo()">
             <a>
                 <span class="icon"><strong>↺</strong></span>
@@ -202,6 +206,7 @@
             </a>
         </li>
         <li id="help"
+            class="taobtn"
             (click)="helpDialogue.open()">
             <a>
                 <span class="icon"><strong>?</strong></span>

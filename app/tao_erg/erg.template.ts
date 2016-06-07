@@ -6,14 +6,9 @@ export class ErgTemplate {
 
     public static makeTemplate(simulation) {
         let template = `
-        
         function {{name}} () {
           var self = this;
           var globals = this;
-          
-          {{! variables}}
-          
-          
           
           {{! functions}}
         

@@ -173,72 +173,71 @@ export class Engine {
         this.eventRanker = lifoRank;
     }
 
-    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, steps: number): number {
+    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number): number {
         let scheduler = schedulers[thread];
+        let success = false;
+        if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
+            let currentEvent = scheduler.next();
+            let skip = false;
+            if (!currentEvent) {
+                scheduler.setClock(scheduler.getClock() + 1);
+                if (scheduler.getClock() > duration)
+                    return -1;
+            }
 
-        for (var i = 0; i < steps; i++) {
-            if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
-                let currentEvent = scheduler.next();
-                let skip = false;
-                if (!currentEvent) {
-                    scheduler.setClock(scheduler.getClock() + 1);
-                    if (scheduler.getClock() > duration)
-                        return -1;
-                }
-
-                // check cancelling edges
-                for (var e in scheduler.cancellingEvents) {
-                    let cancel = scheduler.cancellingEvents[e];
-                    if (cancel.name == currentEvent.name) {
-                        delete scheduler.cancellingEvents[e];
-                        return 0;
-                    }
-                }
-
-                if (currentEvent.timestamp > duration) return -1;
-
-                currentEvent.func(scheduler, currentEvent.params, false);
-
-                if (currentEvent.parentEvent.name == "Run" && currentEvent.trace)
-                    console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run at time '
-                        + scheduler.getClock()
-                        + ' by thread ' + (thread + 1));
-                else if (currentEvent.parentEvent && currentEvent.trace) {
-                    console.log(currentEvent.name + ' '
-                        + currentEvent.getId() + ' by '
-                        + currentEvent.parentEvent.name + ' '
-                        + currentEvent.parentEvent.getId() + ' at time '
-                        + scheduler.getClock()
-                        + ' by thread ' + (thread + 1));
-                }
-
-                for (var e in scheduler.pendingEvents) {
-                    let pendingEvent = scheduler.pendingEvents[e];
-
-                    // only global variables
-
-                    if (pendingEvent.conditionFunc(scenario)) {
-                        delete scheduler.pendingEvents[e];
-
-                        pendingEvent.func(scheduler, pendingEvent.params, true);
-                        if (pendingEvent.parentEvent.name == "Run" && pendingEvent.trace)
-                            console.log(pendingEvent.name + ' ' + pendingEvent.getId() + ' by Run at time '
-                                + scheduler.getClock()
-                                + ' by thread ' + (thread + 1));
-                        else if (pendingEvent.parentEvent && pendingEvent.trace) {
-                            console.log(pendingEvent.name + ' '
-                                + pendingEvent.getId() + ' by '
-                                + pendingEvent.parentEvent.name + ' '
-                                + pendingEvent.parentEvent.getId() + ' at time '
-                                + scheduler.getClock()
-                                + ' by thread ' + (thread + 1));
-                        }
-
-                    }
+            // check cancelling edges
+            for (let e in scheduler.cancellingEvents) {
+                let cancel = scheduler.cancellingEvents[e];
+                if (cancel.name == currentEvent.name) {
+                    delete scheduler.cancellingEvents[e];
+                    return 0;
                 }
             }
-        }
-        return 1;
+
+            if (currentEvent.timestamp > duration) return -1;
+
+            currentEvent.func(scheduler, currentEvent.params, false);
+
+            if (currentEvent.parentEvent.name == "Run" && currentEvent.trace)
+                console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run at time '
+                    + scheduler.getClock()
+                    + ' by thread ' + (thread + 1));
+            else if (currentEvent.parentEvent && currentEvent.trace) {
+                console.log(currentEvent.name + ' '
+                    + currentEvent.getId() + ' by '
+                    + currentEvent.parentEvent.name + ' '
+                    + currentEvent.parentEvent.getId() + ' at time '
+                    + scheduler.getClock()
+                    + ' by thread ' + (thread + 1));
+            }
+
+            for (let e in scheduler.pendingEvents) {
+                let pendingEvent = scheduler.pendingEvents[e];
+
+                // only global variables
+
+                if (pendingEvent.conditionFunc(scenario)) {
+                    delete scheduler.pendingEvents[e];
+
+                    pendingEvent.func(scheduler, pendingEvent.params, true);
+                    if (pendingEvent.parentEvent.name == "Run" && pendingEvent.trace)
+                        console.log(pendingEvent.name + ' ' + pendingEvent.getId() + ' by Run at time '
+                            + scheduler.getClock()
+                            + ' by thread ' + (thread + 1));
+                    else if (pendingEvent.parentEvent && pendingEvent.trace) {
+                        console.log(pendingEvent.name + ' '
+                            + pendingEvent.getId() + ' by '
+                            + pendingEvent.parentEvent.name + ' '
+                            + pendingEvent.parentEvent.getId() + ' at time '
+                            + scheduler.getClock()
+                            + ' by thread ' + (thread + 1));
+                    }
+
+                }
+            }
+            return 1;
+        } else return -2;
+
     }
 
     execute(scenarioList: any[], duration: number, threads: number=1) {
@@ -248,29 +247,65 @@ export class Engine {
         }
 
         let schedulerMaster: Scheduler[] = [];
-        let loopMaster: number[] = [];
+        let loopMaster: any = {};
+        let numberOfEvents: number[] = [];
+        let updateMaster: number[] = [];
 
-        for (var i = 0; i < threads; i++) {
+        for (let i = 0; i < threads; i++) {
             schedulerMaster.push(new Scheduler(this.eventRanker, duration));
-            loopMaster.push(1);
+            loopMaster[i] = 1;
+            updateMaster.push(1);
+            numberOfEvents.push(0);
         }
         
-        for (var j = 0; j < threads; j++) {
+        for (let j = 0; j < threads; j++) {
             scenarioList[j].Run(schedulerMaster[j]);
             console.log('Running ' + scenarioList[j].name + ' on thread ' + (j + 1));
         }
 
         while (!_.isEmpty(loopMaster)) {
-            for (var k in loopMaster) {
-                if (loopMaster[k] == 1) {
-                    let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k), 1);
-                    if (status == -1 || status == -2)
-                        loopMaster.splice(parseInt(k), 1);
-                    loopMaster[k] == status;
+            for (let k in loopMaster) {
+                for (let j = 0; j < updateMaster[k]; j++) {
+                    if (loopMaster[k] == 1) {
+                        let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k));
+                        numberOfEvents[k]++;
+                        loopMaster[k] == status;
+                        if (status == -1 || status == -2) {
+                            delete loopMaster[k]
+                            console.log('Terminating thread ' + (parseInt(k)+1));
+                            break;
+                        }
+                    }
                 }
             }
+            if (threads > 1)
+               this.updateResources(numberOfEvents, updateMaster);
         }
 
+    }
+
+    updateResources(numberOfEvents: number[], updateMaster: number[]) {
+        let probabilities = [];
+        let sum = 0;
+        for (let i = 0; i < numberOfEvents.length; i++) {
+            sum += numberOfEvents[i];
+        }
+
+        for (let j = 0; j < numberOfEvents.length; j++) {
+            probabilities.push(numberOfEvents[j]/sum)
+        }
+        probabilities.sort();
+        let variate = Math.random();
+        let cumulativeProbability = 0;
+        if (variate < probabilities[0])
+            updateMaster[0] += 1;
+        else {
+            for (let k = 0; k < probabilities.length; k++) {
+                cumulativeProbability += probabilities[k];
+                if (variate < cumulativeProbability)
+                    updateMaster[k] += 1;
+            }
+        }
     }
 
 }
