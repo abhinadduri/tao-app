@@ -3,11 +3,12 @@
  */
 import {Component, ViewChild, OnInit} from '@angular/core';
 import {NgStyle} from '@angular/common';
-import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
-import {EventHelp} from './tao_help_components/tao.event.help'
-import {EdgeHelp} from './tao_help_components/tao.edge.help'
-import {GlobalsHelp} from './tao_help_components/tao.globals.help'
-import {JavascriptHelp} from './tao_help_components/tao.javascript.help'
+import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal';
+import {EventHelp} from './tao_help_components/tao.event.help';
+import {EdgeHelp} from './tao_help_components/tao.edge.help';
+import {GlobalsHelp} from './tao_help_components/tao.globals.help';
+import {JavascriptHelp} from './tao_help_components/tao.javascript.help';
+import {GraphHelp} from './tao_help_components/tao.graph.help';
 
 @Component({
     selector: 'help',
@@ -56,6 +57,9 @@ import {JavascriptHelp} from './tao_help_components/tao.javascript.help'
                     <globals-help
                     *ngIf="renderGlobals()"
                     [selectedSubComponent]="selectedElement"></globals-help>
+                    <graph-help
+                    *ngIf="renderGraph()"
+                    [selectedSubComponent]="selectedElement"></graph-help>
                     <javascript-help
                     *ngIf="renderJavascript()"
                     [selectedSubComponent]="selectedElement"></javascript-help>
@@ -64,16 +68,17 @@ import {JavascriptHelp} from './tao_help_components/tao.javascript.help'
         </modal-body>
     </modal>
     `,
-    directives: [MODAL_DIRECTIVES, NgStyle, EventHelp, EdgeHelp, GlobalsHelp, JavascriptHelp]
+    directives: [MODAL_DIRECTIVES, NgStyle, EventHelp, EdgeHelp, GraphHelp, GlobalsHelp, JavascriptHelp]
 })
 
 export class HelpDialogue {
     @ViewChild('modal') modal: ModalComponent;
 
-    helpListKeys: any = ['Events', 'Edges', 'Globals', 'Javascript'];
+    helpListKeys: any = ['Events', 'Edges', 'Globals', 'Graph', 'Javascript'];
     helpListSubkeys: any = {'Events': ['Creating an Event', 'Editing an Event', 'Private Variables'],
                             'Edges': ['Creating an Edge', 'Editing an Edge', 'Pending Edges', 'Cancelling Edges', 'Parameters'],
                             'Globals': ['Creating Global Variables', 'Accessing Global Variables', 'Time Units'],
+                            'Graph': ['Tracing Output'],
                             'Javascript': ['General', 'Variables', 'Functions', 'Arrays', 'Objects']}
     selectedElement = 'Creating an Event';
 
@@ -104,6 +109,10 @@ export class HelpDialogue {
         return this.selectedElement == 'Creating Global Variables'
             || this.selectedElement == 'Accessing Global Variables'
             || this.selectedElement == 'Time Units';
+    }
+
+    renderGraph() {
+        return this.selectedElement == 'Tracing Output';
     }
 
     renderJavascript() {

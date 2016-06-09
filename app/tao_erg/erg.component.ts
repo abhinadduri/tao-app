@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {NgStyle} from '@angular/common'
 import {TaoEvent} from './../tao_event/tao.event';
 import {TaoEdge} from './../tao_edge/tao.edge';
 import {TaoSidebar} from './../tao_sidebar/tao.sidebar';
@@ -8,11 +9,11 @@ import {Variable} from './../tao_variable/tao.variable.model';
 import {ErgTemplate} from './erg.template';
 import {Engine} from './erg.engine';
 import {Stats} from '../resources/stats';
-
+import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
     selector: 'erg',
-    directives: [TaoEvent, TaoEdge, TaoSidebar],
+    directives: [TaoEvent, TaoEdge, TaoSidebar, MODAL_DIRECTIVES, NgStyle],
     templateUrl: './app/tao_erg/erg.component.tpl.html'
 })
 
@@ -31,6 +32,10 @@ export class ErgComponent implements OnInit {
     simulationDescription: string;
     timeUnits: number;
     threads: number;
+    graphData: any;
+    graphingVariable: string;
+
+    @ViewChild('background') modal: ModalComponent;
 
     ngOnInit() {
         this.counter = 1;
@@ -41,6 +46,7 @@ export class ErgComponent implements OnInit {
         this.simulationDescription = "A sample description.";
         this.timeUnits = 5;
         this.threads = 1;
+        this.graphData = {};
 
         this.eventList = [
             new Event("Run", "// your code here", "50", "50", false, {})
@@ -85,6 +91,14 @@ export class ErgComponent implements OnInit {
         saveAs(blob, this.simulationName + ".txt");
     }
 
+    private isNumArray(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (typeof arr[i] != "number")
+                return false
+        }
+        return true;
+    }
+
     handleRun() {
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
@@ -97,6 +111,19 @@ export class ErgComponent implements OnInit {
         }
 
         let scenarioList: any[] = [];
+        let variableNames: string[] = [];
+        for (let k = 0; k < this.variableList.length; k++) {
+            let value;
+            try {
+                value = eval('(' + this.variableList[k].value + ')');
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (typeof value == "number" || (Array.isArray(value) && value.length == this.threads && this.isNumArray(value)))
+                variableNames.push(this.variableList[k].name)
+        }
+
         for (var i = 0; i < this.threads; i++) {
             let code = new compiledFunction();
             code.stats = Stats;
@@ -119,11 +146,15 @@ export class ErgComponent implements OnInit {
                     code[this.variableList[j].name] = value;
                 else
                     code[this.variableList[j].name] = value[i];
+
             }
             scenarioList.push(code);
         }
 
-        engine.execute(scenarioList, this.timeUnits, this.threads);
+        this.graphData = engine.execute(scenarioList, this.timeUnits, this.threads, variableNames);
+        if (!this.graphingVariable)
+            if (this.variableList[0])
+            this.graphingVariable = this.variableList[0].name;
     }
 
     handleOpen(e) {
@@ -155,6 +186,10 @@ export class ErgComponent implements OnInit {
         }
 
         this.threads = num;
+    }
+
+    updateGraphVariable(graph: string) {
+        this.graphingVariable = graph;
     }
 
     createEvent(e, graph) {

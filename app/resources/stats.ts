@@ -75,6 +75,41 @@ export class Stats {
             * (1 + 1/(12*t) + 1/(288*t*t) - 139/(51840*t*t*t) - 571/(2488320*t*t*t*t));
     }
 
+    public static gammaRandomVariable = function(alpha, beta) {
+        let small = false;
+        let betaCheck = false;
+
+        if (alpha < 0)
+            return null;
+        if (alpha > 0 && alpha < 1) {
+            small = true;
+            alpha = alpha + 1;
+        }
+        if (beta != 1)
+            betaCheck = true;
+
+        let d = alpha-1/3;
+        let c = 1/(Math.sqrt(9*d));
+        let variate = 0;
+        while (true) {
+            let z = Stats.normalRandomVariable();
+            let u = Math.random();
+            let v = Math.pow((1 + c * z), 3);
+            let product = z * z / 2 + d - d * v + d * Math.log(v);
+            if ((z > -1 / c) && Math.log(u) < product) {
+                variate = d * v;
+                break;
+            }
+        }
+
+        if (small)
+            variate = variate * Math.pow(Math.random(), (1/alpha));
+        if (betaCheck)
+            variate = variate / beta;
+
+        return variate;
+    }
+
     public static gammacdf = function(t, a, b, precision=.00001) {
         let normalize = Math.pow(b, a) / Stats.gamma(a);
 

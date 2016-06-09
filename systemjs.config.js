@@ -19,6 +19,7 @@ System.config({
     },
     paths: {
         handlebars: './node_modules/handlebars/dist/handlebars.js',
-        underscore: './node_modules/underscore/underscore.js'
+        underscore: './node_modules/underscore/underscore.js',
+        Dygraph: './node_modules/dygraphs/dygraph-combined.js'
     }
 });

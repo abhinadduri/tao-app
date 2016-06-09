@@ -25,6 +25,9 @@
             [eventList]="eventList"
             [edgeList]="edgeList"
             [variableList]="variableList"
+            [graphData]="graphData"
+            [graphVar]="graphingVariable"
+            [threads]="threads"
             (resetParticle)="unSelectFromPanel($event)"
             [variablePanel]="selectedVariablePanel"
             [simulationName]="simulationName"
@@ -38,7 +41,9 @@
             (changeDescriptionERG)="simulationDescription = $event"
             (changeTimeERG)="timeUnits = $event"
             (changeThreadNumber)="updateThreads($event)"
+            (changeGraphVar)="updateGraphVariable($event)"
             (historyUpdate)="handleHistoryUpdate()"
             (undo)="handleUndo()">
     </sidebar>
+
 </div>

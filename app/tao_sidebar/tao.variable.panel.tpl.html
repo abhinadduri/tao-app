@@ -34,10 +34,10 @@
     <br />
 
     <span class="title">Graphing</span>
-    <select #selectGraphVariable>
-        <option
-                *ngFor="let variable of variableList"
-                (change)="changeGraphingVariable()">{{variable ? variable.name : ''}}</option>
+    <select #selectGraphVariable
+            (change)="changeGraphingVariable(selectGraphVariable.value)">
+            <option
+                *ngFor="let variable of variableList">{{variable ? variable.name : ''}}</option>
     </select>
     <br /> <br />
 

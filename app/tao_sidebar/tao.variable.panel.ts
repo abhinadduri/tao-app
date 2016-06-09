@@ -23,6 +23,7 @@ export class TaoVariablePanel {
     @Output() changeDescription = new EventEmitter();
     @Output() changeTime = new EventEmitter();
     @Output() changeThreadNumber = new EventEmitter();
+    @Output() changeGraphVar = new EventEmitter();
     @Output() variableHistoryUpdate = new EventEmitter();
 
     updateSimulationName(newName) {
@@ -52,8 +53,8 @@ export class TaoVariablePanel {
         this.variableHistoryUpdate.emit(0);
     }
 
-    changeGraphingVariable() {
-
+    changeGraphingVariable(varToGraph) {
+        this.changeGraphVar.emit(varToGraph);
     }
 
     deleteGlobalVariable(variable: Variable) {

@@ -7,13 +7,14 @@ import {CORE_DIRECTIVES} from '@angular/common';
 import {HelpDialogue} from './tao.help';
 import {Event} from '../tao_event/tao.event.model'
 import {Edge} from '../tao_edge/tao.edge.model'
+import {TaoGraph} from '../tao_graph/tao.graph'
 
 import {TaoVariablePanel} from '../tao_sidebar/tao.variable.panel'
 
 @Component({
     selector: 'sidebar',
     templateUrl: './app/tao_sidebar/tao.sidebar.tpl.html',
-    directives: [NgStyle, CORE_DIRECTIVES, TaoVariablePanel, HelpDialogue]
+    directives: [NgStyle, CORE_DIRECTIVES, TaoVariablePanel, HelpDialogue, TaoGraph]
 })
 
 export class TaoSidebar {
@@ -21,6 +22,9 @@ export class TaoSidebar {
     @Input() eventList;
     @Input() edgeList;
     @Input() variableList;
+    @Input() graphData;
+    @Input() graphVar;
+    @Input() threads;
 
     @Input() variablePanel: boolean;
 
@@ -40,6 +44,7 @@ export class TaoSidebar {
     @Output() changeThreadNumber = new EventEmitter();
     @Output() historyUpdate = new EventEmitter();
     @Output() undo = new EventEmitter();
+    @Output() changeGraphVar = new EventEmitter();
     
     
     emptyDict: any = {};
@@ -91,6 +96,10 @@ export class TaoSidebar {
     emitThreadNumber(event) {
         this.changeThreadNumber.emit(event);
         this.emitHistoryUpdate();
+    }
+
+    emitChangeGraph(event) {
+        this.changeGraphVar.emit(event);
     }
 
     logError(err) {

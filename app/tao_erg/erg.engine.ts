@@ -173,7 +173,7 @@ export class Engine {
         this.eventRanker = lifoRank;
     }
 
-    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number): number {
+    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, names: string[], graphData: any): number {
         let scheduler = schedulers[thread];
         let success = false;
         if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
@@ -235,12 +235,17 @@ export class Engine {
 
                 }
             }
+
+            for (let i = 0; i < names.length; i++) {
+                graphData[thread][names[i]][scheduler.getClock()] = scenario[names[i]];
+            }
+
             return 1;
         } else return -2;
 
     }
 
-    execute(scenarioList: any[], duration: number, threads: number=1) {
+    execute(scenarioList: any[], duration: number, threads: number=1, variableNames: string[]): any {
 
         if (scenarioList.length != threads) {
             alert('Error. Please report this error.');
@@ -250,13 +255,21 @@ export class Engine {
         let loopMaster: any = {};
         let numberOfEvents: number[] = [];
         let updateMaster: number[] = [];
+        let graphData: any = [];
 
         for (let i = 0; i < threads; i++) {
             schedulerMaster.push(new Scheduler(this.eventRanker, duration));
             loopMaster[i] = 1;
             updateMaster.push(1);
             numberOfEvents.push(0);
+
+            let variables = {};
+            for (let j = 0; j < variableNames.length; j++) {
+                variables[variableNames[j]] = {};
+            }
+            graphData.push(variables);
         }
+
         
         for (let j = 0; j < threads; j++) {
             scenarioList[j].Run(schedulerMaster[j]);
@@ -267,7 +280,7 @@ export class Engine {
             for (let k in loopMaster) {
                 for (let j = 0; j < updateMaster[k]; j++) {
                     if (loopMaster[k] == 1) {
-                        let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k));
+                        let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k), variableNames, graphData);
                         numberOfEvents[k]++;
                         loopMaster[k] == status;
                         if (status == -1 || status == -2) {
@@ -281,6 +294,8 @@ export class Engine {
             if (threads > 1)
                this.updateResources(numberOfEvents, updateMaster);
         }
+
+        return graphData;
 
     }
 

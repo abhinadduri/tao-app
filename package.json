@@ -19,6 +19,7 @@
     "@angular/router-deprecated": "2.0.0-rc.1",
     "@angular/upgrade": "2.0.0-rc.1",
     "bootstrap": "^3.3.6",
+    "dygraphs": "^1.1.1",
     "file-saver": "^1.2.2",
     "handlebars": "^4.0.5",
     "jquery": "^2.2.4",

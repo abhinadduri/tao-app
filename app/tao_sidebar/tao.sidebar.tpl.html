@@ -131,6 +131,7 @@
                     (changeDescription)="emitDescriptionERG($event)"
                     (changeTime)="emitTimeERG($event)"
                     (changeThreadNumber)="emitThreadNumber($event)"
+                    (changeGraphVar)="emitChangeGraph($event)"
                     (variableHistoryUpdate)="emitHistoryUpdate()">
             </VariablePanel>
 
@@ -184,6 +185,15 @@
                 <span>GLOBALS</span>
             </a>
         </li>
+        <li id="graph"
+            class="taobtn"
+            (click)="taoGraph.open()">
+            <a>
+                <span class="icon"><strong>/</strong></span>
+                <br>
+                <span>GRAPH</span>
+            </a>
+        </li>
         <li id="open"
             class="taobtn"
             (click)="file.click()">
@@ -218,3 +228,4 @@
 </div>
 
 <help #helpDialogue></help>
+<graph #taoGraph [graphData]="graphData" [graphingVariable]="graphVar" [threads]="threads"></graph>
