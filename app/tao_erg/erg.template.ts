@@ -44,9 +44,6 @@ export class ErgTemplate {
             {{#getCancellingEdges ../edges name}}
             scheduler.scheduleCancelling("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", this);
             {{/getCancellingEdges}}
-        
-            // var graph_var = $('#global_vars option:selected').val()
-            // return (graph_var == "no_graph") ? null : globals[graph_var]
           }
         
           {{/each}}

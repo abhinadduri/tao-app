@@ -185,30 +185,32 @@ export class Engine {
                     return -1;
             }
 
-            // check cancelling edges
-            for (let e in scheduler.cancellingEvents) {
-                let cancel = scheduler.cancellingEvents[e];
-                if (cancel.name == currentEvent.name) {
-                    delete scheduler.cancellingEvents[e];
-                    return 0;
+            if (currentEvent) {
+                // check cancelling edges
+                for (let e in scheduler.cancellingEvents) {
+                    let cancel = scheduler.cancellingEvents[e];
+                    if (cancel.name == currentEvent.name) {
+                        delete scheduler.cancellingEvents[e];
+                        return 0;
+                    }
                 }
-            }
 
-            if (currentEvent.timestamp > duration) return -1;
+                if (currentEvent.timestamp > duration) return -1;
 
-            currentEvent.func(scheduler, currentEvent.params, false);
+                currentEvent.func(scheduler, currentEvent.params, false);
 
-            if (currentEvent.parentEvent.name == "Run" && currentEvent.trace)
-                console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run at time '
-                    + scheduler.getClock()
-                    + ' by thread ' + (thread + 1));
-            else if (currentEvent.parentEvent && currentEvent.trace) {
-                console.log(currentEvent.name + ' '
-                    + currentEvent.getId() + ' by '
-                    + currentEvent.parentEvent.name + ' '
-                    + currentEvent.parentEvent.getId() + ' at time '
-                    + scheduler.getClock()
-                    + ' by thread ' + (thread + 1));
+                if (currentEvent.parentEvent.name == "Run" && currentEvent.trace)
+                    console.log(currentEvent.name + ' ' + currentEvent.getId() + ' by Run at time '
+                        + scheduler.getClock()
+                        + ' by thread ' + (thread + 1));
+                else if (currentEvent.parentEvent && currentEvent.trace) {
+                    console.log(currentEvent.name + ' '
+                        + currentEvent.getId() + ' by '
+                        + currentEvent.parentEvent.name + ' '
+                        + currentEvent.parentEvent.getId() + ' at time '
+                        + scheduler.getClock()
+                        + ' by thread ' + (thread + 1));
+                }
             }
 
             for (let e in scheduler.pendingEvents) {

@@ -42,7 +42,7 @@ export class TaoGraph {
             let selectedGraphData = this.graphData[0][this.graphingVariable];
 
             if (!selectedGraphData) {
-                alert('Error');
+                alert('No valid graph data. You can only graph global variables that are numbers.');
                 return;
             }
 
