@@ -77,7 +77,7 @@ export class HelpDialogue {
     helpListKeys: any = ['Events', 'Edges', 'Globals', 'Graph', 'Javascript'];
     helpListSubkeys: any = {'Events': ['Creating an Event', 'Editing an Event', 'Private Variables'],
                             'Edges': ['Creating an Edge', 'Editing an Edge', 'Pending Edges', 'Cancelling Edges', 'Parameters'],
-                            'Globals': ['Creating Global Variables', 'Accessing Global Variables', 'Time Units'],
+                            'Globals': ['Creating Global Variables', 'Accessing Global Variables', 'Time Units', 'Console Output'],
                             'Graph': ['Tracing Output'],
                             'Javascript': ['General', 'Variables', 'Functions', 'Arrays', 'Objects']}
     selectedElement = 'Creating an Event';
@@ -108,7 +108,8 @@ export class HelpDialogue {
     renderGlobals() {
         return this.selectedElement == 'Creating Global Variables'
             || this.selectedElement == 'Accessing Global Variables'
-            || this.selectedElement == 'Time Units';
+            || this.selectedElement == 'Time Units'
+            || this.selectedElement == 'Console Output';
     }
 
     renderGraph() {

@@ -10,7 +10,7 @@
                 }">
                 <span class="title">NAME</span>
                 <input type="text" #eventName [ngModel]="typeOfNode() ? selectedParticle.name : ''"
-                       (change)="updateEvent(eventName, eventTrace, eventStateChange)">
+                       (change)="updateEvent(eventName, eventTrace, eventStateChange, eventDescription)">
                 <br /> <br />
 
                 <span class="title">TRACE</span>
@@ -20,20 +20,33 @@
                        type="checkbox"
                        id="traceEvent"
                        [ngModel]="typeOfNode() ? selectedParticle.trace : false"
-                       (change)="updateEvent(eventName, eventTrace, eventStateChange)">
+                       (change)="updateEvent(eventName, eventTrace, eventStateChange, eventDescription)">
 
                 <br /> <br />
+
+                <span class="title">DESCRIPTION</span>
+                <textarea type="text" #eventDescription [ngModel]="typeOfNode() ? selectedParticle.description : ''"
+                          (change)="updateEvent(eventName, eventTrace, eventStateChange, eventDescription)"
+                          [ngStyle]="{'height': '100px'}"></textarea>
+
+                <br /> <br />
+
                 <span class="title">STATE CHANGE</span>
                 <textarea #eventStateChange [ngModel]="typeOfNode() ? selectedParticle.stateChange : ''"
-                          (change)="updateEvent(eventName, eventTrace, eventStateChange)"></textarea>
+                          (change)="updateEvent(eventName, eventTrace, eventStateChange, eventDescription)"></textarea>
                 <br /> <br />
 
                 <span class="title">PARAMETERS</span>
                 <ul #eventParameters>
-                    <li *ngFor="let parameter of keys((typeOfNode() ? selectedParticle.parameters : emptyDict))">
-                        <span class="code variableName">{{parameter}}</span>
+                    <li *ngFor="let parameter of keys((typeOfNode() ? selectedParticle.parameters : emptyDict))"
+                        [ngStyle]="{'height': '50px'}">
+                        <input #changeName
+                        class="code variableName" [ngModel]="parameter"
+                        [ngStyle]="{'margin-top': '5px'}"
+                        (change)="changeEventParameterName(changeName, parameter)"/>
                         <a class="right"
-                           (click)="deleteParameterEvent(parameter)">✕</a>
+                           (click)="deleteParameterEvent(parameter)"
+                           [ngStyle]="{'margin-top': '5px'}">✕</a>
                     </li>
                     <span class="instructions">To add a parameter, enter a name for the parameter below and hit enter to add it to the list.</span>
                     <input #addParam
@@ -73,9 +86,16 @@
                 </ul>
                 <br />
 
+                <span class="title">DESCRIPTION</span>
+                <textarea type="text" #edgeDescription [ngModel]="typeOfEdge() ? selectedParticle.description : ''"
+                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
+                          [ngStyle]="{'height': '100px'}"></textarea>
+
+                <br /> <br />
+
                 <span class="title">EDGE TYPE</span>
                 <select #edgeType
-                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)"
+                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
                         [ngModel]="typeOfEdge() ? selectedParticle.type : ''">
                     <option value="Scheduling">Scheduling Edge</option>
                     <option value="Pending">Pending Edge</option>
@@ -85,26 +105,20 @@
 
                 <span class="title">CONDITION</span>
                 <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"
-                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)"></textarea>
+                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
+                          [ngStyle]="{'height': '100px'}"></textarea>
                 <br /> <br />
 
                 <span class="title" >DELAY</span>
                 <input type="text" #edgeDelay
-                       [ngStyle]="{
-                        'display': edgeType.value == 'Pending' ? 'none' : 'block'
-                    }"
                        [ngModel]="typeOfEdge() ? selectedParticle.delay : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
-                    <span class="instructions"
-                          [ngStyle]="{
-                        'display': edgeType.value == 'Pending' ? 'block' : 'none'
-                    }">You cannot set a delay for a pending edge.</span>
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
                 <br /> <br />
 
                 <span class="title">PRIORITY</span>
                 <input type="text" #edgePriority
                        [ngModel]="typeOfEdge() ? selectedParticle.priority : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
                 <br /> <br />
 
                 <span class="title">PARAMETERS</span>
@@ -115,7 +129,7 @@
                         <input placeholder="Parameter Value"
                                class="parameterVal"
                                [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''"
-                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters)">
+                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
                     </li>
                 </ul>
             </div>
@@ -148,9 +162,9 @@
 
                 <a class="tao-footer-action-button green taobtn"
                    (click)="typeOfNode() ?
-                    updateEvent(eventName, eventTrace, eventStateChange) :
+                    updateEvent(eventName, eventTrace, eventStateChange, eventDescription) :
                     (typeOfEdge() ?
-                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters) :
+                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription) :
                     logError('Element not found'))">Update</a>
             </div>
         </div>
@@ -158,6 +172,8 @@
         <div class="tao-panel-footer"
              *ngIf="variablePanel">
              <div class="right">
+                 <a class="tao-footer-action-button green"
+                    (click)="handleLocalRun()">Run Locally</a>
                  <a class="tao-footer-action-button green"
                     (click)="handleDownload()">Download Tao File</a>
              </div>
@@ -189,7 +205,7 @@
             class="taobtn"
             (click)="taoGraph.open()">
             <a>
-                <span class="icon"><strong>/</strong></span>
+                <span class="icon"><strong>↱</strong></span>
                 <br>
                 <span>GRAPH</span>
             </a>

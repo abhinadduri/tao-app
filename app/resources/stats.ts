@@ -3,19 +3,19 @@
  */
 export class Stats {
 
-    public static expoRandomVariable = function(parameter) {
+    public expoRandomVariable = function(parameter) {
         return (
             -Math.log(Math.random()) / parameter
         );
     }
 
-    public static normalRandomVariable = function(mu=0, stddev=1) {
+    public normalRandomVariable = function(mu=0, stddev=1) {
         return (
             stddev*(Math.sqrt(-2*Math.log(Math.random())))*(Math.cos(2*Math.PI*Math.random())) + mu
         );
     }
 
-    public static poissonRandomVariable = function(lambda) {
+    public poissonRandomVariable = function(lambda) {
         let n = 0;
         let limit = Math.exp(-lambda);
         let u = Math.random();
@@ -27,20 +27,20 @@ export class Stats {
         return n;
     }
 
-    public static poissonpmf = function(lambda, x) {
+    public poissonpmf = function(lambda, x) {
         return (Math.pow(lambda, x)
-             * Math.exp(-lambda)) / Stats.gamma(x+1);
+             * Math.exp(-lambda)) / this.gamma(x+1);
     }
 
-    public static poissoncdf = function(lambda, x) {
+    public poissoncdf = function(lambda, x) {
         let sum = 0;
 
         for (let i = 0; i < x; i++) {
-            sum += Stats.poissonpmf(lambda, i);
+            sum += this.poissonpmf(lambda, i);
         }
     }
 
-    public static binomRandomVariable = function(n, p) {
+    public binomRandomVariable = function(n, p) {
         let variate = 0;
 
         for (let i = 0; i < n; i++) {
@@ -51,21 +51,21 @@ export class Stats {
         return variate;
     }
 
-    public static binompmf = function(n, k, p) {
-        return Stats.choose(n, k) * Math.pow(p, k) * Math.pow((1-p), (n-k));
+    public binompmf = function(n, k, p) {
+        return this.choose(n, k) * Math.pow(p, k) * Math.pow((1-p), (n-k));
     }
 
-    public static binomcdf = function(n, k, p) {
+    public binomcdf = function(n, k, p) {
         let sum = 0;
 
         for (let i = 0; i < k; i++) {
-            sum += Stats.binompmf(n, i, p);
+            sum += this.binompmf(n, i, p);
         }
 
         return sum;
     }
 
-    public static gamma = function(t) {
+    public gamma = function(t) {
         if (t == 0)
             return 1;
 
@@ -75,7 +75,7 @@ export class Stats {
             * (1 + 1/(12*t) + 1/(288*t*t) - 139/(51840*t*t*t) - 571/(2488320*t*t*t*t));
     }
 
-    public static gammaRandomVariable = function(alpha, beta) {
+    public gammaRandomVariable = function(alpha, beta) {
         let small = false;
         let betaCheck = false;
 
@@ -92,7 +92,7 @@ export class Stats {
         let c = 1/(Math.sqrt(9*d));
         let variate = 0;
         while (true) {
-            let z = Stats.normalRandomVariable();
+            let z = this.normalRandomVariable();
             let u = Math.random();
             let v = Math.pow((1 + c * z), 3);
             let product = z * z / 2 + d - d * v + d * Math.log(v);
@@ -110,35 +110,35 @@ export class Stats {
         return variate;
     }
 
-    public static gammacdf = function(t, a, b, precision=.00001) {
-        let normalize = Math.pow(b, a) / Stats.gamma(a);
+    public gammacdf = function(t, a, b, precision=.00001) {
+        let normalize = Math.pow(b, a) / this.gamma(a);
 
         let pdf = function(y) {
             return (Math.pow(y, a-1)
             * Math.exp(-b*y));
         }
 
-        return Stats.integrate(0, t, precision, pdf);
+        return this.integrate(0, t, precision, pdf);
     }
 
-    public static beta = function(alpha, beta, precision=.00001) {
-        return Stats.integrate(0, 1, precision, function(x) {
+    public beta = function(alpha, beta, precision=.00001) {
+        return this.integrate(0, 1, precision, function(x) {
             return Math.pow(x, alpha-1) * Math.pow((1-x), beta-1);
         });
     }
 
-    public static betacdf = function(x, a, b, precision=.00001) {
-        let betaConstant = Stats.beta(a, b);
+    public betacdf = function(x, a, b, precision=.00001) {
+        let betaConstant = this.beta(a, b);
 
         let pdf = function(y) {
             return (Math.pow(y, a-1)
             * Math.pow((1-y), b-1))
         }
 
-        return Stats.integrate(0, x, precision, pdf) / betaConstant;
+        return this.integrate(0, x, precision, pdf) / betaConstant;
     }
 
-    public static integrate = function(a, b, dx=.0001, func) {
+    public integrate = function(a, b, dx=.0001, func) {
         let neg = false;
         if (a > b) {
             neg = true;
@@ -159,11 +159,11 @@ export class Stats {
         return sum;
     }
 
-    public static expcont = function(a, b, arg, pdf, precision=.0001) {
-        return Stats.integrate(a, b, precision, function(y) {return arg(y) * pdf(y)});
+    public expcont = function(a, b, arg, pdf, precision=.0001) {
+        return this.integrate(a, b, precision, function(y) {return arg(y) * pdf(y)});
     }
 
-    public static expdisc = function(a, b, arg, pdf) {
+    public expdisc = function(a, b, arg, pdf) {
         let sum = 0;
 
         while (a < b) {
@@ -178,7 +178,7 @@ export class Stats {
         return sum;
     }
 
-    public static derv = function(f, x, error=.00001) {
+    public derv = function(f, x, error=.00001) {
         let h = .001;
         let d1 = (f(x + h) - f(x))/h;
         let d2 = 0;
@@ -195,11 +195,11 @@ export class Stats {
         return d2;
     }
 
-    public static choose = function(n, k) {
-        return Math.round(Stats.gamma(n + 1) / (Stats.gamma(k + 1) * Stats.gamma(n - k + 1)));
+    public choose = function(n, k) {
+        return Math.round(this.gamma(n + 1) / (this.gamma(k + 1) * this.gamma(n - k + 1)));
     }
 
-    private static isInt(x) {
+    private isInt(x) {
         return x % 1 == 0;
     }
 

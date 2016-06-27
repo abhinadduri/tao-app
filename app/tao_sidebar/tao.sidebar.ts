@@ -45,6 +45,7 @@ export class TaoSidebar {
     @Output() historyUpdate = new EventEmitter();
     @Output() undo = new EventEmitter();
     @Output() changeGraphVar = new EventEmitter();
+    @Output() localRun = new EventEmitter();
     
     
     emptyDict: any = {};
@@ -56,6 +57,10 @@ export class TaoSidebar {
 
     handleRun() {
         this.runERG.emit(0);
+    }
+
+    handleLocalRun() {
+        this.localRun.emit(0);
     }
 
     handleOpen(file) {
@@ -118,21 +123,44 @@ export class TaoSidebar {
         this.historyUpdate.emit(0);
     }
 
-    updateEvent(eventName, trace, stateChange) {
+    updateEvent(eventName, trace, stateChange, description) {
+        // change all edges pointed to this event.
+
+        let sourceEdges: Edge[] = this.selectedParticle.getSourceEdges(this.edgeList);
+        let targetEdges: Edge[] = this.selectedParticle.getTargetEdges(this.edgeList);
+
+        for (let i = 0; i < sourceEdges.length; i++) {
+            let edge: Edge = sourceEdges[i];
+            edge.source = eventName.value;
+            edge.description = "Edge from " + edge.source + " to " + edge.target + ".";
+        }
+        for (let j = 0; j < targetEdges.length; j++) {
+            let edge: Edge = targetEdges[j];
+            edge.target = eventName.value;
+            edge.description = "Edge from " + edge.source + " to " + edge.target + ".";
+        }
+
+        if (this.selectedParticle.description == this.selectedParticle.name + " description.")
+            this.selectedParticle.description = eventName.value + " description.";
+        else
+            this.selectedParticle.description = description.value;
+
         this.selectedParticle.name = eventName.value;
         this.selectedParticle.trace = trace.checked;
         this.selectedParticle.stateChange = stateChange.value;
+
 
         this.emitHistoryUpdate();
     }
 
     // only called if selected particle is an edge
 
-    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters) {
+    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription) {
         this.selectedParticle.type = edgeType.value;
         this.selectedParticle.condition = edgeCondition.value;
         this.selectedParticle.delay = edgeDelay.value;
         this.selectedParticle.priority = edgePriority.value;
+        this.selectedParticle.description = edgeDescription.value;
 
         var paramsList = edgeParameters.getElementsByTagName("li");
 
@@ -143,8 +171,8 @@ export class TaoSidebar {
 
             this.selectedParticle.parameters[span] = value;
         }
-
         this.emitHistoryUpdate();
+
     }
 
     keys(params) {
@@ -155,6 +183,27 @@ export class TaoSidebar {
         // if this function is being called, selectedParticle cannot possibly be null
         // can change this to only make permanent changes on an update
         delete this.selectedParticle.parameters[parameter];
+
+        this.emitHistoryUpdate();
+    }
+
+    changeEventParameterName(parameterName, oldName) {
+        let name = parameterName.value;
+        if (this.selectedParticle.parameters.hasOwnProperty(oldName)) {
+            this.selectedParticle.parameters[name] = null;
+            delete this.selectedParticle.parameters[oldName];
+        }
+
+        let targetEdges: Edge[] = this.selectedParticle.getTargetEdges(this.edgeList);
+        for (let i = 0; i < targetEdges.length; i++) {
+            let currentEdge = targetEdges[i];
+            if (currentEdge.parameters.hasOwnProperty(oldName)) {
+                currentEdge.parameters[name] = currentEdge.parameters[oldName];
+                delete currentEdge.parameters[oldName];
+            } else {
+                currentEdge.parameters[name] = null;
+            }
+        }
 
         this.emitHistoryUpdate();
     }
@@ -184,7 +233,7 @@ export class TaoSidebar {
         }
 
         for (var j = 0; j < spliceIndices.length; j++) {
-            this.edgeList.splice(spliceIndices[i]);
+            this.edgeList.splice(spliceIndices[j]);
         }
 
         let index = this.eventList.indexOf(this.selectedParticle);

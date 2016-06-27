@@ -14,8 +14,8 @@ import {NgStyle} from '@angular/common';
             
             <div *ngIf="selectedSubComponent=='Tracing Output'"
             [ngStyle]="{'text-align':'left'}">
-                <p>To graph a global variable, select the variable to graph in the Globals tab. Then, run a simulation. The <br />
-                graph output for the latest simulation run can be viewed by clicking the graph button.</p>
+                <p>To graph a global variable, select the variable to graph in the Globals tab. Then, run a simulation. The
+                graph output <br />for the latest simulation run can be viewed by clicking the graph button.</p>
             </div>
             
             

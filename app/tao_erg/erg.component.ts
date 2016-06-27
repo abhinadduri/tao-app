@@ -9,6 +9,7 @@ import {Variable} from './../tao_variable/tao.variable.model';
 import {ErgTemplate} from './erg.template';
 import {Engine} from './erg.engine';
 import {Stats} from '../resources/stats';
+import {LocalRun} from './erg.local';
 import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
@@ -49,7 +50,7 @@ export class ErgComponent implements OnInit {
         this.graphData = {};
 
         this.eventList = [
-            new Event("Run", "// your code here", "50", "50", false, {})
+            new Event("Run", "// your code here", "50", "50", false, {}, "Run event.")
         ];
 
         this.edgeList = [];
@@ -60,6 +61,7 @@ export class ErgComponent implements OnInit {
         this.currentVersion = 0;
 
     }
+
 
     handleHistoryUpdate() {
         if (this.history.length > 20)
@@ -87,8 +89,40 @@ export class ErgComponent implements OnInit {
     handleDownload() {
         let data = JSON.stringify(this.produceErgJSON());
 
-        var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+        let blob = new Blob([data], {type: "text/plain;charset=utf-8"});
         saveAs(blob, this.simulationName + ".txt");
+    }
+
+    handleLocal() {
+        if (!this.checkParameters())
+            return;
+
+        for (var j = 0; j < this.variableList.length; j++) {
+            let value;
+            try {
+                value = eval('(' + this.variableList[j].value + ')');
+            } catch (e) {
+                console.error(e);
+                return;
+            }
+
+            if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
+                alert('Each global variable should be a comma separated array specifiying an initial condition' +
+                    'for each thread. For example, a global variable with a value of 2 in the first thread and ' +
+                    '7 in the second thread should be [2,7].');
+                return;
+            }
+        }
+
+        let text = LocalRun.downloadTemplate(
+            this.timeUnits,
+            ErgTemplate.makeTemplate(this.produceErgJSON()),
+            this.variableList,
+            this.threads,
+            this.simulationName);
+
+        let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, this.simulationName + ".js");
     }
 
     private isNumArray(arr) {
@@ -99,10 +133,32 @@ export class ErgComponent implements OnInit {
         return true;
     }
 
+    private checkParameters(): boolean {
+        for (let i = 0; i < this.eventList.length; i++) {
+            let currentEvent = this.eventList[i];
+            let currentParams = currentEvent.parameters;
+
+            let targetEdges: Edge[] = this.getSourceAndTargetEdges(currentEvent)['target'];
+            for (let i in currentParams) {
+                for (let j = 0; j < targetEdges.length; j++) {
+                    if (!targetEdges[j].parameters.hasOwnProperty(i)
+                    || targetEdges[j].parameters[i] == "") {
+                        alert('A parameter field for parameter ' + i + ' of event ' + currentEvent.name + ' has been left blank.');
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     handleRun() {
+        if (!this.checkParameters())
+            return;
+
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
-
         let compiledFunction;
         try {
             compiledFunction = eval('(' + generatedCode + ')');
@@ -112,6 +168,7 @@ export class ErgComponent implements OnInit {
 
         let scenarioList: any[] = [];
         let variableNames: string[] = [];
+
         for (let k = 0; k < this.variableList.length; k++) {
             let value;
             try {
@@ -126,7 +183,7 @@ export class ErgComponent implements OnInit {
 
         for (var i = 0; i < this.threads; i++) {
             let code = new compiledFunction();
-            code.stats = Stats;
+            code.stats = new Stats();
             for (var j = 0; j < this.variableList.length; j++) {
                 let value;
                 try {
@@ -136,9 +193,9 @@ export class ErgComponent implements OnInit {
                 }
 
                 if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
-                    alert('The number of threads is greater than one. Each global variable must be a comma separated array,' +
-                        'specifying the initial values of the simulation for each thread. For example, with two threads, a global' +
-                        'variable named queue with initial values of 2 and 3 would have a value of [2, 3].')
+                    alert('Each global variable should be a comma separated array specifiying an initial condition' +
+                        'for each thread. For example, a global variable with a value of 2 in the first thread and ' +
+                        '7 in the second thread should be [2,7].');
                     return;
                 }
 
@@ -151,14 +208,14 @@ export class ErgComponent implements OnInit {
             scenarioList.push(code);
         }
 
+        console.log('Running ' + this.simulationName);
         this.graphData = engine.execute(scenarioList, this.timeUnits, this.threads, variableNames);
         if (!this.graphingVariable)
             if (this.variableList[0])
-            this.graphingVariable = this.variableList[0].name;
+                this.graphingVariable = this.variableList[0].name;
     }
 
     handleOpen(e) {
-        // let file = new FileReader();
         let file = e.target.files[0];
         if (!file) {
             alert('Invalid file.');
@@ -171,8 +228,9 @@ export class ErgComponent implements OnInit {
 
         reader.onload = function(e) {
             let target: any = e.target;
-
+            self.unSelectFromPanel('reset all');
             self.loadFromText(target.result);
+            self.handleHistoryUpdate();
         }
 
         reader.readAsText(file);
@@ -198,7 +256,7 @@ export class ErgComponent implements OnInit {
             var x = (e.clientX - 35).toString();
             var y = (e.clientY - 35).toString();
             var stateChange = `// your code here`;
-            var event = new Event(name, stateChange, x, y, true, {});
+            var event = new Event(name, stateChange, x, y, true, {}, name + " description.");
             this.counter++;
             this.eventList.push(event);
             this.handleHistoryUpdate();
@@ -218,7 +276,7 @@ export class ErgComponent implements OnInit {
         this.selectedParticle = null;
         this.shiftSelectedSource = null;
 
-        if (!(type == 'reset all'))
+        if (type != 'reset all')
             this.selectedVariablePanel = true
     }
 
@@ -244,18 +302,18 @@ export class ErgComponent implements OnInit {
     }
 
     createEdge(source : string, target : string) {
-        var sourceEvent : Event = null;
-        var targetEvent : Event = null;
+        let sourceEvent : Event = null;
+        let targetEvent : Event = null;
 
-        for (var i = 0; i < this.eventList.length; i++) {
-            var currentEvent : Event = this.eventList[i];
+        for (let i = 0; i < this.eventList.length; i++) {
+            let currentEvent : Event = this.eventList[i];
             if (currentEvent.name === source)
                 sourceEvent = currentEvent;
             if (currentEvent.name === target)
                 targetEvent = currentEvent;
         }
 
-        var newEdge : Edge = new Edge(
+        let newEdge : Edge = new Edge(
             source,
             target,
             (parseInt(sourceEvent.x) + 35).toString(),
@@ -266,7 +324,8 @@ export class ErgComponent implements OnInit {
             'Scheduling',
             1,
             5,
-            {}
+            {},
+            "Edge from " + source + " to " + target + "."
         );
 
         this.edgeList.push(newEdge);
@@ -280,8 +339,8 @@ export class ErgComponent implements OnInit {
 
     // given an event, get all edges whose source/target is that event
     getSourceAndTargetEdges(node: Event) : any {
-        var output = {'source': [], 'target': []};
-        for (var i = 0; i < this.edgeList.length; i++) {
+        let output = {'source': [], 'target': []};
+        for (let i = 0; i < this.edgeList.length; i++) {
             if (this.edgeList[i].source === node.name)
                 output['source'].push(this.edgeList[i]);
             // fix this for self edges
@@ -297,11 +356,11 @@ export class ErgComponent implements OnInit {
             var sourceEdges = sourceAndTarget['source'];
             var targetEdges = sourceAndTarget['target'];
 
-            for (var i = 0; i < sourceEdges.length; i++) {
+            for (let i = 0; i < sourceEdges.length; i++) {
                 sourceEdges[i].startX = (parseInt(node.x) + 35).toString();
                 sourceEdges[i].startY = (parseInt(node.y) + 35).toString();
             }
-            for (var i = 0; i < targetEdges.length; i++) {
+            for (let i = 0; i < targetEdges.length; i++) {
                 targetEdges[i].endX = (parseInt(node.x) + 35).toString();
                 targetEdges[i].endY = (parseInt(node.y) + 35).toString();
             }
@@ -317,25 +376,22 @@ export class ErgComponent implements OnInit {
 
         simulation['variables'] = [];
 
-        for (var i = 0; i < this.variableList.length; i++) {
+        for (let i = 0; i < this.variableList.length; i++) {
             let currentVariable = this.variableList[i];
 
-            simulation['variables'].push(
-                {
+            simulation['variables'].push({
                     'name': currentVariable.name,
                     'value': currentVariable.value,
                     'description': currentVariable.description
-                }
-            );
+                });
         }
 
         simulation['edges'] = [];
 
-        for (var i = 0; i < this.edgeList.length; i++) {
+        for (let i = 0; i < this.edgeList.length; i++) {
             let currentEdge = this.edgeList[i];
 
-            simulation['edges'].push(
-                {
+            simulation['edges'].push({
                     'source': currentEdge.source,
                     'target': currentEdge.target,
                     'startX': currentEdge.startX,
@@ -346,26 +402,25 @@ export class ErgComponent implements OnInit {
                     'type': currentEdge.type,
                     'delay': currentEdge.delay,
                     'priority': currentEdge.priority,
-                    'parameters': currentEdge.parameters
-                }
-            )
+                    'parameters': currentEdge.parameters,
+                    'description': currentEdge.description
+                });
         }
 
         simulation['events'] = [];
 
-        for (var i = 0; i < this.eventList.length; i++) {
+        for (let i = 0; i < this.eventList.length; i++) {
             let currentEvent = this.eventList[i];
 
-            simulation['events'].push(
-                {
+            simulation['events'].push({
                     'name': currentEvent.name,
                     'stateChange': currentEvent.stateChange,
                     'x': currentEvent.x,
                     'y': currentEvent.y,
                     'trace': currentEvent.trace,
-                    'parameters': currentEvent.parameters
-                }
-            )
+                    'parameters': currentEvent.parameters,
+                    'description': currentEvent.description
+                });
         }
         return simulation;
     }
@@ -381,7 +436,7 @@ export class ErgComponent implements OnInit {
         this.threads = simJson.hasOwnProperty('threads') ? simJson.threads : 1;
 
         if (simJson.hasOwnProperty('variables')) {
-            for (var i = 0; i < simJson.variables.length; i++) {
+            for (let i = 0; i < simJson.variables.length; i++) {
                 let currentVariable = simJson.variables[i];
 
                 this.variableList.push(
@@ -394,7 +449,7 @@ export class ErgComponent implements OnInit {
         }
 
         if (simJson.hasOwnProperty('events')) {
-            for (var i = 0; i < simJson.events.length; i++) {
+            for (let i = 0; i < simJson.events.length; i++) {
                 let currentEvent = simJson.events[i];
 
                 this.eventList.push(
@@ -404,13 +459,14 @@ export class ErgComponent implements OnInit {
                         (currentEvent.hasOwnProperty('x') ? currentEvent.x.toString() : (i * 100).toString()),
                         (currentEvent.hasOwnProperty('y') ? currentEvent.y.toString() : (i * 100).toString()),
                         (currentEvent.hasOwnProperty('trace') ? currentEvent.trace : true),
-                        (currentEvent.hasOwnProperty('parameters') ? currentEvent.parameters : {}))
+                        (currentEvent.hasOwnProperty('parameters') ? currentEvent.parameters : {}),
+                        (currentEvent.hasOwnProperty('description') ? currentEvent.description : "Description."))
                 );
             }
         }
 
         if (simJson.hasOwnProperty('edges')) {
-            for (var i = 0; i < simJson.edges.length; i++) {
+            for (let i = 0; i < simJson.edges.length; i++) {
                 let currentEdge = simJson.edges[i];
 
                 this.edgeList.push(
@@ -425,7 +481,9 @@ export class ErgComponent implements OnInit {
                         (currentEdge.hasOwnProperty('type') ? currentEdge.type : 'Scheduling'),
                         (currentEdge.hasOwnProperty('delay') ? currentEdge.delay : 1),
                         (currentEdge.hasOwnProperty('priority') ? currentEdge.priority : 5),
-                        (currentEdge.hasOwnProperty('parameters') ? currentEdge.parameters : {})
+                        (currentEdge.hasOwnProperty('parameters') ? currentEdge.parameters : {}),
+                        (currentEdge.hasOwnProperty('description') ? currentEdge.description :
+                        "Edge from " + currentEdge.source + " to " + currentEdge.target + ".")
                     )
                 );
             }

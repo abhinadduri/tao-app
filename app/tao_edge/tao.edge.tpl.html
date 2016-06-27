@@ -2,7 +2,10 @@
      [ngClass]="{
     'circle': tao_edge.source == tao_edge.target,
     'line': tao_edge.source != tao_edge.target,
-    'selected': selected}"
+    'selected': selected,
+    'dotted': tao_edge.type == 'Cancelling',
+    'straight': tao_edge.type == 'Scheduling' || tao_edge.type == 'Pending'
+    }"
      [ngStyle]="{
     'top': (tao_edge.source == tao_edge.target) ? (tao_edge.startY - 70) + 'px' : (twoWayEdge() ? (parse(tao_edge.startY) + calculateDisplacement()) + 'px' : tao_edge.startY + 'px'),
     'left': (tao_edge.source == tao_edge.target) ? (tao_edge.startX - 35) + 'px' : (tao_edge.startX) + 'px',

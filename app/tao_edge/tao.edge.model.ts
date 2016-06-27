@@ -15,7 +15,8 @@ export class Edge {
         public type: string,
         public delay: number,
         public priority: number,
-        public parameters: any
+        public parameters: any,
+        public description: string
     ) { }
 
     public getSourceEvent(eventList: Event[]) : Event {

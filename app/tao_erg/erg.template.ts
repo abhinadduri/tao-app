@@ -9,14 +9,12 @@ export class ErgTemplate {
         function {{name}} () {
           var self = this;
           var globals = this;
-          
-          {{! functions}}
-        
+            
           {{#each events}}
           
-          self.{{name}} = function(scheduler, params, scheduledByPending) {
+          self.{{name}} = function(scheduler, params) {
             this.name = "{{name}}";
-            self.{{name}}.func(scheduler, params, scheduledByPending);
+            {{{stateChange}}}
             {{#getSchedulingEdges ../edges name}}
             if ({{{condition}}}) {
               scheduler.schedule("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", 
@@ -42,25 +40,20 @@ export class ErgTemplate {
             {{/getPendingEdges}}
         
             {{#getCancellingEdges ../edges name}}
-            scheduler.scheduleCancelling("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", this);
+            scheduler.scheduleCancelling("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", this, 
+            {{#parameters parameters}}{{{params}}}{{/parameters}},
+            function(globals) { return {{{condition}}} },
+            {{delay}});
             {{/getCancellingEdges}}
           }
         
           {{/each}}
-          
-          {{#each events}}
-          
-          self.{{name}}.func = function(scheduler, params, scheduledByPending) {
-            {{{stateChange}}}
-           
-          }
-          {{~/each}}
         }
         `;
 
         function stringify(parameters) {
-            var toReturn = "{";
-            for (var key in parameters) {
+            let toReturn = "{";
+            for (let key in parameters) {
                 toReturn += key;
                 toReturn += ": ";
                 toReturn += parameters[key];
@@ -76,12 +69,12 @@ export class ErgTemplate {
         }
 
         function getObjects(obj, key, val) {
-            var newObj = [];
+            let newObj = [];
 
-            for (var i = 0; i < obj.length; i++) {
+            for (let i = 0; i < obj.length; i++) {
                 let testObject = obj[i];
 
-                for (var k in testObject) {
+                for (let k in testObject) {
                     if (k == key && testObject[k] == val)
                         newObj.push(testObject);
                 }
@@ -104,8 +97,8 @@ export class ErgTemplate {
 
         Handlebars.registerHelper('getSchedulingEdges', function (edges, eventName, options) {
             let correctEdges = getObjects(edges, "source", eventName);
-            var out = "";
-            for (var i = 0; i < correctEdges.length; i++) {
+            let out = "";
+            for (let i = 0; i < correctEdges.length; i++) {
                 if (correctEdges[i].type == "Scheduling")
                     out += options.fn(correctEdges[i]);
             }
@@ -114,8 +107,8 @@ export class ErgTemplate {
 
         Handlebars.registerHelper('getPendingEdges', function (edges, eventName, options) {
             let correctEdges = getObjects(edges, "source", eventName);
-            var out = "";
-            for (var i = 0; i < correctEdges.length; i++) {
+            let out = "";
+            for (let i = 0; i < correctEdges.length; i++) {
                 if (correctEdges[i].type == "Pending")
                     out += options.fn(correctEdges[i]);
             }
@@ -124,8 +117,8 @@ export class ErgTemplate {
 
         Handlebars.registerHelper('getCancellingEdges', function(edges, eventName, options) {
             let correctEdges = getObjects(edges, "source", eventName);
-            var out = "";
-            for (var i = 0; i < correctEdges.length; i++) {
+            let out = "";
+            for (let i = 0; i < correctEdges.length; i++) {
                 if (correctEdges[i].type == "Cancelling")
                     out += options.fn(correctEdges[i]);
             }
@@ -134,8 +127,8 @@ export class ErgTemplate {
 
         Handlebars.registerHelper('pendingEdgeLength', function (edges, eventName, options) {
             let correctEdges = getObjects(edges, "source", eventName);
-            var list = [];
-            for (var i = 0; i < correctEdges.length; i++) {
+            let list = [];
+            for (let i = 0; i < correctEdges.length; i++) {
                 if (correctEdges[i].edgeType == "Pending")
                     list.push(options.fn(correctEdges[i]));
             }
@@ -150,13 +143,13 @@ export class ErgTemplate {
         });
 
         Handlebars.registerHelper('variableEach', function(context, options) {
-            var fn = options.fn,
+            let fn = options.fn,
                 inverse = options.inverse,
                 ctx;
-            var ret = "";
+            let ret = "";
 
             if (context && context.length > 0) {
-                for (var i = 0, j = context.length; i < j; i++) {
+                for (let i = 0, j = context.length; i < j; i++) {
                     ctx = Object.create(context[i]);
                     ctx.index = i + 1;
                     if (i + 1 == j) {
@@ -171,8 +164,8 @@ export class ErgTemplate {
             return ret;
         });
 
-        var t = Handlebars.compile(template);
-        var rendered = t(simulation);
+        let t = Handlebars.compile(template);
+        let rendered = t(simulation);
         return rendered;
     }
 }

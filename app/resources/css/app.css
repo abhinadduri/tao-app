@@ -77,8 +77,26 @@
     position: absolute;
     transform-origin: top left;
 
-    border: 1px solid rgb(0, 0, 0);
     height: 0px;
+}
+
+.segment.selected {
+    border: 2px solid rgb(255, 110, 122);
+    color: rgb(255, 110, 122);
+}
+
+.straight {
+    border: 1px solid rgb(0, 0, 0);
+
+    border: 1px solid rgb(84, 110, 122);
+
+}
+
+.dotted {
+    border: none;
+    border-top: 2px dotted rgb(0, 0, 0);
+    background-color: #fff;
+
 }
 
 .node.animate {
@@ -99,8 +117,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid rgb(84, 110, 122);
-    background: rgb(84, 110, 122);
+    /*border: 1px solid rgb(84, 110, 122);*/
+    /*background: rgb(84, 110, 122);*/
     z-index: 1;
 
     -webkit-transform-origin: 0 100%;
@@ -114,7 +132,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    border: 2px solid rgb(84, 110, 122);
     z-index: 1;
     border-radius: 50%;
 
@@ -126,19 +143,31 @@
     height: 70px;
 }
 
+.segment.circle.straight {
+    border: 2px solid rgb(84, 110, 122);
+}
+
+.segment.circle.dotted {
+    border: 2px dotted rgb(84, 110, 122);
+}
+
+.segment.circle.straight.selected {
+    border: 2px solid rgb(255, 110, 122);
+}
+
+.segment.circle.dotted.selected {
+    border: 2px solid rgb(255, 110, 122);
+}
+
 .arrow-tip {
     width: 0;
     height: 0;
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
-    border-left: 12px solid;
+    border-left: 10px solid;
     float: right;
 }
 
-.segment.selected {
-    border: 2px solid rgb(255, 110, 122);
-    color: rgb(255, 110, 122);
-}
 
 .graph {
     height: 100vh;

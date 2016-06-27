@@ -34,6 +34,13 @@ import {NgStyle} from '@angular/common';
                 specified duration and then terminate.
                 </p>
             </div>
+            
+            <div *ngIf="selectedSubComponent=='Console Output'"
+            [ngStyle]="{'text-align':'left'}">
+                <p>After a Tao simulation is run, there will be a trace output available in the browser console. To access the console, press <br />
+                command + shift + j on a mac, or ctrl + shift + j on a pc. 
+                </p>
+            </div>
         </div>
     `,
     directives: [NgStyle]

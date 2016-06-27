@@ -5,7 +5,7 @@ html {
 body {
     -webkit-user-select: none;
     -moz-user-select: none;
-    /*background-image: url(images/appvis-bg.png);*/
+    background-image: url(../images/grid.png);
     height: 100%;
     margin: 0;
     padding: 0;
@@ -131,7 +131,7 @@ a {
     color: inherit;
     width: calc(100% - 30px);
     padding: 5px 15px;
-    height: 300px;
+    height: 200px;
     border: 0;
 }
 
@@ -141,15 +141,6 @@ a {
     vertical-align: -7px;
 }
 
-#simulationDescription{
-    font-size: 14px;
-    background-color: rgb(241, 242, 243);
-    color: inherit;
-    width: calc(100% - 30px);
-    padding: 5px 15px;
-    height: 100px;
-    border: 0;
-}
 
 .editor .code-editor {
     width: 100%;
