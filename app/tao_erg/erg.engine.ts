@@ -180,7 +180,7 @@ class Scheduler {
 
     scheduleDelay(delay: number,
                   name: string) {
-        this.cancelledDelays.push({'delay': delay, 'name': name, 'mark': true, 'time': false});
+        this.cancelledDelays.push({'delay': delay, 'name': name});
     }
 
     hasNext() {
@@ -245,15 +245,10 @@ export class Engine {
                     let del = scheduler.cancelledDelays[c];
                     del.delay += (oldTime - scheduler.getClock());
                     if (del.delay <= 0) {
-                        if (del.mark) {
-                            del.time = scheduler.getClock();
-                            del.mark = false;
-                        }
                         if (currentEvent.name == del.name) {
+                            delete scheduler.cancelledDelays[c];
                             return EngineStatus.CANCELLED;
                         }
-                        if (del.time != scheduler.getClock() && del.mark)
-                            delete scheduler.cancelledDelays[c];
                     }
                 }
 

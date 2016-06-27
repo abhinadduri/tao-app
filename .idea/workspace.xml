@@ -3,23 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="33f8cbd5-6166-4034-9c63-275a679f7c12" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/resources/css/app.css" afterPath="$PROJECT_DIR$/app/resources/css/app.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/resources/css/tao.css" afterPath="$PROJECT_DIR$/app/resources/css/tao.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/resources/stats.ts" afterPath="$PROJECT_DIR$/app/resources/stats.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_edge/tao.edge.model.ts" afterPath="$PROJECT_DIR$/app/tao_edge/tao.edge.model.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_edge/tao.edge.tpl.html" afterPath="$PROJECT_DIR$/app/tao_edge/tao.edge.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.component.tpl.html" afterPath="$PROJECT_DIR$/app/tao_erg/erg.component.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.template.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.template.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_event/tao.event.model.ts" afterPath="$PROJECT_DIR$/app/tao_event/tao.event.model.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.help.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.tpl.html" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao.variable.panel.tpl.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.globals.help.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.globals.help.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.graph.help.ts" afterPath="$PROJECT_DIR$/app/tao_sidebar/tao_help_components/tao.graph.help.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/tao_erg/erg.local.ts" afterPath="$PROJECT_DIR$/app/tao_erg/erg.local.ts" />
     </list>
     <ignored path="angular_tao.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +25,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="erg.component.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="erg.component.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.component.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="426">
@@ -75,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="erg.engine.ts" pinned="false" current-in-tab="false">
+      <file leaf-file-name="erg.engine.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="247" column="39" selection-start-line="247" selection-start-column="39" selection-end-line="247" selection-end-column="39" />
+            <state relative-caret-position="552">
+              <caret line="251" column="21" selection-start-line="251" selection-start-column="21" selection-end-line="251" selection-end-column="21" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -167,12 +152,12 @@
         <option value="$PROJECT_DIR$/node_modules/underscore/underscore-min.js" />
         <option value="$PROJECT_DIR$/app/resources/stats.ts" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.template.ts" />
-        <option value="$PROJECT_DIR$/app/tao_erg/erg.local.ts" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.tpl.html" />
         <option value="$PROJECT_DIR$/app/tao_sidebar/tao.sidebar.ts" />
-        <option value="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/app/tao_erg/erg.component.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.local.ts" />
+        <option value="$PROJECT_DIR$/app/tao_erg/erg.engine.ts" />
       </list>
     </option>
   </component>
@@ -541,12 +526,12 @@
       <workItem from="1465916306576" duration="11180000" />
       <workItem from="1466370569996" duration="7287000" />
       <workItem from="1466532885240" duration="10583000" />
-      <workItem from="1466888870897" duration="16272000" />
+      <workItem from="1466888870897" duration="17588000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139926000" />
+    <option name="totallyTimeSpent" value="141242000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
@@ -1003,27 +988,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.local.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#46#106#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="247" column="39" selection-start-line="247" selection-start-column="39" selection-end-line="247" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -1059,6 +1023,27 @@
           <caret line="232" column="39" selection-start-line="232" selection-start-column="39" selection-end-line="232" selection-end-column="39" />
           <folding>
             <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.local.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#46#106#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/tao_erg/erg.engine.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="251" column="21" selection-start-line="251" selection-start-column="21" selection-end-line="251" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
