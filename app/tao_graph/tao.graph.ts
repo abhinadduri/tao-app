@@ -4,6 +4,7 @@
 import {Component, ViewChild, Input} from '@angular/core';
 import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 import {NgStyle} from '@angular/common';
+import {Variable} from '../tao_variable/tao.variable.model'
 
 @Component({
     selector: 'graph',
@@ -16,9 +17,24 @@ import {NgStyle} from '@angular/common';
         <modal-body>
             <div id="data" [ngStyle]="{'margin': '0 auto'}"></div>
             <div id="dataFooter">
+                <br />
+                <button 
+                *ngFor="let variable of variableList"
+                (click)="changeVariable(variable)"
+                [ngStyle]="{'margin-right': '5px'}"
+                [ngClass]="{
+                'selectedButton': graphingVariable == variable.name
+                }">
+                {{variable.name}}
+                </button>
+                <br /> <br />
                 <button 
                 *ngFor="let num of iterableNumber()"
-                (click)="updateGraph(num)">
+                (click)="updateGraph(num)"
+                [ngStyle]="{'margin-right': '5px'}"
+                [ngClass]="{
+                'selectedButton': selectedThread == num
+                }">
                     Thread {{num + 1}}
                 </button>
             </div>
@@ -33,6 +49,8 @@ export class TaoGraph {
     @Input() graphData: any;
     @Input() graphingVariable: string;
     @Input() threads: number;
+    @Input() variableList: Variable[];
+    selectedThread = 0;
 
     open() {
         if (_.isEmpty(this.graphData) || this.graphData == null || this.graphingVariable == null) {
@@ -71,7 +89,13 @@ export class TaoGraph {
         return arr;
     }
 
+    changeVariable(newGraphVar: Variable) {
+        this.graphingVariable = newGraphVar.name;
+        this.updateGraph(this.selectedThread);
+    }
+
     updateGraph(threadNum: number) {
+        this.selectedThread = threadNum;
         let selectedGraphData = this.graphData[threadNum][this.graphingVariable];
 
         if (!selectedGraphData) {

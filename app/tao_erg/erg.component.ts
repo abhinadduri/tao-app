@@ -1,32 +1,42 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgStyle} from '@angular/common'
+import {provideRouter, RouterConfig} from '@angular/router'
 import {TaoEvent} from './../tao_event/tao.event';
 import {TaoEdge} from './../tao_edge/tao.edge';
+import {TaoGroup} from './../tao_group/tao.group';
 import {TaoSidebar} from './../tao_sidebar/tao.sidebar';
 import {Edge} from './../tao_edge/tao.edge.model';
 import {Event} from './../tao_event/tao.event.model';
+import {Group} from './../tao_group/tao.group.model';
 import {Variable} from './../tao_variable/tao.variable.model';
 import {ErgTemplate} from './erg.template';
 import {Engine} from './erg.engine';
 import {Stats} from '../resources/stats';
 import {LocalRun} from './erg.local';
-import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
+import {Validation} from '../resources/validation.ts';
+import {incorrectThreadNumber, Downloads, Panel, openError, negativeThreads} from '../resources/constants';
+import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal';
+import * as _ from 'underscore';
 
 @Component({
     selector: 'erg',
-    directives: [TaoEvent, TaoEdge, TaoSidebar, MODAL_DIRECTIVES, NgStyle],
+    directives: [TaoEvent, TaoEdge, TaoSidebar, TaoGroup, MODAL_DIRECTIVES, NgStyle],
     templateUrl: './app/tao_erg/erg.component.tpl.html'
 })
 
 export class ErgComponent implements OnInit {
 
     counter: number;
+    groupNameID: number;
     selectedParticle: any;
     shiftSelectedSource: Event;
     selectedVariablePanel: boolean;
     eventList: Event[];
     edgeList: Edge[];
     variableList: Variable[];
+    groupList: Group[];
+    groupStart: boolean;
+    groupCounter: number;
     history: string[];
     currentVersion = 0;
     simulationName: string;
@@ -35,11 +45,14 @@ export class ErgComponent implements OnInit {
     threads: number;
     graphData: any;
     graphingVariable: string;
+    copyVariable: any;
+    
 
     @ViewChild('background') modal: ModalComponent;
 
     ngOnInit() {
         this.counter = 1;
+        this.groupNameID = 1;
         this.selectedParticle = null;
         this.shiftSelectedSource = null;
         this.selectedVariablePanel = false;
@@ -48,14 +61,19 @@ export class ErgComponent implements OnInit {
         this.timeUnits = 5;
         this.threads = 1;
         this.graphData = {};
+        this.copyVariable = null;
 
         this.eventList = [
-            new Event("Run", "// your code here", "50", "50", false, {}, "Run event.")
+            new Event("Run", "// your code here", "50", "50", false, {}, "Run event.", false, false, true)
         ];
 
         this.edgeList = [];
 
         this.variableList = [];
+
+        this.groupList = [];
+        this.groupStart = false;
+        this.groupCounter = 0;
 
         this.history = [JSON.stringify(this.produceErgJSON())];
         this.currentVersion = 0;
@@ -82,19 +100,19 @@ export class ErgComponent implements OnInit {
         if (this.currentVersion == 0)
             return;
         this.selectedParticle = null;
-        this.currentVersion --;
+        this.currentVersion--;
         this.loadFromText(this.history[this.currentVersion]);
     }
 
     handleDownload() {
         let data = JSON.stringify(this.produceErgJSON());
 
-        let blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, this.simulationName + ".txt");
+        let blob = new Blob([data], {type: Downloads.type});
+        saveAs(blob, this.simulationName + Downloads.taoFileExtension);
     }
 
     handleLocal() {
-        if (!this.checkParameters())
+        if (!Validation.checkParameters(this.eventList, this.edgeList) || !Validation.checkNames(this.eventList))
             return;
 
         for (var j = 0; j < this.variableList.length; j++) {
@@ -107,9 +125,7 @@ export class ErgComponent implements OnInit {
             }
 
             if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
-                alert('Each global variable should be a comma separated array specifiying an initial condition' +
-                    'for each thread. For example, a global variable with a value of 2 in the first thread and ' +
-                    '7 in the second thread should be [2,7].');
+                alert(incorrectThreadNumber);
                 return;
             }
         }
@@ -121,42 +137,18 @@ export class ErgComponent implements OnInit {
             this.threads,
             this.simulationName);
 
-        let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-        saveAs(blob, this.simulationName + ".js");
+        let blob = new Blob([text], {type: Downloads.type});
+        saveAs(blob, this.simulationName + Downloads.localRunFileExtension);
     }
 
-    private isNumArray(arr) {
-        for (let i = 0; i < arr.length; i++) {
-            if (typeof arr[i] != "number")
-                return false
-        }
-        return true;
-    }
-
-    private checkParameters(): boolean {
-        for (let i = 0; i < this.eventList.length; i++) {
-            let currentEvent = this.eventList[i];
-            let currentParams = currentEvent.parameters;
-
-            let targetEdges: Edge[] = this.getSourceAndTargetEdges(currentEvent)['target'];
-            for (let i in currentParams) {
-                for (let j = 0; j < targetEdges.length; j++) {
-                    if (!targetEdges[j].parameters.hasOwnProperty(i)
-                    || targetEdges[j].parameters[i] == "") {
-                        alert('A parameter field for parameter ' + i + ' of event ' + currentEvent.name + ' has been left blank.');
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
 
     handleRun() {
-        if (!this.checkParameters())
+        if (!Validation.checkParameters(this.eventList, this.edgeList)
+            || !Validation.checkNames(this.eventList))
             return;
 
+        this.selectedVariablePanel = true;
+        this.unSelectFromPanel(Panel.reset);
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
         let engine = new Engine();
         let compiledFunction;
@@ -164,6 +156,7 @@ export class ErgComponent implements OnInit {
             compiledFunction = eval('(' + generatedCode + ')');
         } catch (e) {
             console.error(e);
+            return;
         }
 
         let scenarioList: any[] = [];
@@ -175,9 +168,13 @@ export class ErgComponent implements OnInit {
                 value = eval('(' + this.variableList[k].value + ')');
             } catch (e) {
                 console.error(e);
+                return;
             }
 
-            if (typeof value == "number" || (Array.isArray(value) && value.length == this.threads && this.isNumArray(value)))
+            if (typeof value == "number" ||
+                (Array.isArray(value) &&
+                value.length == this.threads &&
+                Validation.isNumArray(value)))
                 variableNames.push(this.variableList[k].name)
         }
 
@@ -193,9 +190,7 @@ export class ErgComponent implements OnInit {
                 }
 
                 if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
-                    alert('Each global variable should be a comma separated array specifiying an initial condition' +
-                        'for each thread. For example, a global variable with a value of 2 in the first thread and ' +
-                        '7 in the second thread should be [2,7].');
+                    alert(incorrectThreadNumber);
                     return;
                 }
 
@@ -218,7 +213,7 @@ export class ErgComponent implements OnInit {
     handleOpen(e) {
         let file = e.target.files[0];
         if (!file) {
-            alert('Invalid file.');
+            alert(openError);
             return;
         }
 
@@ -228,7 +223,7 @@ export class ErgComponent implements OnInit {
 
         reader.onload = function(e) {
             let target: any = e.target;
-            self.unSelectFromPanel('reset all');
+            self.unSelectFromPanel(Panel.reset);
             self.loadFromText(target.result);
             self.handleHistoryUpdate();
         }
@@ -236,9 +231,42 @@ export class ErgComponent implements OnInit {
         reader.readAsText(file);
     }
 
+    handleDrag(node: Event) {
+        if (node && this.selectedParticle) {
+            var sourceEdges = Validation.getSourceEdges(node, this.edgeList);
+            var targetEdges = Validation.getTargetEdges(node, this.edgeList);
+
+            for (let i = 0; i < sourceEdges.length; i++) {
+                sourceEdges[i].startX = (parseInt(node.x) + 35).toString();
+                sourceEdges[i].startY = (parseInt(node.y) + 35).toString();
+            }
+            for (let i = 0; i < targetEdges.length; i++) {
+                targetEdges[i].endX = (parseInt(node.x) + 35).toString();
+                targetEdges[i].endY = (parseInt(node.y) + 35).toString();
+            }
+        }
+    }
+
+    handleDragGroup(g: Group) {
+        if (g) {
+            let incomingEdges = g.getIncomingEdges();
+            let outgoingEdges = g.getOutgoingEdges();
+
+            for (let i = 0; i < incomingEdges.length; i++) {
+                incomingEdges[i].endX = (parseInt(g.x) + 35).toString();
+                incomingEdges[i].endY = (parseInt(g.y) + 35).toString();
+            }
+
+            for (let i = 0; i < outgoingEdges.length; i++) {
+                outgoingEdges[i].startX = (parseInt(g.x) + 35).toString();
+                outgoingEdges[i].startY = (parseInt(g.y) + 35).toString();
+            }
+        }
+    }
+
     updateThreads(num: number) {
         if (num <= 0) {
-            alert('Need at least one thread!');
+            alert(negativeThreads);
             this.threads = 1;
             return;
         }
@@ -250,17 +278,267 @@ export class ErgComponent implements OnInit {
         this.graphingVariable = graph;
     }
 
-    createEvent(e, graph) {
-        if (e.target == graph) {
-            var name = "Event" + this.counter;
-            var x = (e.clientX - 35).toString();
-            var y = (e.clientY - 35).toString();
-            var stateChange = `// your code here`;
-            var event = new Event(name, stateChange, x, y, true, {}, name + " description.");
-            this.counter++;
-            this.eventList.push(event);
-            this.handleHistoryUpdate();
+    copySelectedItem() {
+        if (this.selectedParticle)
+            this.copyVariable = this.selectedParticle;
+    }
+
+    pasteSelectedItem() {
+        if (this.copyVariable && this.copyVariable.constructor == Event) {
+            let copy: Event = this.copyVariable;
+            this.createGeneralEvent(
+                copy.name + '_' + this.counter,
+                (parseInt(copy.x) + 40).toString(),
+                (parseInt(copy.y) + 40).toString(),
+                copy.stateChange,
+                copy.trace,
+                copy.parameters,
+                copy.description
+            )
         }
+        else if (this.copyVariable && this.copyVariable.constructor == Edge) {
+            let copy: Edge = this.copyVariable;
+            let source = copy.getSourceEvent(this.eventList);
+            let target = copy.getTargetEvent(this.eventList);
+
+            if (source == null || target == null)
+                alert('The edge cannot be copied. Either the source or target event has been deleted.');
+            else {
+                this.createGeneralEdge(
+                    copy.source,
+                    copy.target,
+                    copy.startX,
+                    copy.startY,
+                    copy.endX,
+                    copy.endY,
+                    copy.condition,
+                    copy.type,
+                    copy.delay,
+                    copy.priority,
+                    copy.parameters,
+                    copy.description,
+                    copy.subType
+                );
+            }
+        }
+    }
+
+    groupAndFinish() {
+        this.groupStart = !this.groupStart;
+
+
+        if (this.groupStart) {
+            this.handleHistoryUpdate();
+            let g = new Group('Group' + this.groupNameID, Math.random()*200, Math.random()*200);
+            this.groupNameID++;
+            this.groupList.push(g);
+            this.groupCounter = this.groupList.indexOf(g);
+        }
+
+        else {
+            let groupedEvents: Event[] = [];
+            let subGroups: Group[] = [];
+
+            for (let i = 0; i < this.eventList.length; i++) {
+                if (this.eventList[i].groupedDOM) {
+                    if (this.eventList[i].grouped) {
+                        alert('Cannot put the same node into two groups.');
+                    }
+                    groupedEvents.push(this.eventList[i]);
+                }
+
+                this.eventList[i].groupedDOM = false;
+
+            }
+
+            for (let i = 0; i < this.groupList.length; i++) {
+                if (this.groupList[i].groupedDOM) {
+                    subGroups.push(this.groupList[i]);
+                    this.groupList[i].groupedDOM = false;
+                }
+            }
+
+
+            if (groupedEvents.length == 0 && subGroups.length == 0) {
+                this.groupList.splice(this.groupCounter, 1);
+                this.groupNameID--;
+            }
+            else {
+                let currentGroup = this.groupList[this.groupCounter];
+                currentGroup.visible = true;
+
+                for (let j = 0; j < groupedEvents.length; j++)
+                    currentGroup.addEvent(groupedEvents[j]);
+
+                for (let k = 0; k < subGroups.length; k++) {
+                    subGroups[k].grouped = true;
+                    subGroups[k].parent = currentGroup;
+                    currentGroup.addGroup(subGroups[k]);
+                    subGroups[k].visible = false;
+                }
+
+                for (let i = 0; i < currentGroup.getEvents().length; i++) {
+                    let eventIndex = this.eventList.indexOf(currentGroup.getEvents()[i]);
+                    let currentEvent = this.eventList[eventIndex];
+
+                    let sourceEdgesToEvent = Validation.getSourceEdges(currentEvent, this.edgeList);
+                    let targetEdgesFromEvent = Validation.getTargetEdges(currentEvent, this.edgeList);
+
+                    for (let j = 0; j < sourceEdgesToEvent.length; j++) {
+                        let currentEdge = sourceEdgesToEvent[j];
+
+                        let target = currentGroup.getEventByName(currentEdge.target)
+                        if (target == -1) {
+                            currentEdge.groupedSource = currentGroup.name;
+                            // currentEdge.groupedTarget = currentEdge.target;
+                            currentEdge.startX = (parseInt(currentGroup.x) + 35).toString();
+                            currentEdge.startY = (parseInt(currentGroup.y) + 35).toString();
+                            currentGroup.addOutgoingEdge(currentEdge);
+                        }
+                        else {
+                            if (!this.getEventByEdgeTarget(currentEdge).grouped) {
+                                currentGroup.addEdge(currentEdge);
+                            }
+                        }
+                    }
+
+                    for (let k = 0; k < targetEdgesFromEvent.length; k++) {
+                        let currentEdge = targetEdgesFromEvent[k];
+                        if (currentGroup.getEventByName(currentEdge.source) == -1) {
+                            currentEdge.groupedTarget = currentGroup.name;
+                            currentEdge.endX = (parseInt(currentGroup.x) + 35).toString();
+                            currentEdge.endY = (parseInt(currentGroup.y) + 35).toString();
+                            currentGroup.addIncomingEdge(currentEdge);
+                        }
+
+                    }
+                }
+
+                for (let j = 0; j < groupedEvents.length; j++)
+                    groupedEvents[j].grouped = true;
+
+                for (let i = 0; i < currentGroup.getGroups().length; i++) {
+                    let subGroup = currentGroup.getGroups()[i];
+
+                    // for (let j = 0; j < subGroup.getEvents().length; j++) {
+                    //     if (currentGroup.getEvents().indexOf(subGroup.getEvents()[j]) == -1)
+                    //         currentGroup.addEvent(subGroup.getEvents()[j]);
+                    // }
+
+                    for (let j = 0; j < subGroup.getOutgoingEdges().length; j++) {
+                        // might be a problem later on
+                        let currentSubEdge = subGroup.getOutgoingEdges()[j];
+                        if (currentGroup.findByName(currentSubEdge.target)) {
+                            currentSubEdge.groupedSource = "None";
+                            currentSubEdge.groupedTarget = "None";
+                            currentGroup.addEdge(currentSubEdge);
+                        }
+                        else {
+                            currentSubEdge.groupedSource = currentGroup.name;
+                            currentGroup.addOutgoingEdge(currentSubEdge);
+                            currentSubEdge.startX = (parseInt(currentGroup.x) + 35).toString();
+                            currentSubEdge.startY = (parseInt(currentGroup.y) + 35).toString();
+                        }
+                    }
+
+                    for (let j = 0; j < subGroup.getIncomingEdges().length; j++) {
+                        let currentSubEdge = subGroup.getIncomingEdges()[j];
+                        if (currentGroup.findByName(currentSubEdge.source)) {
+                            currentSubEdge.groupedSource = "None";
+                            currentSubEdge.groupedTarget = "None";
+                            currentGroup.addEdge(currentSubEdge);
+                        }
+                        else {
+                            currentSubEdge.groupedTarget = currentGroup.name;
+                            currentGroup.addIncomingEdge(currentSubEdge);
+                            currentSubEdge.endX = (parseInt(currentGroup.x) + 35).toString();
+                            currentSubEdge.endY = (parseInt(currentGroup.y) + 35).toString();
+                        }
+                    }
+
+                }
+
+                for (let i = 0; i < currentGroup.getEdges().length; i++) {
+                    let currentEdge = currentGroup.getEdges()[i];
+                    let ind = this.edgeList.indexOf(currentEdge);
+                    if (ind != -1)
+                        this.edgeList[ind].visible = false;
+                }
+
+                for (let j = 0; j < currentGroup.getEvents().length; j++) {
+                    let currentEvent = currentGroup.getEvents()[j];
+                    let ind = this.eventList.indexOf(currentEvent);
+                    this.eventList[ind].visible = false;
+                }
+            }
+        }
+
+        this.unSelectFromPanel(Panel.reset);
+    }
+
+    handleUngroup(g: Group) {
+        let ind = this.groupList.indexOf(g);
+        if (g.parent == null) {
+            this.handleHistoryUpdate();
+            for (let i = 0; i < g.getEvents().length; i++) {
+                g.getEvents()[i].visible = true;
+                g.getEvents()[i].grouped = false;
+            }
+
+            for (let j = 0; j < g.getEdges().length; j++) {
+                let currentEdge = g.getEdges()[j];
+                currentEdge.groupedSource = "None";
+                currentEdge.groupedTarget = "None";
+
+                currentEdge.visible = true;
+            }
+
+            for (let i = 0; i < g.getIncomingEdges().length; i++) {
+                let currentEdge = g.getIncomingEdges()[i];
+                let targetEvent = this.getEventByEdgeTarget(currentEdge);
+                currentEdge.groupedTarget = "None";
+
+                if (!targetEvent.grouped) {
+                    currentEdge.endX = (parseInt(targetEvent.x) + 35).toString();
+                    currentEdge.endY = (parseInt(targetEvent.y) + 35).toString();
+                }
+            }
+
+            for (let j = 0; j < g.getOutgoingEdges().length; j++) {
+                let currentEdge = g.getOutgoingEdges()[j];
+                let sourceEvent = this.getEventByEdgeSource(currentEdge);
+                currentEdge.groupedSource = "None";
+
+                if (!sourceEvent.grouped) {
+                    currentEdge.startX = (parseInt(sourceEvent.x) + 35).toString();
+                    currentEdge.startY = (parseInt(sourceEvent.y) + 35).toString();
+                }
+            }
+
+            for (let k = 0; k < g.getGroups().length; k++) {
+                let currentSubGroup = g.getGroups()[k];
+                for (let i = 0; i < currentSubGroup.getIncomingEdges().length; i++) {
+                    let currentSubEdge = currentSubGroup.getIncomingEdges()[i];
+                    currentSubEdge.groupedTarget = currentSubGroup.name;
+                    currentSubEdge.endX = (parseInt(currentSubGroup.x) + 35).toString();
+                    currentSubEdge.endY = (parseInt(currentSubGroup.y) + 35).toString();
+                }
+
+                for (let j = 0; j < currentSubGroup.getOutgoingEdges().length; j++) {
+                    let currentSubEdge = currentSubGroup.getOutgoingEdges()[j];
+                    currentSubEdge.groupedSource = currentSubGroup.name;
+                    currentSubEdge.startX = (parseInt(currentSubGroup.x) + 35).toString();
+                    currentSubEdge.startY = (parseInt(currentSubGroup.y) + 35).toString();
+                }
+
+                currentSubGroup.visible = true;
+                currentSubGroup.parent = g.parent;
+            }
+
+            g.visible = false;
+            this.groupList.splice(ind, 1);
+        }
+        
     }
     
     unSelect(graph, e) {
@@ -276,7 +554,7 @@ export class ErgComponent implements OnInit {
         this.selectedParticle = null;
         this.shiftSelectedSource = null;
 
-        if (type != 'reset all')
+        if (type != Panel.reset)
             this.selectedVariablePanel = true
     }
 
@@ -287,33 +565,85 @@ export class ErgComponent implements OnInit {
             this.selectedVariablePanel = false;
             this.selectedParticle = event;
         }
-    }
 
+        if (this.groupStart && event.groupedDOM) {
+            event.groupedDOM = false;
+            this.unSelectFromPanel(Panel.reset);
+            return;
+        } else if (this.groupStart) {
+            event.groupedDOM = true;
+        }
+
+    }
 
     selectShiftEvent(event : Event, e) {
         if (!this.shiftSelectedSource)
             this.shiftSelectedSource = event;
         else if (this.shiftSelectedSource) {
-            // can optimize this maybe
             this.createEdge(this.shiftSelectedSource.name, event.name);
             this.shiftSelectedSource = null;
         }
 
     }
 
+    selectEdge(edge: Edge, e) {
+        this.selectedVariablePanel = false;
+        this.selectedParticle = edge;
+    }
+
+    selectGroup(group: Group) {
+        this.selectedVariablePanel = false;
+        this.selectedParticle = group;
+        
+        if (this.groupStart && group.groupedDOM) {
+            group.groupedDOM = false;
+            this.unSelectFromPanel(Panel.reset);
+            return;
+        } else if (this.groupStart) {
+            group.groupedDOM = true;
+        }
+    }
+
+    createEvent(e, graph) {
+        if (e.target == graph) {
+            var name = "Event" + this.counter;
+            var x = (e.clientX - 35).toString();
+            var y = (e.clientY - 35).toString();
+            var stateChange = `// your code here`;
+            var event = new Event(name, stateChange, x, y, true, {}, name + " description.", false, false, true);
+            this.counter++;
+            this.eventList.push(event);
+            this.handleHistoryUpdate();
+        }
+    }
+
+    createGeneralEvent(name: string,
+                       x: string,
+                       y: string,
+                       stateChange: string,
+                       trace: boolean,
+                       parameters: any,
+                       description: string) {
+        this.eventList.push(new Event(
+            name, stateChange, x, y, trace, parameters, description, false, false, true
+        ));
+        this.counter++;
+        this.handleHistoryUpdate();
+    }
+
     createEdge(source : string, target : string) {
-        let sourceEvent : Event = null;
-        let targetEvent : Event = null;
+        let sourceEvent:Event = null;
+        let targetEvent:Event = null;
 
         for (let i = 0; i < this.eventList.length; i++) {
-            let currentEvent : Event = this.eventList[i];
+            let currentEvent: Event = this.eventList[i];
             if (currentEvent.name === source)
                 sourceEvent = currentEvent;
             if (currentEvent.name === target)
                 targetEvent = currentEvent;
         }
 
-        let newEdge : Edge = new Edge(
+        let newEdge: Edge = new Edge(
             source,
             target,
             (parseInt(sourceEvent.x) + 35).toString(),
@@ -325,46 +655,38 @@ export class ErgComponent implements OnInit {
             1,
             5,
             {},
-            "Edge from " + source + " to " + target + "."
+            "Edge from " + source + " to " + target + ".",
+            "Next",
+            "None",
+            "None",
+            true,
+            _.uniqueId()
         );
 
         this.edgeList.push(newEdge);
         this.handleHistoryUpdate();
     }
-    
-    selectEdge(edge: Edge, e) {
-        this.selectedVariablePanel = false;
-        this.selectedParticle = edge;
-    }
 
-    // given an event, get all edges whose source/target is that event
-    getSourceAndTargetEdges(node: Event) : any {
-        let output = {'source': [], 'target': []};
-        for (let i = 0; i < this.edgeList.length; i++) {
-            if (this.edgeList[i].source === node.name)
-                output['source'].push(this.edgeList[i]);
-            // fix this for self edges
-            if (this.edgeList[i].target === node.name)
-                output['target'].push(this.edgeList[i]);
-        }
-        return output;
-    }
+    createGeneralEdge(source: string,
+                      target: string,
+                      sourceX: string,
+                      sourceY: string,
+                      targetX: string,
+                      targetY: string,
+                      condition: string,
+                      type: string,
+                      delay: number,
+                      priority: number,
+                      parameters: any,
+                      description: string,
+                      subType: string) {
+        let newEdge: Edge = new Edge(
+            source, target, sourceX, sourceY, targetX, targetY, condition, type, delay,
+            priority, parameters, description, subType, "None", "None", true, _.uniqueId()
+        );
 
-    handleDrag(node: Event) {
-        if (node && this.selectedParticle) {
-            var sourceAndTarget = this.getSourceAndTargetEdges(this.selectedParticle);
-            var sourceEdges = sourceAndTarget['source'];
-            var targetEdges = sourceAndTarget['target'];
-
-            for (let i = 0; i < sourceEdges.length; i++) {
-                sourceEdges[i].startX = (parseInt(node.x) + 35).toString();
-                sourceEdges[i].startY = (parseInt(node.y) + 35).toString();
-            }
-            for (let i = 0; i < targetEdges.length; i++) {
-                targetEdges[i].endX = (parseInt(node.x) + 35).toString();
-                targetEdges[i].endY = (parseInt(node.y) + 35).toString();
-            }
-        }
+        this.edgeList.push(newEdge);
+        this.handleHistoryUpdate();
     }
 
     produceErgJSON() : any {
@@ -373,6 +695,7 @@ export class ErgComponent implements OnInit {
         simulation['name'] = this.simulationName;
         simulation['time'] = this.timeUnits;
         simulation['threads'] = this.threads;
+        simulation['counter'] = this.counter;
 
         simulation['variables'] = [];
 
@@ -403,7 +726,12 @@ export class ErgComponent implements OnInit {
                     'delay': currentEdge.delay,
                     'priority': currentEdge.priority,
                     'parameters': currentEdge.parameters,
-                    'description': currentEdge.description
+                    'description': currentEdge.description,
+                    'subType': currentEdge.subType,
+                    'groupedSource': currentEdge.groupedSource,
+                    'groupedTarget': currentEdge.groupedTarget,
+                    'visible': currentEdge.visible,
+                    'id': currentEdge.getId()
                 });
         }
 
@@ -419,9 +747,37 @@ export class ErgComponent implements OnInit {
                     'y': currentEvent.y,
                     'trace': currentEvent.trace,
                     'parameters': currentEvent.parameters,
-                    'description': currentEvent.description
+                    'description': currentEvent.description,
+                    'grouped': currentEvent.grouped,
+                    'groupedDOM': currentEvent.groupedDOM,
+                    'visible': currentEvent.visible
                 });
         }
+
+        simulation['groups'] = [];
+
+        for (let i = 0; i < this.groupList.length; i++) {
+            let currentGroup = this.groupList[i];
+            let groupNames: string[] = [];
+
+            for (let j = 0; j < currentGroup.getGroups().length; j++)
+                groupNames.push(currentGroup.getGroups()[j].name);
+
+            simulation['groups'].push({
+                'name': currentGroup.name,
+                'x': currentGroup.x,
+                'y': currentGroup.y,
+                'eventList': JSON.stringify(currentGroup.eventList),
+                'edgeList': JSON.stringify(currentGroup.edgeList),
+                'outgoingEdges': JSON.stringify(currentGroup.outgoingEdges),
+                'incomingEdges': JSON.stringify(currentGroup.incomingEdges),
+                'parent': currentGroup.parent ? currentGroup.parent.name : null,
+                'visible': currentGroup.visible,
+                'grouped': currentGroup.grouped,
+                'groupedDOM': currentGroup.groupedDOM
+            });
+        }
+        // console.log(simulation);
         return simulation;
     }
 
@@ -434,6 +790,7 @@ export class ErgComponent implements OnInit {
         this.simulationDescription = simJson.hasOwnProperty('description') ? simJson.description : 'A sample description.';
         this.timeUnits = simJson.hasOwnProperty('time') ? simJson.time : 10;
         this.threads = simJson.hasOwnProperty('threads') ? simJson.threads : 1;
+        this.counter = simJson.hasOwnProperty('counter') ? simJson.counter : 1;
 
         if (simJson.hasOwnProperty('variables')) {
             for (let i = 0; i < simJson.variables.length; i++) {
@@ -460,7 +817,10 @@ export class ErgComponent implements OnInit {
                         (currentEvent.hasOwnProperty('y') ? currentEvent.y.toString() : (i * 100).toString()),
                         (currentEvent.hasOwnProperty('trace') ? currentEvent.trace : true),
                         (currentEvent.hasOwnProperty('parameters') ? currentEvent.parameters : {}),
-                        (currentEvent.hasOwnProperty('description') ? currentEvent.description : "Description."))
+                        (currentEvent.hasOwnProperty('description') ? currentEvent.description : "Description."),
+                        (currentEvent.hasOwnProperty('grouped') ? currentEvent.grouped : false),
+                        (currentEvent.hasOwnProperty('groupedDOM') ? currentEvent.groupedDOM : false),
+                        (currentEvent.hasOwnProperty('visible') ? currentEvent.visible : true))
                 );
             }
         }
@@ -483,17 +843,109 @@ export class ErgComponent implements OnInit {
                         (currentEdge.hasOwnProperty('priority') ? currentEdge.priority : 5),
                         (currentEdge.hasOwnProperty('parameters') ? currentEdge.parameters : {}),
                         (currentEdge.hasOwnProperty('description') ? currentEdge.description :
-                        "Edge from " + currentEdge.source + " to " + currentEdge.target + ".")
+                        "Edge from " + currentEdge.source + " to " + currentEdge.target + "."),
+                        (currentEdge.hasOwnProperty('subType') ? currentEdge.subType : "Next"),
+                        (currentEdge.hasOwnProperty('groupedSource') ? currentEdge.groupedSource : "None"),
+                        (currentEdge.hasOwnProperty('groupedTarget') ? currentEdge.groupedTarget : "None"),
+                        (currentEdge.hasOwnProperty('visible') ? currentEdge.visible : true),
+                        (currentEdge.hasOwnProperty('id') ? currentEdge.id : _.uniqueId())
                     )
                 );
             }
         }
+
+        if (simJson.hasOwnProperty('groups')) {
+            for (let i = 0; i < simJson.groups.length; i++) {
+
+                let currentGroup = simJson.groups[i];
+
+                let groupToAdd = new Group(currentGroup.name, currentGroup.x, currentGroup.y);
+
+                let eventList = JSON.parse(currentGroup.eventList);
+                for (let j = 0; j < eventList.length; j++)
+                    groupToAdd.addEvent(this.getEventByName(eventList[j].name));
+
+                let edgeList = JSON.parse(currentGroup.edgeList);
+                for (let j = 0; j < edgeList.length; j++)
+                    groupToAdd.addEdge(this.getEdgeById(edgeList[j].id));
+
+                let incomingEdges = JSON.parse(currentGroup.incomingEdges);
+                for (let j = 0; j < incomingEdges.length; j++)
+                    groupToAdd.addIncomingEdge(this.getEdgeById(incomingEdges[j].id));
+
+                let outgoingEdges = JSON.parse(currentGroup.outgoingEdges);
+                for (let j = 0; j < outgoingEdges.length; j++)
+                    groupToAdd.addOutgoingEdge(this.getEdgeById(outgoingEdges[j].id));
+
+                groupToAdd.visible = currentGroup.visible;
+                groupToAdd.grouped = currentGroup.grouped;
+                groupToAdd.groupedDOM = currentGroup.groupedDOM;
+                groupToAdd.parent = currentGroup.parent;
+
+                this.groupList.push(groupToAdd);
+            }
+
+            for (let i = 0; i < this.groupList.length; i++) {
+                if (this.groupList[i].parent != null)
+                    this.groupList[i].parent = this.getGroupByName(<string>this.groupList[i].parent);
+            }
+
+            for (let i = 0; i < this.groupList.length; i++) {
+                let currentGroup = this.groupList[i];
+                for (let j = 0; j < this.groupList.length; j++)
+                    if (this.groupList[j].parent == currentGroup)
+                        currentGroup.addGroup(this.groupList[j]);
+            }
+
+        }
+    }
+
+    private getEventByEdgeSource(e: Edge): Event {
+        for (let i = 0; i < this.eventList.length; i++) {
+            if (this.eventList[i].name == e.source)
+                return this.eventList[i];
+        }
+        return null;
+    }
+
+    private getEventByEdgeTarget(e: Edge): Event {
+        for (let i = 0; i < this.eventList.length; i++) {
+            if (this.eventList[i].name == e.target)
+                return this.eventList[i];
+        }
+        return null;
+    }
+
+    private getEventByName(name: string): Event {
+        for (let i = 0; i < this.eventList.length; i++) {
+            if (this.eventList[i].name == name)
+                return this.eventList[i];
+        }
+        return null;
+    }
+
+    private getGroupByName(name: string): Group {
+        for (let i = 0; i < this.groupList.length; i++) {
+            if (this.groupList[i].name == name)
+                return this.groupList[i];
+        }
+
+        return null;
+    }
+
+    private getEdgeById(id: string): Edge {
+        for (let i = 0; i < this.edgeList.length; i++) {
+            if (this.edgeList[i].getId() == id)
+                return this.edgeList[i];
+        }
+        return null;
     }
 
     private clearERG() {
         this.eventList = [];
         this.edgeList = [];
         this.variableList = [];
+        this.groupList = [];
     }
 }
 

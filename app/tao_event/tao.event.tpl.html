@@ -1,5 +1,6 @@
 <div class="node"
      #circle
+     *ngIf="tao_event.visible"
      [ngStyle]="{'top': tao_event.y + 'px',
      'left': tao_event.x + 'px'}"
      [ngClass]="{

@@ -11,7 +11,10 @@ export class Event {
         public y: string,
         public trace: boolean,
         public parameters: {},
-        public description: string
+        public description: string,
+        public grouped: boolean,
+        public groupedDOM: boolean,
+        public visible: boolean
     ) { }
 
     public getSourceEdges(edgeList: Edge[]): Edge[] {

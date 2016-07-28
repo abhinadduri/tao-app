@@ -37,9 +37,9 @@ export class TaoEdge {
         let otherEdge: Edge = this.getEdgePair();
 
         if (this.edgeList.indexOf(this.tao_edge) > this.edgeList.indexOf(otherEdge))
-            return 3;
+            return 5;
         else
-            return -3;
+            return -5;
     }
 
     parse(x) {

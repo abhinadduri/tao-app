@@ -5,9 +5,11 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {NgStyle} from '@angular/common';
 import {CORE_DIRECTIVES} from '@angular/common';
 import {HelpDialogue} from './tao.help';
-import {Event} from '../tao_event/tao.event.model'
-import {Edge} from '../tao_edge/tao.edge.model'
-import {TaoGraph} from '../tao_graph/tao.graph'
+import {Event} from '../tao_event/tao.event.model';
+import {Edge} from '../tao_edge/tao.edge.model';
+import {Group} from '../tao_group/tao.group.model'
+import {TaoGraph} from '../tao_graph/tao.graph';
+import {Ace, Panel} from '../resources/constants';
 
 import {TaoVariablePanel} from '../tao_sidebar/tao.variable.panel'
 
@@ -22,9 +24,12 @@ export class TaoSidebar {
     @Input() eventList;
     @Input() edgeList;
     @Input() variableList;
+    @Input() groupList;
+    @Input() groupStart;
     @Input() graphData;
     @Input() graphVar;
     @Input() threads;
+    @Input() copyVariable;
 
     @Input() variablePanel: boolean;
 
@@ -46,6 +51,10 @@ export class TaoSidebar {
     @Output() undo = new EventEmitter();
     @Output() changeGraphVar = new EventEmitter();
     @Output() localRun = new EventEmitter();
+    @Output() copy = new EventEmitter();
+    @Output() paste = new EventEmitter();
+    @Output() group = new EventEmitter();
+    @Output() ungroup = new EventEmitter();
     
     
     emptyDict: any = {};
@@ -119,8 +128,35 @@ export class TaoSidebar {
         return (!(this.selectedParticle)) ? false : (this.selectedParticle.constructor == Edge);
     }
 
+    typeOfGroup() {
+        return (!(this.selectedParticle) ? false : (this.selectedParticle.constructor == Group));
+    }
+
     emitHistoryUpdate() {
         this.historyUpdate.emit(0);
+    }
+
+    storeCopiedVariable() {
+        if (this.typeOfNode() && this.selectedParticle.name == 'Run') {
+            alert('Cannot copy the Run node.');
+            return;
+        }
+        this.copy.emit(0);
+    }
+
+    pasteItem() {
+        this.paste.emit(0);
+    }
+    
+    beginGroup() {
+        this.group.emit(0);
+    }
+
+    handleUngroup() {
+        if (!this.typeOfGroup())
+            return;
+        
+        this.ungroup.emit(this.selectedParticle);
     }
 
     updateEvent(eventName, trace, stateChange, description) {
@@ -155,12 +191,14 @@ export class TaoSidebar {
 
     // only called if selected particle is an edge
 
-    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription) {
+    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) {
         this.selectedParticle.type = edgeType.value;
         this.selectedParticle.condition = edgeCondition.value;
         this.selectedParticle.delay = edgeDelay.value;
         this.selectedParticle.priority = edgePriority.value;
         this.selectedParticle.description = edgeDescription.value;
+        if (edgeSubType)
+            this.selectedParticle.subType = edgeSubType.value;
 
         var paramsList = edgeParameters.getElementsByTagName("li");
 
@@ -216,8 +254,8 @@ export class TaoSidebar {
         this.emitHistoryUpdate();
     }
 
-    deleteEvent() {
-        if (this.selectedParticle.name == 'Run') {
+    deleteEvent(event: Event) {
+        if (event.name == 'Run') {
             alert('You cannot delete the run node.');
             return;
         }
@@ -226,21 +264,21 @@ export class TaoSidebar {
         for (var i = 0; i < this.edgeList.length; i++) {
             let currentEdge = this.edgeList[i];
 
-            if (currentEdge.target == this.selectedParticle.name
-                || currentEdge.source == this.selectedParticle.name) {
+            if (currentEdge.target == event.name
+                || currentEdge.source == event.name) {
                 spliceIndices.push(i)
             }
         }
 
-        for (var j = 0; j < spliceIndices.length; j++) {
-            this.edgeList.splice(spliceIndices[j]);
+        for (let j = spliceIndices.length - 1; j >= 0; j--) {
+            this.edgeList.splice(spliceIndices[j], 1);
         }
 
-        let index = this.eventList.indexOf(this.selectedParticle);
+        let index = this.eventList.indexOf(event);
 
         this.eventList.splice(index, 1);
         this.emitHistoryUpdate();
-        this.resetParticle.emit('reset all');
+        this.resetParticle.emit(Panel.reset);
     }
 
     deleteEdge() {
@@ -248,6 +286,63 @@ export class TaoSidebar {
 
         this.edgeList.splice(index, 1);
         this.emitHistoryUpdate();
+    }
+
+    deleteGroupEvent(event: Event) {
+        if (!this.typeOfGroup())
+            return;
+
+        let group: Group = this.selectedParticle;
+        let spliceIncomingIndices = [];
+        let spliceOutgoingIndices = [];
+        let spliceInternalIndices = [];
+
+        for (let i = 0; i < group.getIncomingEdges().length; i++) {
+            let currentEdge = group.getIncomingEdges()[i];
+
+            if (currentEdge.target == event.name)
+                spliceIncomingIndices.push(i);
+        }
+
+        for (let j = 0; j < group.getOutgoingEdges().length; j++) {
+            let currentEdge = group.getOutgoingEdges()[j];
+
+            if (currentEdge.source == event.name)
+                spliceOutgoingIndices.push(j);
+        }
+
+        for (let k = 0; k < group.getEdges().length; k++) {
+            let currentEdge = group.getEdges()[k];
+
+            if (currentEdge.source == event.name || currentEdge.target == event.name) {
+                spliceInternalIndices.push(k);
+            }
+        }
+
+        for (let i = spliceIncomingIndices.length - 1; i >= 0; i--)
+            group.getIncomingEdges().splice(spliceIncomingIndices[i], 1);
+
+        for (let j = spliceOutgoingIndices.length - 1; j >= 0; j--)
+            group.getOutgoingEdges().splice(spliceOutgoingIndices[j], 1);
+
+        for (let k = spliceInternalIndices.length - 1; k >= 0; k--)
+            group.getEdges().splice(spliceInternalIndices[k], 1);
+
+
+        group.getEvents().splice(group.getEvents().indexOf(event), 1);
+
+        this.deleteEvent(event);
+
+    }
+
+    deleteGroupEdge(edge: Edge) {
+        if (!this.typeOfGroup())
+            return;
+
+        let group = this.selectedParticle;
+
+        group.getEdges().splice(group.getEdges().indexOf(edge), 1);
+        this.edgeList.splice(this.edgeList.indexOf(edge), 1);
     }
 
 }

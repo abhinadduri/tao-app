@@ -52,7 +52,8 @@ class EngineCancellingEvent {
         public parentEvent: any,
         public params: any,
         public cancelCondition: any,
-        public delay: number
+        public delay: number,
+        public subType: string
     ) { }
 }
 
@@ -85,6 +86,8 @@ class Scheduler {
     pendingEvents: EnginePendingEvent[];
     cancellingEvents: EngineCancellingEvent[];
     cancelledDelays: any[];
+    executeDelay: any[];
+    executeParamsDelay: any;
 
     constructor(
         public eventRanker: any,
@@ -101,6 +104,8 @@ class Scheduler {
         this.pendingEvents = [];
         this.cancellingEvents = [];
         this.cancelledDelays = [];
+        this.executeDelay = [];
+        this.executeParamsDelay = {};
         this.duration = duration;
     }
 
@@ -172,15 +177,18 @@ class Scheduler {
                        parentEvent: any,
                        params: any,
                        cancelFunc: any,
-                       delay: number) {
+                       delay: number,
+                       subType: string) {
 
-        let cancelOneEvent = new EngineCancellingEvent(name, parentEvent, params, cancelFunc, delay);
-        this.cancellingEvents.push(cancelOneEvent);
+        let cancelEvent = new EngineCancellingEvent(name, parentEvent, params, cancelFunc, delay, subType);
+        this.cancellingEvents.push(cancelEvent);
     }
 
     scheduleDelay(delay: number,
-                  name: string) {
-        this.cancelledDelays.push({'delay': delay, 'name': name});
+                  name: string,
+                  type: string,
+                  params: any) {
+        this.cancelledDelays.push({'delay': delay, 'name': name, 'type': type, 'params': params});
     }
 
     hasNext() {
@@ -197,6 +205,14 @@ class Scheduler {
             this.clock = currentEvent.timestamp;
 
         return currentEvent;
+    }
+
+    pop() {
+        return this.scheduledEvents.pop();
+    }
+
+    push(event: EngineEvent) {
+        this.scheduledEvents.push(event);
     }
 }
 
@@ -221,34 +237,90 @@ export class Engine {
         }
     }
 
+    private equals(paramsOne: any, paramsTwo: any): boolean {
+        for (let prop in paramsOne) {
+            if (paramsTwo.hasOwnProperty(prop) &&
+                typeof paramsOne[prop] == typeof paramsTwo[prop] &&
+                paramsOne[prop] == paramsTwo[prop] || JSON.stringify(paramsOne[prop]) == JSON.stringify(paramsTwo[prop]))
+                continue;
+            else return false;
+        }
+        return true;
+    }
+
+    private flushScheduling(event: string, scheduler: Scheduler) {
+        let toReAdd: any[] = [];
+        while (scheduler.hasNext()) {
+            let currentEvent: any = scheduler.pop();
+            if (currentEvent.name != event)
+                toReAdd.push(currentEvent);
+        }
+
+        for (let i = 0; i < toReAdd.length; i++) {
+            scheduler.push(toReAdd[i]);
+        }
+    }
+
+    private flushPending(event: string, scheduler: Scheduler) {
+        let pendingEvents = scheduler.pendingEvents;
+
+        for (let e: EnginePendingEvent in pendingEvents) {
+            if (e.name == event)
+                delete pendingEvents[e];
+        }
+    }
+
+    private updateCancelled(scheduler: Scheduler, scenario) {
+        for (let e in scheduler.cancellingEvents) {
+            let cancel: EngineCancellingEvent = scheduler.cancellingEvents[e];
+            let params = cancel.params;
+            delete scheduler.cancellingEvents[e];
+
+            if (cancel.cancelCondition(scenario)) {
+                scheduler.incrementCancelledNumber(cancel.name);
+                scheduler.scheduleDelay(cancel.delay, cancel.name, cancel.subType, cancel.params);
+            }
+        }
+    }
+
     step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, names: string[], graphData: any): number {
         let scheduler = schedulers[thread];
         let success = false;
         if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
-            let oldTime: number = scheduler.getClock();
+            let oldTime = scheduler.getClock();
             let currentEvent = scheduler.next();
             if (currentEvent) {
-                // check cancelling edges
-                for (let e in scheduler.cancellingEvents) {
-                    let cancel = scheduler.cancellingEvents[e];
-                    let params = cancel.params;
-                    if (cancel.name == currentEvent.name) {
-                        if (cancel.cancelCondition(scenario)) {
-                            scheduler.incrementCancelledNumber(cancel.name);
-                            scheduler.scheduleDelay(cancel.delay, cancel.name);
-                        }
-                        delete scheduler.cancellingEvents[e];
-                    }
-                }
+                this.updateCancelled(scheduler, scenario);
 
                 for (let c in scheduler.cancelledDelays) {
                     let del = scheduler.cancelledDelays[c];
                     del.delay += (oldTime - scheduler.getClock());
+
                     if (del.delay <= 0) {
-                        if (currentEvent.name == del.name) {
-                            delete scheduler.cancelledDelays[c];
+                        delete scheduler.cancelledDelays[c];
+                        if (del.type == "Next") {
+                            scheduler.executeDelay.push(del.name);
+                        } else if (del.type == "Params") {
+                            scheduler.executeParamsDelay[del.name] = del.params;
+                        } else if (del.type == "All") {
+                            this.flushScheduling(del.name, scheduler);
+                            this.flushPending(del.name, scheduler);
                             return EngineStatus.CANCELLED;
                         }
+                    }
+                }
+
+                let index = scheduler.executeDelay.indexOf(currentEvent.name);
+                if (index != -1) {
+                    scheduler.executeDelay.splice(index, 1);
+                    return EngineStatus.CANCELLED;
+                }
+
+                if (scheduler.executeParamsDelay.hasOwnProperty(currentEvent.name)) {
+                    if (this.equals(scheduler.executeParamsDelay[currentEvent.name], currentEvent.params)) {
+                        // delete if failed or wait?
+                        delete scheduler.executeParamsDelay[currentEvent.name];
+                        return EngineStatus.CANCELLED;
                     }
                 }
 
@@ -281,7 +353,13 @@ export class Engine {
             }
 
             if (!currentEvent && !scheduler.hasNext()) {
+                this.updateCancelled(scheduler, scenario);
                 scheduler.setClock(scheduler.getClock() + 1);
+                for (let c in scheduler.cancelledDelays) {
+                    let del = scheduler.cancelledDelays[c];
+                    del.delay -= 1;
+                }
+
                 if (scheduler.getClock() > duration)
                     return EngineStatus.TERMINATE;
             }
@@ -337,7 +415,6 @@ export class Engine {
                             if (threads > 1 && winner) {
                                 let term = confirm('Thread (' + (parseInt(k) + 1) + ') has finished. Continue running simulation?');
                                 winner = false;
-
                                 if (term == false)
                                     return graphData;
 

@@ -55,13 +55,17 @@ export class EdgeService {
     ) : boolean {
         let source = edge.source;
         let target = edge.target;
+        let groupedSource = edge.groupedSource;
+        let groupedTarget = edge.groupedTarget;
         if (source == target)
             return false;
 
         for (var i = 0; i < edgeList.length; i++) {
             let currentEdge = edgeList[i];
 
-            if (source == currentEdge.target && target == currentEdge.source)
+            if (source == currentEdge.target && target == currentEdge.source ||
+                ((groupedSource != "None" || groupedTarget != "None") &&
+                groupedSource == currentEdge.groupedTarget && groupedTarget == currentEdge.groupedSource))
                 return true;
         }
 
@@ -76,11 +80,15 @@ export class EdgeService {
     ) : Edge {
         let source = edge.source;
         let target = edge.target;
+        let groupedSource = edge.groupedSource;
+        let groupedTarget = edge.groupedTarget;
 
         for (var i = 0; i < edgeList.length; i++) {
             let currentEdge = edgeList[i];
 
-            if (source == currentEdge.target && target == currentEdge.source)
+            if (source == currentEdge.target && target == currentEdge.source ||
+                groupedSource == currentEdge.groupedTarget && groupedTarget == currentEdge.groupedSource)
+
                 return currentEdge;
         }
     }

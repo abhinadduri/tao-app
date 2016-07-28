@@ -252,3 +252,7 @@ a {
 .taobtn:hover {
     cursor: pointer;
 }
+
+.selectedButton {
+    color: rgb(22, 150, 136);
+}

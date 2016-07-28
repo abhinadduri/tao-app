@@ -16,32 +16,61 @@ export class Edge {
         public delay: number,
         public priority: number,
         public parameters: any,
-        public description: string
+        public description: string,
+        public subType: string,
+        public groupedSource: string,
+        public groupedTarget: string,
+        public visible: boolean,
+        private id: string
     ) { }
 
-    public getSourceEvent(eventList: Event[]) : Event {
-        for (var event in eventList) {
+    public getId(): string {
+        return this.id;
+    }
+
+    public equals(e: Edge): boolean {
+        return this.getId() == e.getId();
+    }
+
+    public getSourceEvent(eventList: Event[]): Event {
+        for (let event in eventList) {
             if (eventList[event].name === this.source)
                 return eventList[event];
         }
         return null;
     }
 
-    public getTargetEvent(eventList: Event[]) : Event {
-        for (var event in eventList) {
+    public getTargetEvent(eventList: Event[]): Event {
+        for (let event in eventList) {
             if (eventList[event].name === this.target)
                 return eventList[event];
         }
         return null;
     }
 
-    public getCopies(edgeList: Edge[]) : Edge[] {
-        var listOfCopies: Edge[] = [];
-        for (var edge in edgeList) {
-            var currentEdge: Edge = edgeList[edge];
+    public getCopies(edgeList: Edge[], eventList: Event[]): Edge[] {
+        let listOfCopies: Edge[] = [];
+        for (let edge in edgeList) {
+            let currentEdge: Edge = edgeList[edge];
             if (currentEdge.source == this.source && currentEdge.target == this.target)
+                listOfCopies.push(currentEdge);
+            else if (currentEdge.groupedSource == "None" &&
+                     this.groupedSource == "None" &&
+                     currentEdge.source == this.source &&
+                     currentEdge.groupedTarget != "None" &&
+                     currentEdge.groupedTarget == this.groupedTarget)
+                listOfCopies.push(currentEdge);
+            else if (currentEdge.groupedSource != "None" &&
+                     this.groupedSource == currentEdge.groupedSource &&
+                     currentEdge.target == this.target)
+                listOfCopies.push(currentEdge);
+            else if (currentEdge.groupedSource != "None" &&
+                     this.groupedSource == currentEdge.groupedSource &&
+                     currentEdge.groupedTarget != "None" &&
+                     currentEdge.groupedTarget == this.groupedTarget)
                 listOfCopies.push(currentEdge);
         }
         return listOfCopies;
     }
+
 }

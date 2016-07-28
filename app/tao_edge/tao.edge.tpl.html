@@ -1,4 +1,5 @@
 <div class="segment"
+     *ngIf="tao_edge.visible"
      [ngClass]="{
     'circle': tao_edge.source == tao_edge.target,
     'line': tao_edge.source != tao_edge.target,

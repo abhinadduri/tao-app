@@ -8,7 +8,7 @@
             (drag)="handleDrag($event)"
             (historyUpdate) = "handleHistoryUpdate()"
             (mousedown)="selectEvent(event, $event)"
-            [selected]="event == selectedParticle"
+            [selected]="event == selectedParticle || event.groupedDOM"
             [shiftSelected]="event == shiftSelectedSource">
     </event>
 
@@ -20,20 +20,32 @@
             [edgeList]="edgeList">
     </edge>
 
+    <group
+            *ngFor="let group of groupList"
+            [tao_group]="group"
+            [selected]="group == selectedParticle || group.groupedDOM"
+            (click)="selectGroup($event)"
+            (dragGroup)="handleDragGroup($event)">
+
+    </group>
+
     <sidebar
             [selectedParticle]="selectedParticle"
             [eventList]="eventList"
             [edgeList]="edgeList"
             [variableList]="variableList"
+            [groupList]="groupList"
+            [groupStart]="groupStart"
             [graphData]="graphData"
             [graphVar]="graphingVariable"
             [threads]="threads"
-            (resetParticle)="unSelectFromPanel($event)"
             [variablePanel]="selectedVariablePanel"
             [simulationName]="simulationName"
             [simulationDescription]="simulationDescription"
             [timeUnits]="timeUnits"
             [threads]="threads"
+            [copyVariable]="copyVariable"
+            (resetParticle)="unSelectFromPanel($event)"
             (downloadERG)="handleDownload()"
             (runERG)="handleRun()"
             (openERG)="handleOpen($event)"
@@ -44,7 +56,11 @@
             (changeGraphVar)="updateGraphVariable($event)"
             (historyUpdate)="handleHistoryUpdate()"
             (undo)="handleUndo()"
-            (localRun)="handleLocal()">
+            (localRun)="handleLocal()"
+            (paste)="pasteSelectedItem()"
+            (copy)="copySelectedItem()"
+            (group)="groupAndFinish()"
+            (ungroup)="handleUngroup($event)">
     </sidebar>
 
 </div>

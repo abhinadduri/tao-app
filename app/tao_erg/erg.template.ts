@@ -4,9 +4,9 @@ export class ErgTemplate {
 
     constructor() {}
 
-    public static makeTemplate(simulation) {
+    public static makeTemplate(simulation: any) {
         let template = `
-        function {{name}} () {
+        function () {
           var self = this;
           var globals = this;
             
@@ -43,7 +43,8 @@ export class ErgTemplate {
             scheduler.scheduleCancelling("{{#getEvent ../../events target}}{{name}}{{/getEvent}}", this, 
             {{#parameters parameters}}{{{params}}}{{/parameters}},
             function(globals) { return {{{condition}}} },
-            {{delay}});
+            {{delay}},
+            "{{subType}}");
             {{/getCancellingEdges}}
           }
         

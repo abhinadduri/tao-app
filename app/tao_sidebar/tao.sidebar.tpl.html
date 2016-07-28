@@ -79,7 +79,7 @@
                     <li class="edgeDropDown"
                         *ngFor="let edge of (typeOfEdge() ? selectedParticle.getCopies(edgeList) : emptyList); let id = index"
                         (click)="setEdge(edge)">
-                        Edge {{id + 1}}
+                        <span>Edge {{id + 1}}</span>
                             <span class="right"
                                   *ngIf="edge == selectedParticle">←</span>
                     </li>
@@ -88,37 +88,49 @@
 
                 <span class="title">DESCRIPTION</span>
                 <textarea type="text" #edgeDescription [ngModel]="typeOfEdge() ? selectedParticle.description : ''"
-                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
+                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
                           [ngStyle]="{'height': '100px'}"></textarea>
 
                 <br /> <br />
 
                 <span class="title">EDGE TYPE</span>
                 <select #edgeType
-                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
-                        [ngModel]="typeOfEdge() ? selectedParticle.type : ''">
+                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                        [ngModel]="typeOfEdge() ? selectedParticle.type : ''"
+                        [ngStyle]="{'display': 'inline-block'}">
                     <option value="Scheduling">Scheduling Edge</option>
                     <option value="Pending">Pending Edge</option>
                     <option value="Cancelling">Cancelling Edge</option>
                 </select>
+
+
+                <select #edgeSubType
+                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                        [ngModel]="typeOfEdge() ? selectedParticle.subType : 'Next'"
+                        *ngIf="typeOfEdge() ? selectedParticle.type == 'Cancelling' : false">
+                    <option value="Next">Next</option>
+                    <option value="Params">Params</option>
+                    <option value="All">All</option>
+                </select>
+
                 <br /> <br />
 
                 <span class="title">CONDITION</span>
                 <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"
-                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)"
+                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
                           [ngStyle]="{'height': '100px'}"></textarea>
                 <br /> <br />
 
                 <span class="title" >DELAY</span>
                 <input type="text" #edgeDelay
                        [ngModel]="typeOfEdge() ? selectedParticle.delay : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
                 <br /> <br />
 
                 <span class="title">PRIORITY</span>
                 <input type="text" #edgePriority
                        [ngModel]="typeOfEdge() ? selectedParticle.priority : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
+                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
                 <br /> <br />
 
                 <span class="title">PARAMETERS</span>
@@ -129,7 +141,51 @@
                         <input placeholder="Parameter Value"
                                class="parameterVal"
                                [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''"
-                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription)">
+                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
+                    </li>
+                </ul>
+            </div>
+
+            <div id="group-editor"
+                 [ngStyle]="{
+                    'display': typeOfGroup() ? 'block' : 'none'
+                }">
+                <span class="title">GROUP NAME</span>
+                <input type="text" #groupName [ngModel]="typeOfGroup() ? selectedParticle.name : ''"
+                       (change)="selectedParticle.name = groupName.value">
+                <br /> <br /> <br />
+
+                <span class="title">Events</span>
+                <ul>
+                    <li *ngFor="let event of (typeOfGroup() ? selectedParticle.getEvents() : emptyList)"
+                        (click)="selectedParticle = event">
+                        <span class="code">{{event.name}}</span>
+                        <a class="right"
+                           (click)="deleteGroupEvent(event)">✕</a>
+                        <br />
+                    </li>
+                </ul>
+                <br /> <br />
+
+                <span class="title">Edges</span>
+                <ul>
+                    <li *ngFor="let edge of (typeOfGroup() ? selectedParticle.getEdges() : emptyList)"
+                        (click)="selectedParticle = edge">
+                        <span class="code">
+                            Edge from {{edge.source}} to {{edge.target}}
+                        </span>
+                        <a class="right"
+                           (click)="deleteGroupEdge(edge)">✕</a>
+                        <br />
+                    </li>
+                </ul>
+                <br /> <br />
+
+                <span class="title">Inner Groups</span>
+                <ul>
+                    <li *ngFor="let group of (typeOfGroup() ? selectedParticle.getGroups() : emptyList)"
+                        (click)="selectedParticle = group">
+                        <span class="code">{{group.name}}</span>
                     </li>
                 </ul>
             </div>
@@ -154,8 +210,10 @@
              *ngIf="typeOfNode() || typeOfEdge()">
             <div class="right">
                 <a class="tao-footer-action-button green taobtn"
+                   (click)="storeCopiedVariable()">Copy</a>
+                <a class="tao-footer-action-button green taobtn"
                    (click)="typeOfNode() ?
-                    deleteEvent() :
+                    deleteEvent(selectedParticle) :
                     (typeOfEdge() ?
                     deleteEdge() :
                     logError('Element not found'))">Delete</a>
@@ -164,9 +222,21 @@
                    (click)="typeOfNode() ?
                     updateEvent(eventName, eventTrace, eventStateChange, eventDescription) :
                     (typeOfEdge() ?
-                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription) :
+                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) :
                     logError('Element not found'))">Update</a>
             </div>
+        </div>
+
+        <div class="tao-panel-footer"
+             *ngIf="typeOfGroup()">
+             <div class="right">
+                <a class="tao-footer-action-button green"
+                   *ngIf="typeOfGroup() && selectedParticle.parent == null"
+                   (click)="handleUngroup()">Ungroup</a>
+                 <a class="tao-footer-action-button green"
+                    *ngIf="typeOfGroup() && selectedParticle.parent != null"
+                    (click)="selectedParticle = selectedParticle.parent">Back</a>
+             </div>
         </div>
 
         <div class="tao-panel-footer"
@@ -210,6 +280,15 @@
                 <span>GRAPH</span>
             </a>
         </li>
+        <li id="group"
+            class="taobtn"
+            (click)="beginGroup()">
+            <a>
+                <span class="icon"><strong>...</strong></span>
+                <br>
+                <span>{{groupStart ? 'FINISH' : 'GROUP'}}</span>
+            </a>
+        </li>
         <li id="open"
             class="taobtn"
             (click)="file.click()">
@@ -220,6 +299,15 @@
                 <span class="icon"><strong>↑</strong></span>
                 <br>
                 <span>OPEN</span>
+            </a>
+        </li>
+        <li id="paste"
+            class="taobtn"
+            (click)="pasteItem()">
+            <a>
+                <span class="icon"><strong>⎀</strong></span>
+                <br>
+                <span>PASTE</span>
             </a>
         </li>
         <li id="undo"
@@ -244,4 +332,4 @@
 </div>
 
 <help #helpDialogue></help>
-<graph #taoGraph [graphData]="graphData" [graphingVariable]="graphVar" [threads]="threads"></graph>
+<graph #taoGraph [graphData]="graphData" [variableList]="variableList" [graphingVariable]="graphVar" [threads]="threads"></graph>

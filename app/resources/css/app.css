@@ -29,6 +29,27 @@
     padding: 0;
 }
 
+.group {
+    height: 70px;
+    width: 70px;
+    background: hsla(350,83%,95%,1);
+    border: 3px dotted hsla(10,95%,37%,1);
+    border-radius: 85px;
+    text-align: center;
+    opacity: 50;
+    position: absolute;
+
+    z-index: 2;
+    -webkit-backface-visibility: hidden;
+    color: hsla(10,95%,37%,1);
+}
+
+.group span {
+    line-height: 65px;
+    color: inherit;
+    font-size: 14px;
+}
+
 .node {
     border-radius: 65px;
     background: rgb(237, 244, 249);
@@ -106,6 +127,10 @@
 }
 
 .node:hover {
+    cursor: pointer;
+}
+
+.group:hover {
     cursor: pointer;
 }
 
