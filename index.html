@@ -3,31 +3,38 @@
 <head>
   <title>Tao</title>
 
-  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <!--<script>
+    window.jQuery = window.$ = require('jquery');
+  </script>-->
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="./app/resources/css/app.css">
   <link rel="stylesheet" href="./app/resources/css/tao.css">
+  <base href="./">
 
 
   <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
 
-  <script src="node_modules/handlebars/dist/handlebars.js"></script>
-  <script src="node_modules/underscore/underscore.js"></script>
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="node_modules/file-saver/FileSaver.js"></script>
-  <script src="node_modules/dygraphs/dygraph-combined.js"></script>
-  <script src="app/resources/ace.js"></script>
+  <script src="./node_modules/handlebars/dist/handlebars.js"></script>
+  <script src="./node_modules/underscore/underscore.js"></script>
+  
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./node_modules/file-saver/FileSaver.js"></script>
+  <script src="./node_modules/dygraphs/dygraph-combined.js"></script>
+  <script src="./app/resources/ace.js"></script>
 
 
-  <script src="node_modules/zone.js/dist/zone.js"></script>
-  <script src="node_modules/typescript/lib/typescript.js"></script>
-  <script src="node_modules/reflect-metadata/Reflect.js"></script>
-  <script src="node_modules/systemjs/dist/system.src.js"></script>
-  <script src="systemjs.config.js"></script>
-  <script src="node_modules/ng2-bs3-modal/bundles/ng2-bs3-modal.js"></script>
+  <script src="./node_modules/zone.js/dist/zone.js"></script>
+  <script src="./node_modules/typescript/lib/typescript.js"></script>
+  <script src="./node_modules/reflect-metadata/Reflect.js"></script>
+  <script src="./node_modules/systemjs/dist/system.src.js"></script>
+  <script src="./systemjs.config.js"></script>
+  <script src="./node_modules/ng2-bs3-modal/bundles/ng2-bs3-modal.js"></script>
+
   <script>
     System.import('app').catch(function (err) {console.error(err);});
   </script>
+
 </head>
 <body>
 <app>Loading Simulation Playground...</app>

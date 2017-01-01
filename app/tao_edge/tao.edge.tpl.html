@@ -5,7 +5,7 @@
     'line': tao_edge.source != tao_edge.target,
     'selected': selected,
     'dotted': tao_edge.type == 'Cancelling',
-    'straight': tao_edge.type == 'Scheduling' || tao_edge.type == 'Pending'
+    'straight': tao_edge.type == 'Scheduling' || tao_edge.type == 'Pending' || tao_edge.type == 'Succeeding' || tao_edge.type == 'Preceding'
     }"
      [ngStyle]="{
     'top': (tao_edge.source == tao_edge.target) ? (tao_edge.startY - 70) + 'px' : (twoWayEdge() ? (parse(tao_edge.startY) + calculateDisplacement()) + 'px' : tao_edge.startY + 'px'),

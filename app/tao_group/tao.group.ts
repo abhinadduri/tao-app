@@ -68,7 +68,6 @@ export class TaoGroup {
 
     selectGroup(event, group) {
         event.preventDefault();
-
-        this.click.emit(group);
+        this.click.emit(this.tao_group);
     }
 }

@@ -38,7 +38,8 @@ class EnginePendingEvent {
         public params: any,
         public trace: any,
         public condition: boolean,
-        public conditionFunc: any
+        public conditionFunc: any,
+        public endConditionFunc: any
     ) { }
 
     getId() {
@@ -158,6 +159,7 @@ class Scheduler {
         this.count += 1;
     }
 
+
     schedulePending(name: string,
                     parentEvent: any,
                     offset: number,
@@ -166,9 +168,10 @@ class Scheduler {
                     params: any,
                     trace: boolean,
                     condition: any,
-                    conditionFunc: any) {
+                    conditionFunc: any,
+                    endConditionFunc: any) {
 
-        let futureEvent = new EnginePendingEvent(name, parentEvent, this.uniqueId[name], this.count, offset, priority, func, params, trace, condition, conditionFunc);
+        let futureEvent = new EnginePendingEvent(name, parentEvent, this.uniqueId[name], this.count, offset, priority, func, params, trace, condition, conditionFunc, endConditionFunc);
         this.pendingEvents.push(futureEvent);
         this.count += 1;
     }
@@ -264,8 +267,8 @@ export class Engine {
     private flushPending(event: string, scheduler: Scheduler) {
         let pendingEvents = scheduler.pendingEvents;
 
-        for (let e: EnginePendingEvent in pendingEvents) {
-            if (e.name == event)
+        for (let e in pendingEvents) {
+            if (pendingEvents[e].name == event)
                 delete pendingEvents[e];
         }
     }
@@ -288,7 +291,32 @@ export class Engine {
         let success = false;
         if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
             let oldTime = scheduler.getClock();
+
+            for (let e in scheduler.pendingEvents) {
+                let pendingEvent = scheduler.pendingEvents[e];
+                let params = pendingEvent.params;
+
+                if (pendingEvent.endConditionFunc(scenario)) {
+                    delete scheduler.pendingEvents[e];
+                    continue;
+                }
+                // console.log(pendingEvent.condition);
+                if (pendingEvent.conditionFunc(scenario)) {
+
+                    delete scheduler.pendingEvents[e];
+
+                    scheduler.schedule(pendingEvent.name,
+                        pendingEvent.parentEvent,
+                        pendingEvent.delay,
+                        pendingEvent.priority,
+                        pendingEvent.func,
+                        pendingEvent.params,
+                        pendingEvent.trace);
+                };
+            }
+
             let currentEvent = scheduler.next();
+
             if (currentEvent) {
                 this.updateCancelled(scheduler, scenario);
 
@@ -331,22 +359,6 @@ export class Engine {
 
             }
 
-            for (let e in scheduler.pendingEvents) {
-                let pendingEvent = scheduler.pendingEvents[e];
-                let params = pendingEvent.params;
-
-                if (pendingEvent.conditionFunc(scenario)) {
-                    delete scheduler.pendingEvents[e];
-
-                    scheduler.schedule(pendingEvent.name,
-                        pendingEvent.parentEvent,
-                        pendingEvent.delay,
-                        pendingEvent.priority,
-                        pendingEvent.func,
-                        pendingEvent.params,
-                        pendingEvent.trace);
-                };
-            }
 
             for (let i = 0; i < names.length; i++) {
                 graphData[thread][names[i]][scheduler.getClock()] = scenario[names[i]];

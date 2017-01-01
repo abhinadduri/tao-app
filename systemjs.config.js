@@ -2,10 +2,10 @@ System.config({
     transpiler: 'typescript',
     typescriptOptions: {emitDecoratorMetadata: true},
     map: {
-        'app' : 'app',
-        'rxjs': 'node_modules/rxjs',
-        '@angular'                         : 'node_modules/@angular',
-        'ng2-bs3-modal': 'node_modules/ng2-bs3-modal'
+        'app' : './app',
+        'rxjs': './node_modules/rxjs',
+        '@angular'                         : './node_modules/@angular',
+        'ng2-bs3-modal': './node_modules/ng2-bs3-modal'
     },
     packages: {
         'app'                              : {main: 'main.ts', defaultExtension: 'ts'},
@@ -14,6 +14,7 @@ System.config({
         '@angular/common'                  : {main: 'index.js'},
         '@angular/compiler'                : {main: 'index.js'},
         '@angular/router'                  : {main: 'index.js'},
+        '@angular/http'                    : {main: 'index.js'},
         '@angular/platform-browser'        : {main: 'index.js'},
         '@angular/platform-browser-dynamic': {main: 'index.js'}
     },

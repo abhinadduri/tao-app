@@ -88,24 +88,26 @@
 
                 <span class="title">DESCRIPTION</span>
                 <textarea type="text" #edgeDescription [ngModel]="typeOfEdge() ? selectedParticle.description : ''"
-                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                          (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
                           [ngStyle]="{'height': '100px'}"></textarea>
 
                 <br /> <br />
 
                 <span class="title">EDGE TYPE</span>
                 <select #edgeType
-                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                        (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
                         [ngModel]="typeOfEdge() ? selectedParticle.type : ''"
                         [ngStyle]="{'display': 'inline-block'}">
                     <option value="Scheduling">Scheduling Edge</option>
                     <option value="Pending">Pending Edge</option>
                     <option value="Cancelling">Cancelling Edge</option>
+                    <option value="Preceding">Preceding Edge</option>
+                    <option value="Succeeding">Succeeding Edge</option>
                 </select>
 
 
                 <select #edgeSubType
-                        (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                        (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
                         [ngModel]="typeOfEdge() ? selectedParticle.subType : 'Next'"
                         *ngIf="typeOfEdge() ? selectedParticle.type == 'Cancelling' : false">
                     <option value="Next">Next</option>
@@ -115,22 +117,41 @@
 
                 <br /> <br />
 
-                <span class="title">CONDITION</span>
+                <span class="title" *ngIf="typeOfEdge() && selectedParticle.type != 'Preceding' && selectedParticle.type != 'Succeeding'">CONDITION</span>
                 <textarea #edgeCondition [ngModel]="typeOfEdge() ? selectedParticle.condition : ''"
-                          (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
-                          [ngStyle]="{'height': '100px'}"></textarea>
+                          (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                          [ngStyle]="{'height': '100px',
+                                      'display': typeOfEdge() && selectedParticle.type != 'Preceding' && selectedParticle.type != 'Succeeding' ? 'block' : 'none'}">
+                </textarea>
+
+                <div *ngIf="typeOfEdge() && selectedParticle.type != 'Preceding' && selectedParticle.type != 'Succeeding'">
                 <br /> <br />
+                </div>
+
+
+                <span *ngIf="typeOfEdge() ? (selectedParticle.type == 'Pending') : false" class="title">END CONDITION</span>
+                <textarea #endCondition [ngModel]="typeOfEdge() ? selectedParticle.endCondition : ''"
+                          [ngStyle]="{'display': typeOfEdge() && (selectedParticle.type == 'Pending') ? 'block' : 'none',
+                                      'height': '100px'}"
+                          (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)"
+                          [ngStyle]="{'height': '100px'}">
+                </textarea>
+
+                <div *ngIf="typeOfEdge() && (selectedParticle.type == 'Pending')">
+                <br /> <br />
+                </div>
+
 
                 <span class="title" >DELAY</span>
                 <input type="text" #edgeDelay
                        [ngModel]="typeOfEdge() ? selectedParticle.delay : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
+                       (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
                 <br /> <br />
 
                 <span class="title">PRIORITY</span>
                 <input type="text" #edgePriority
                        [ngModel]="typeOfEdge() ? selectedParticle.priority : 0"
-                       (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
+                       (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
                 <br /> <br />
 
                 <span class="title">PARAMETERS</span>
@@ -141,7 +162,7 @@
                         <input placeholder="Parameter Value"
                                class="parameterVal"
                                [ngModel]="typeOfEdge() ? selectedParticle.parameters[edgeParam] : ''"
-                               (change)="updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
+                               (change)="updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType)">
                     </li>
                 </ul>
             </div>
@@ -222,7 +243,7 @@
                    (click)="typeOfNode() ?
                     updateEvent(eventName, eventTrace, eventStateChange, eventDescription) :
                     (typeOfEdge() ?
-                    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) :
+                    updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) :
                     logError('Element not found'))">Update</a>
             </div>
         </div>
@@ -243,7 +264,9 @@
              *ngIf="variablePanel">
              <div class="right">
                  <a class="tao-footer-action-button green"
-                    (click)="handleLocalRun()">Run Locally</a>
+                    (click)="handleDelete()">Delete</a>
+                 <a class="tao-footer-action-button green"
+                    (click)="handleLocalRun()">Run Local</a>
                  <a class="tao-footer-action-button green"
                     (click)="handleDownload()">Download Tao File</a>
              </div>
@@ -301,15 +324,15 @@
                 <span>OPEN</span>
             </a>
         </li>
-        <li id="paste"
-            class="taobtn"
-            (click)="pasteItem()">
-            <a>
-                <span class="icon"><strong>⎀</strong></span>
-                <br>
-                <span>PASTE</span>
-            </a>
-        </li>
+        <!--<li id="paste"-->
+            <!--class="taobtn"-->
+            <!--(click)="pasteItem()">-->
+            <!--<a>-->
+                <!--<span class="icon"><strong>⎀</strong></span>-->
+                <!--<br>-->
+                <!--<span>PASTE</span>-->
+            <!--</a>-->
+        <!--</li>-->
         <li id="undo"
             class="taobtn"
             (click)="handleUndo()">
@@ -318,6 +341,15 @@
                 <br>
                 <span>UNDO</span>
             </a>
+        </li>
+         <li id="save"
+             class="taobtn"
+             (click)="handleSave()">
+             <a>
+                 <span class="icon"><strong>☁</strong></span>
+                 <br>
+                 <span>SAVE</span>
+             </a>
         </li>
         <li id="help"
             class="taobtn"

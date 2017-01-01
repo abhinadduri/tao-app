@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+app/**/*.map
+app/**/*.js
+!app/resources/*.js
+!app/**/electron.js

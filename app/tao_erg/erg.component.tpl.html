@@ -1,3 +1,4 @@
+
 <div #graph class="graph"
      (dblclick)="createEvent($event, graph)"
      (click)="unSelect(graph, $event)">
@@ -24,7 +25,7 @@
             *ngFor="let group of groupList"
             [tao_group]="group"
             [selected]="group == selectedParticle || group.groupedDOM"
-            (click)="selectGroup($event)"
+            (click)="selectGroup(group, $event)"
             (dragGroup)="handleDragGroup($event)">
 
     </group>
@@ -60,7 +61,9 @@
             (paste)="pasteSelectedItem()"
             (copy)="copySelectedItem()"
             (group)="groupAndFinish()"
-            (ungroup)="handleUngroup($event)">
+            (ungroup)="handleUngroup($event)"
+            (save)="handleSave()"
+            (delete)="handleDelete()">
     </sidebar>
 
 </div>

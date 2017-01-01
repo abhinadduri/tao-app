@@ -5,7 +5,6 @@ html {
 body {
     -webkit-user-select: none;
     -moz-user-select: none;
-    background-image: url(../images/grid.png);
     height: 100%;
     margin: 0;
     padding: 0;
@@ -36,9 +35,10 @@ a {
 #sidebar {
     display: block;
     float: right;
-    height: 100%;
+    height: 100vh;
+    /*margin-top: 50px;*/
     background-color: rgb(98, 125, 137);
-    position: absolute;
+    position: relative;
     right: 0;
     top: 0;
     z-index: 999;
@@ -255,4 +255,222 @@ a {
 
 .selectedButton {
     color: rgb(22, 150, 136);
+}
+
+.loginBackground {
+    width: 100%;
+    height: 100%;
+    /*background-color: rgb(103, 161, 187);*/
+    background-color: rgb(218, 223, 226);
+    opacity: 1;
+    position: fixed;
+}
+
+.loginBox {
+    margin-left: -15%;
+    /*top: 50%;*/
+    left: 80%;
+    width: 30%;
+    height: 80%;
+    border-left: 2px solid rgba(22, 150, 136, .64);
+    position: relative;
+    transform: translateY(12%);
+}
+
+.credentials {
+    text-align: center;
+    color: rgb(98, 125, 137);
+    font-family: 'Roboto', helvetica, san-serif;
+    position: relative;
+    top: 30%;
+}
+
+.logo {
+    color: white;
+    font-family: 'Roboto', helvetica, san-serif;
+}
+
+.username {
+    margin-top: 8%;
+    width: 70%;
+    line-height: 2.5em;
+    outline: none;
+    border: none;
+    background-color: rgba(169, 169, 175, 0.39);
+    padding-left: 10px;
+    border-radius: 3px;
+}
+
+::-webkit-input-placeholder {
+    color: white;
+}
+
+.password {
+    margin-top: 3%;
+    width: 70%;
+    line-height: 2.5em;
+    border: none;
+    background-color: rgba(169, 169, 175, 0.39);
+    padding-left: 10px;
+    border-radius: 3px;
+}
+
+.loginButton {
+    width: 17%;
+    background-color: inherit;
+    line-height: 2.5em;
+    color: rgb(22, 150, 136);
+    border: 1px solid rgb(22, 150, 136);
+    margin-top: 5%;
+    float: right;
+    margin-right: 15%;
+}
+
+.loginBand {
+    width: 100%;
+    height: 60px;
+    /*position: fixed;*/
+    background-color: rgb(218, 223, 226);
+    /*background-color: rgb(114, 138, 149);*/
+    /*background-color: rgb(98, 125, 137);*/
+}
+
+.loginBandButton {
+    float: right;
+    /*border-left: none;*/
+    /*border-top: none;*/
+    /*border-bottom: none;*/
+    border: none;
+    height: 60px;
+    width: 75px;
+    font-family: 'Roboto', helvetica, san-serif;
+    color: white;
+    background-color: rgba(218, 223, 226, 0.7);
+}
+
+.loginBandButton:hover {
+    background-color: rgb(98, 125, 137);
+    /*color: rgb(98, 125, 137);*/
+}
+
+.border {
+    width: 100%;
+    height: 1px;
+    border: 1px solid rgb(218, 223, 226);
+}
+
+.signupMessage {
+    font-size: 10px;
+}
+
+.signupMessage:hover a {
+    cursor: pointer;
+}
+
+.welcome {
+    float: right;
+
+}
+
+.simulationList {
+    /*margin-left: -15%;*/
+    /*top: 50%;*/
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    /*transform: translateY(10%);*/
+    /*border-top: 1px solid rgb(204, 204, 204);*/
+    overflow-y: auto;
+}
+
+.simulationItem {
+    font-size: 15px;
+    /*left: 50%;*/
+    height: 10%;
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid rgb(204, 204, 204);
+    display: table;
+    color: rgb(98, 125, 137);
+}
+
+.simulationItem:hover {
+    cursor: pointer;
+    background-color: rgba(153, 153, 153, .6);
+}
+
+.simulationName {
+    vertical-align: middle;
+    display: table-cell;
+    font-family: 'Roboto', helvetica, san-serif;
+    padding-left: 20px;
+}
+
+.newSimulation {
+    height: 10%;
+    width: 400px;
+    border: none;
+    font-size: 15px;
+    font-family: 'Roboto', helvetica, san-serif;
+    color: rgb(98, 125, 137);;
+}
+
+.newSimulation:hover {
+    background-color: rgba(153, 153, 153, .6);
+}
+
+.search {
+    vertical-align: middle;
+    display: table-cell;
+    font-family: 'Roboto', helvetica, san-serif;
+    padding-left: 20px;
+    background-color: inherit;
+    border: none;
+    border-bottom: 1px solid rgb(204, 204, 204);
+    width: 100%;
+    height: 10%;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.loginMenu {
+    display: inline-block;
+    width: 75px;
+    height: 100%;
+    left: calc(100% - 75px);
+    background-color: rgb(98, 125, 137);
+    position: fixed;
+}
+
+.login {
+    height: 90px;
+    background-color: rgb(214, 220, 223);
+    color: rgb(98, 125, 137);
+    position: relative;
+    top: calc(100% - 90px);
+    width: 100%;
+    text-align: center;
+    border-left: 1px solid rgb(98, 125, 137);
+}
+
+.login span {
+    font-size: 12px;
+    /*margin-top: 10px;*/
+    position: relative;
+    display: inline-block;
+    padding: 33px 0 70px 0;
+    padding-bottom: 6px;
+    font-family: 'Roboto', helvetica, san-serif;
+}
+
+.loginArea {
+    display: inline-block;
+    height: 100%;
+    width: 400px;
+    /*float: left;*/
+    background-color: rgb(214, 220, 223);
+    position: fixed;
+    left: calc(100% - 75px - 400px);
 }

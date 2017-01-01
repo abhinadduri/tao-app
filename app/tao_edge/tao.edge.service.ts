@@ -86,9 +86,7 @@ export class EdgeService {
         for (var i = 0; i < edgeList.length; i++) {
             let currentEdge = edgeList[i];
 
-            if (source == currentEdge.target && target == currentEdge.source ||
-                groupedSource == currentEdge.groupedTarget && groupedTarget == currentEdge.groupedSource)
-
+            if (source == currentEdge.target && target == currentEdge.source)
                 return currentEdge;
         }
     }

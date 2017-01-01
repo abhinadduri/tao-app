@@ -55,6 +55,8 @@ export class TaoSidebar {
     @Output() paste = new EventEmitter();
     @Output() group = new EventEmitter();
     @Output() ungroup = new EventEmitter();
+    @Output() save = new EventEmitter();
+    @Output() delete = new EventEmitter();
     
     
     emptyDict: any = {};
@@ -78,6 +80,14 @@ export class TaoSidebar {
 
     handleUndo() {
         this.undo.emit(0);
+    }
+
+    handleSave() {
+        this.save.emit(0);
+    }
+
+    handleDelete() {
+        this.delete.emit(0);
     }
 
     launchHelp() {
@@ -191,9 +201,11 @@ export class TaoSidebar {
 
     // only called if selected particle is an edge
 
-    updateEdge(edgeType, edgeCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) {
+    updateEdge(edgeType, edgeCondition, endCondition, edgeDelay, edgePriority, edgeParameters, edgeDescription, edgeSubType) {
         this.selectedParticle.type = edgeType.value;
         this.selectedParticle.condition = edgeCondition.value;
+        // console.log(endCondition);
+        this.selectedParticle.endCondition = endCondition.value;
         this.selectedParticle.delay = edgeDelay.value;
         this.selectedParticle.priority = edgePriority.value;
         this.selectedParticle.description = edgeDescription.value;
@@ -209,6 +221,7 @@ export class TaoSidebar {
 
             this.selectedParticle.parameters[span] = value;
         }
+
         this.emitHistoryUpdate();
 
     }

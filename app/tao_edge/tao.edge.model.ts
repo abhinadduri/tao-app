@@ -1,7 +1,7 @@
 /**
  * Created by abhinadduri on 4/24/16.
  */
-import {Event} from '../tao_event/tao.event.model'
+import {Event} from '../tao_event/tao.event.model';
 
 export class Edge {
     constructor(
@@ -12,6 +12,7 @@ export class Edge {
         public endX: string,
         public endY: string,
         public condition: any,
+        public endCondition: any,
         public type: string,
         public delay: number,
         public priority: number,

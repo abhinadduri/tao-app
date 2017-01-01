@@ -32,3 +32,5 @@ interface AceWindow extends Window {
 declare var window: AceWindow;
 
 export const Ace: any = window.ace;
+
+export const ERGTemplate = '{"name":"Simulation","time":5,"threads":1,"counter":1,"groupNameID":1,"variables":[],"edges":[],"events":[{"name":"Run","stateChange":"// your code here","x":"75","y":"150","trace":false,"parameters":{},"description":"Run event.","grouped":false,"groupedDOM":false,"visible":true}],"groups":[]}';
