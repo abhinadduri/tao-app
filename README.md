@@ -1,0 +1,1 @@
+Run typings install and npm install to get all the latest dependencies. Run npm start to launch in the browser, and npm run electron to launch the electron app. In the browser version, navigate to localhost:8080/#/erg/playground to play with the app. The server and cassandra integration will be released soon.
