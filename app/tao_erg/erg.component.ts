@@ -12,7 +12,7 @@ import {ErgTemplate} from './erg.template';
 import {Engine} from './erg.engine';
 import {Stats} from '../resources/stats';
 import {LocalRun} from './erg.local';
-import {Validation} from '../resources/validation.ts';
+import {Validation} from '../resources/validation';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import {currentERG} from '../tao_cloud/tao.erg.service';
@@ -52,11 +52,15 @@ export class ErgComponent implements OnInit {
     graphData: any;
     graphingVariable: string;
     copyVariable: any;
+    // onesecondclick: boolean;
+    // startingPosX: string;
+    // startingPosY: string;
+    // screenSize: number;
 
     private sub: any;
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
+        // this.sub.unsubscribe();
     }
     
 
@@ -77,34 +81,43 @@ export class ErgComponent implements OnInit {
 
     ngOnInit() {
 
-        this.http.get('http://127.0.0.1:3000/users/currentUser')
-            .subscribe(data => {
-                if (data.text() != "error" && data.text() != "not logged in") {
-                    let user_data = data.json();
-                    this.user.changeUser(new User(user_data.first_name, user_data.last_name, user_data.email))
-                }
-                else
-                    this.user.changeUser(null);
+        // window.oncontextmenu = function(event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     return false;
+        // };
 
-        });
+        // this.screenSize = window.screen.width * window.screen.height;
+        this.loadFromText(ERGTemplate);
 
-        this.sub = this.route.params.subscribe(params => {
-            if (params['id'] == "playground") {
-                this.loadFromText(ERGTemplate);
-            } else {
-                this.ergID = params['id'];
-                let body = JSON.stringify({id: params['id']});
-                let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
-                let options = new RequestOptions({headers: headers});
+        // this.http.get('http://127.0.0.1:3000/users/currentUser')
+        //     .subscribe(data => {
+        //         if (data.text() != "error" && data.text() != "not logged in") {
+        //             let user_data = data.json();
+        //             this.user.changeUser(new User(user_data.first_name, user_data.last_name, user_data.email))
+        //         }
+        //         else
+        //             this.user.changeUser(null);
 
-                this.http.post('http://127.0.0.1:3000/users/getSimByID', body, options)
-                    .map(res => res.json())
-                    .subscribe(data => {
-                        // insert failure logic
-                        this.loadFromText(data.json);
-                    });
-            }
-        });
+        // });
+
+        // this.sub = this.route.params.subscribe(params => {
+        //     if (params['id'] == "playground") {
+        //         this.loadFromText(ERGTemplate);
+        //     } else {
+        //         this.ergID = params['id'];
+        //         let body = JSON.stringify({id: params['id']});
+        //         let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
+        //         let options = new RequestOptions({headers: headers});
+
+        //         this.http.post('http://127.0.0.1:3000/users/getSimByID', body, options)
+        //             .map(res => res.json())
+        //             .subscribe(data => {
+        //                 // insert failure logic
+        //                 this.loadFromText(data.json);
+        //             });
+        //     }
+        // });
 
         this.selectedParticle = null;
         this.shiftSelectedSource = null;
@@ -118,6 +131,7 @@ export class ErgComponent implements OnInit {
 
 
         this.currentVersion = 0;
+        // this.onesecondclick = false;
 
     }
 
@@ -147,71 +161,71 @@ export class ErgComponent implements OnInit {
         this.loadFromText(this.history[this.currentVersion]);
     }
 
-    handleSave() {
-        let simulation = JSON.stringify(this.produceErgJSON()).replace(/'/g, '\\\"');
-        let body = JSON.stringify({id: this.ergID, sim: simulation, name: this.simulationName});
-        let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
-        let options = new RequestOptions({ headers: headers });
+    // handleSave() {
+    //     let simulation = JSON.stringify(this.produceErgJSON()).replace(/'/g, '\\\"');
+    //     let body = JSON.stringify({id: this.ergID, sim: simulation, name: this.simulationName});
+    //     let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
+    //     let options = new RequestOptions({ headers: headers });
 
-        this.http.post('http://127.0.0.1:3000/users/updateSimulation', body, options)
-            .subscribe(data => {
-                console.log('Simulation saved.');
-                this.erg.edited = false;
-            });
-    }
+    //     this.http.post('http://127.0.0.1:3000/users/updateSimulation', body, options)
+    //         .subscribe(data => {
+    //             console.log('Simulation saved.');
+    //             this.erg.edited = false;
+    //         });
+    // }
 
-    handleCloudRun() {
-        // copied for now
+    // handleCloudRun() {
+    //     // copied for now
 
-        if (!Validation.checkParameters(this.eventList, this.edgeList) || !Validation.checkNames(this.eventList))
-            return;
+    //     if (!Validation.checkParameters(this.eventList, this.edgeList) || !Validation.checkNames(this.eventList))
+    //         return;
 
-        for (var j = 0; j < this.variableList.length; j++) {
-            let value;
-            try {
-                value = eval('(' + this.variableList[j].value + ')');
-            } catch (e) {
-                console.error(e);
-                return;
-            }
+    //     for (var j = 0; j < this.variableList.length; j++) {
+    //         let value;
+    //         try {
+    //             value = eval('(' + this.variableList[j].value + ')');
+    //         } catch (e) {
+    //             console.error(e);
+    //             return;
+    //         }
 
-            if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
-                alert(incorrectThreadNumber);
-                return;
-            }
-        }
+    //         if (this.threads > 1 && (!Array.isArray(value) || value.length != this.threads)) {
+    //             alert(incorrectThreadNumber);
+    //             return;
+    //         }
+    //     }
 
-        let text = LocalRun.downloadTemplate(
-            this.timeUnits,
-            ErgTemplate.makeTemplate(this.produceErgJSON()),
-            this.variableList,
-            this.threads,
-            this.simulationName,
-            false);
+    //     let text = LocalRun.downloadTemplate(
+    //         this.timeUnits,
+    //         ErgTemplate.makeTemplate(this.produceErgJSON()),
+    //         this.variableList,
+    //         this.threads,
+    //         this.simulationName,
+    //         false);
 
-        let body = JSON.stringify({id: this.ergID, code: text}).replace(/'/g, '\\\"');
-        let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
-        let options = new RequestOptions({ headers: headers });
-        // console.log(body);
-        this.http.post('http://127.0.0.1:3000/users/postJob', body, options)
-            .subscribe(data => {});
+    //     let body = JSON.stringify({id: this.ergID, code: text}).replace(/'/g, '\\\"');
+    //     let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
+    //     let options = new RequestOptions({ headers: headers });
+    //     // console.log(body);
+    //     this.http.post('http://127.0.0.1:3000/users/postJob', body, options)
+    //         .subscribe(data => {});
 
-    }
+    // }
 
-    handleDelete() {
-        let body = JSON.stringify({id: this.ergID});
-        let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
-        let options = new RequestOptions({ headers: headers });
+    // handleDelete() {
+    //     let body = JSON.stringify({id: this.ergID});
+    //     let headers = new Headers({'Content-Type': 'application/json', withCredentials: true});
+    //     let options = new RequestOptions({ headers: headers });
 
-        this.http.post('http://127.0.0.1:3000/users/deleteSimulation', body, options)
-            .subscribe(data => {
-                if (data.text() == 'deleted') {
-                    this.ergID = null;
-                    this.router.navigate(['']);
-                }
-                this.erg.edited = false;
-            });
-    }
+    //     this.http.post('http://127.0.0.1:3000/users/deleteSimulation', body, options)
+    //         .subscribe(data => {
+    //             if (data.text() == 'deleted') {
+    //                 this.ergID = null;
+    //                 this.router.navigate(['']);
+    //             }
+    //             this.erg.edited = false;
+    //         });
+    // }
 
     handleDownload() {
         let data = JSON.stringify(this.produceErgJSON());
@@ -253,20 +267,15 @@ export class ErgComponent implements OnInit {
 
 
     handleRun() {
-        // for (let i = 0; i < this.eventList.length; i++) {
-        //     console.log(this.getNegativeDelaysForEvent(this.eventList[i].name, 0))
-        // }
-        //
-        // return;
+        
         if (!Validation.checkParameters(this.eventList, this.edgeList)
             || !Validation.checkNames(this.eventList))
             return;
-
+        try {
         this.selectedVariablePanel = true;
         this.unSelectFromPanel(Panel.reset);
         let generatedCode = ErgTemplate.makeTemplate(this.produceErgJSON());
-        // console.log(generatedCode);return;
-        let engine = new Engine();
+        
         let compiledFunction;
         try {
             compiledFunction = eval('(' + generatedCode + ')');
@@ -320,10 +329,14 @@ export class ErgComponent implements OnInit {
         }
 
         console.log('Running ' + this.simulationName);
+        let engine = new Engine();
         this.graphData = engine.execute(scenarioList, this.timeUnits, this.threads, variableNames);
         if (!this.graphingVariable)
             if (this.variableList[0])
                 this.graphingVariable = this.variableList[0].name;
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     handleOpen(e) {
@@ -346,7 +359,17 @@ export class ErgComponent implements OnInit {
         reader.readAsText(file);
     }
 
-    handleDrag(node: Event) {
+    handleDrag(events: any) {
+        let node = events.tao_event;
+        let browser_event = events.window_event;
+
+        // let dx = browser_event.clientX - parseInt(this.startingPosX);
+        // let dy = browser_event.clientY - parseInt(this.startingPosY);
+        // let dist = Math.sqrt(dx*dx + dy*dy);
+
+        // if (dist >= this.screenSize * .000035)
+        //     this.onesecondclick = false;
+
         if (node && this.selectedParticle) {
             var sourceEdges = Validation.getSourceEdges(node, this.edgeList);
             var targetEdges = Validation.getTargetEdges(node, this.edgeList);
@@ -445,7 +468,7 @@ export class ErgComponent implements OnInit {
 
         if (this.groupStart) {
             this.handleHistoryUpdate();
-            let g = new Group('Group' + this.groupNameID, Math.random()*200, Math.random()*200);
+            let g = new Group('Group' + this.groupNameID, "" + Math.random()*200, "" + Math.random()*200);
             this.groupNameID++;
             this.groupList.push(g);
             this.groupCounter = this.groupList.indexOf(g);
@@ -674,7 +697,22 @@ export class ErgComponent implements OnInit {
             this.selectedVariablePanel = true
     }
 
+    // disableLongPress() {
+    //     this.onesecondclick = false;
+    // }
+
     selectEvent(event: Event, e) {
+        // this.onesecondclick = true;
+        // this.startingPosX = event.x;
+        // this.startingPosY = event.y;
+
+        // setTimeout(() => {
+        //     if (this.onesecondclick) {
+        //         this.onesecondclick = false;
+        //         this.selectShiftEvent(event, e);
+        //     }
+        // }, 1000);
+
         if (e.shiftKey)
             this.selectShiftEvent(event, e);
         else {
@@ -712,13 +750,12 @@ export class ErgComponent implements OnInit {
         this.selectedVariablePanel = false;
         this.selectedParticle = group;
         
-        if (this.groupStart && group.groupedDOM) {
-            group.groupedDOM = false;
-            this.unSelectFromPanel(Panel.reset);
-            return;
-        } else if (this.groupStart) {
+        if (this.groupStart) { // && group.groupedDOM
             group.groupedDOM = true;
-        }
+        } 
+        // else if (this.groupStart) {
+        //     group.groupedDOM = true;
+        // }
     }
 
     createEvent(e, graph) {
@@ -1015,7 +1052,8 @@ export class ErgComponent implements OnInit {
 
             for (let i = 0; i < this.groupList.length; i++) {
                 if (this.groupList[i].parent != null)
-                    this.groupList[i].parent = this.getGroupByName(<string>this.groupList[i].parent);
+                    // currently not typesafe, property is set as a string in the previous for loop
+                    this.groupList[i].parent = this.getGroupByName(this.groupList[i].parent);
             }
 
             for (let i = 0; i < this.groupList.length; i++) {

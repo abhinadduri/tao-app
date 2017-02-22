@@ -7,8 +7,8 @@ import {ErgComponent} from './tao_erg/erg.component';
 import {HomepageComponent} from './tao_homepage/tao.homepage';
 
 const routes: RouterConfig = [
-    {path: '', component: HomepageComponent},
-    {path: 'erg/:id', component: ErgComponent}
+    {path: '', component: ErgComponent}//,
+    // {path: 'erg/:id', component: ErgComponent}
 ];
 
 export const appRouterProviders = [

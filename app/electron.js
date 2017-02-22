@@ -1,8 +1,7 @@
-var electron = require('electron');
-var app = electron.app;
+const app = require('app');
+const BrowserWindow = require('browser-window');
 
 // browser-window creates a native window
-var BrowserWindow = electron.BrowserWindow;
 var mainWindow = null;
 
 app.on('window-all-closed', function () {

@@ -414,7 +414,9 @@ export class Engine {
             scenarioList[j].Run(schedulerMaster[j]);
         }
 
+        
         while (!_.isEmpty(loopMaster)) {
+            
             for (let k in loopMaster) {
                 for (let j = 0; j < updateMaster[k]; j++) {
                     if (loopMaster[k] == 1) {
@@ -437,12 +439,14 @@ export class Engine {
                 }
             }
             if (threads > 1)
-               this.updateResources(numberOfEvents, updateMaster);
+                this.updateResources(numberOfEvents, updateMaster);            
         }
 
         return graphData;
-
     }
+
+
+        
 
     updateResources(numberOfEvents: number[], updateMaster: number[]) {
         let probabilities = [];

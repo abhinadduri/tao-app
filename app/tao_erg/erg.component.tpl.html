@@ -12,6 +12,7 @@
             [selected]="event == selectedParticle || event.groupedDOM"
             [shiftSelected]="event == shiftSelectedSource">
     </event>
+    <!--(mouseup)="disableLongPress()" add this to event for long presses-->
 
     <edge
             *ngFor="let edge of edgeList"
