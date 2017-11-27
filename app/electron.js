@@ -1,5 +1,5 @@
-const app = require('app');
-const BrowserWindow = require('browser-window');
+const {app, BrowserWindow} = require('electron');
+// const BrowserWindow = require('browser-window');
 
 // browser-window creates a native window
 var mainWindow = null;

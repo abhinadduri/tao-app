@@ -74,6 +74,7 @@ export class TaoGraph {
                 {
                     legend: 'always',
                     animatedZooms: true,
+                    stepPlot: true,
                     labels: ['time', this.graphingVariable]
                 }
             );
@@ -112,6 +113,7 @@ export class TaoGraph {
             {
                 legend: 'always',
                 animatedZooms: true,
+                stepPlot: true,
                 labels: ['time', this.graphingVariable]
             }
         );

@@ -5,13 +5,15 @@
   "main": "app/electron.js",
   "scripts": {
     "start": "live-server",
-    "electron": "electron app"
+    "electron": "electron app",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds"
   },
   "engines": {
     "npm": ">=3.10.x"
   },
   "devDependencies": {
     "electron": "^1.4.13",
+    "electron-packager": "^9.1.0",
     "electron-prebuilt": "^0.35.4",
     "live-server": "0.8.2",
     "typescript": "^1.8.10"

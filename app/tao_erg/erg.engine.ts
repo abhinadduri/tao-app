@@ -286,7 +286,7 @@ export class Engine {
         }
     }
 
-    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, names: string[], graphData: any): number {
+    step(scenario: any, duration: number, schedulers: Scheduler[], thread: number, names: string[], graphData: any, numberOfEvents: any): number {
         let scheduler = schedulers[thread];
         let success = false;
         if (scheduler.hasNext() || !_.isEmpty(scheduler.pendingEvents)) {
@@ -356,6 +356,11 @@ export class Engine {
 
                 currentEvent.func(scheduler, currentEvent.params);
                 this.log(currentEvent, scheduler, thread);
+                if (numberOfEvents[thread].hasOwnProperty(currentEvent.name)) {
+                    numberOfEvents[thread][currentEvent.name] += 1;
+                } else {
+                    numberOfEvents[thread][currentEvent.name] = 1;
+                }
 
             }
 
@@ -391,7 +396,7 @@ export class Engine {
 
         let schedulerMaster: Scheduler[] = [];
         let loopMaster: any = {};
-        let numberOfEvents: number[] = [];
+        let numberOfEvents: any[] = [];
         let updateMaster: number[] = [];
         let graphData: any = [];
         let winner: boolean = true;
@@ -400,7 +405,7 @@ export class Engine {
             schedulerMaster.push(new Scheduler(this.eventRanker, duration));
             loopMaster[i] = 1;
             updateMaster.push(1);
-            numberOfEvents.push(0);
+            numberOfEvents.push({});
 
             let variables = {};
             for (let j = 0; j < variableNames.length; j++) {
@@ -420,8 +425,7 @@ export class Engine {
             for (let k in loopMaster) {
                 for (let j = 0; j < updateMaster[k]; j++) {
                     if (loopMaster[k] == 1) {
-                        let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k), variableNames, graphData);
-                        numberOfEvents[k]++;
+                        let status = this.step(scenarioList[k], duration, schedulerMaster, parseInt(k), variableNames, graphData, numberOfEvents);
                         loopMaster[k] == status;
                         if (status == EngineStatus.TERMINATE || status == EngineStatus.ERROR) {
                             delete loopMaster[k];
@@ -438,8 +442,16 @@ export class Engine {
                     }
                 }
             }
-            if (threads > 1)
-                this.updateResources(numberOfEvents, updateMaster);            
+            if (threads > 1) {
+                this.updateResources(numberOfEvents, scenarioList, updateMaster);
+                // this.updateResources(numberOfEvents, scenarioList, updateMaster, function(numberOfEvents, scenarioList, updateMaster) {
+                //     if (scenarioList[0]['queue'] < scenarioList[1]['queue']) {
+                //         updateMaster[0] += 1;
+                //     } else {
+                //         updateMaster[1] += 1;
+                //     }
+                // });  
+            }          
         }
 
         return graphData;
@@ -448,23 +460,38 @@ export class Engine {
 
         
 
-    updateResources(numberOfEvents: number[], updateMaster: number[]) {
+    updateResources(numberOfEvents: any[], scenarioList: any[], updateMaster: number[], updateFunc=this.defaultUpdateFunc) {
+        updateFunc(numberOfEvents, scenarioList, updateMaster);
+    }
+
+    defaultUpdateFunc(numberOfEvents: any[], scenarioList: any[], updateMaster: any[]) {
         let probabilities = [];
         let sum = 0;
+        let sums = [];
+
         for (let i = 0; i < numberOfEvents.length; i++) {
-            sum += numberOfEvents[i];
+            sums[i] = 0;
+        }
+        
+        for (let i = 0; i < numberOfEvents.length; i++) {
+            for (let j in numberOfEvents[i]) {
+                sums[i] += numberOfEvents[i][j];
+            }
+            sum += sums[i];
         }
 
         for (let j = 0; j < numberOfEvents.length; j++) {
-            probabilities.push(numberOfEvents[j]/sum)
+            probabilities.push(sums[j]/sum)
         }
+
+        console.log(probabilities);
         probabilities.sort();
         let variate = Math.random();
         let cumulativeProbability = 0;
         if (variate < probabilities[0])
             updateMaster[0] += 1;
         else {
-            for (let k = 0; k < probabilities.length; k++) {
+            for (let k = 1; k <= probabilities.length; k++) {
                 cumulativeProbability += probabilities[k];
                 if (variate < cumulativeProbability)
                     updateMaster[k] += 1;
